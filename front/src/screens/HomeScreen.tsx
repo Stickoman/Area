@@ -6,9 +6,9 @@ function HomeScreen() {
   }
   return (
     <div>
-      <ServiceComponent onClick={undefined} title={'tkt'} color={''}></ServiceComponent>
-      <ServiceComponent onClick={undefined} title={'mon'} color={''}></ServiceComponent>
-      <ServiceComponent onClick={(event: any) => console.log('zebi')} title={'gars'} color={''}></ServiceComponent>
+      <ServiceComponent onClick={undefined} title={'tkt'} color={'yellow'}></ServiceComponent>
+      <ServiceComponent onClick={undefined} title={'mon'} color={'red'}></ServiceComponent>
+      <ServiceComponent onClick={(event: any) => console.log('zebi')} title={'gars'} color={'green'}></ServiceComponent>
     </div>
   )
 }
