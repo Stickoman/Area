@@ -1,7 +1,5 @@
 {
   "name": "back",
-  "module": "src/index.ts",
-  "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "start": "tsc && node dist/index.js",
