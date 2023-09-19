@@ -3,22 +3,25 @@ import * as ReactDOM from "react-dom/client";
 
 import {
   RouterProvider,
-  createBrowserRouter,
+  createHashRouter,
 } from "react-router-dom";
 
 import HomeScreen from './screens/HomeScreen'
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <HomeScreen/>,
   },
 ]);
 
-function render() {
-  ReactDOM.createRoot(document.getElementById("root")).render(
-      <RouterProvider router={router} />
-  );
-}
+ReactDOM.createRoot(
+  document.getElementById("root"),
+)
+.render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>,
+);
 
-render();
+postMessage({ payload: "removeLoading" }, "*");
