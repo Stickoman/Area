@@ -1,7 +1,9 @@
 import * as ReactDOM from 'react-dom';
+import HomeScreen from './screens/HomeScreen'
+
 
 function render() {
-  ReactDOM.render(<h2>Hello from React!</h2>, document.body);
+  ReactDOM.render(<HomeScreen/>, document.body);
 }
 
 render();
