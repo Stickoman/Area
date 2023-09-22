@@ -7,12 +7,17 @@ import {
 } from "react-router-dom";
 
 import HomeScreen from './screens/HomeScreen'
+import ServiceScreen from "./screens/ServiceScreen";
 
 const router = createHashRouter([
   {
     path: "/",
     element: <HomeScreen/>,
   },
+  {
+    path: "/:service",
+    element: <ServiceScreen/>,
+  }
 ]);
 
 ReactDOM.createRoot(

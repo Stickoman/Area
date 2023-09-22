@@ -1,6 +1,7 @@
-import {MouseEventHandler} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
+import { Link } from 'react-router-dom';
+import {MouseEventHandler} from 'react';
 
 type ServiceComponentProps = {
   onClick: MouseEventHandler,
@@ -37,8 +38,10 @@ function ServiceComponent(props: ServiceComponentProps) {
 
   return (
     <div onClick={props.onClick} style={containerStyle}>
-      <FontAwesomeIcon style={logoStyle} icon={props.icon}></FontAwesomeIcon>
-      <h6 style={titleStyle}>{props.title}</h6>
+      <Link to={`/${props.title}`}>
+        <FontAwesomeIcon style={logoStyle} icon={props.icon}></FontAwesomeIcon>
+        <h6 style={titleStyle}>{props.title}</h6>
+      </Link>
     </div>
   );
 }

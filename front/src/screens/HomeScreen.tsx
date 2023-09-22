@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
-import ServiceComponent from '../components/ServiceComponent';
 import {faDiscord, faMicrosoft, faSpotify} from '@fortawesome/free-brands-svg-icons';
+
+import { Link } from 'react-router-dom';
+import ServiceComponent from '../components/ServiceComponent';
 
 function HomeScreen() {
   const [filter, setFilter] = useState('');
@@ -25,6 +27,7 @@ function HomeScreen() {
     marginBottom: '20px',
     borderRadius: 10,
   };
+  
 
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
