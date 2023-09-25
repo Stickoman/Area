@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/components/ServiceComponent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/ServiceComponent.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/screens/HomeScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/screens/HomeScreen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/screens/ServiceScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/screens/ServiceScreen.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +27,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
@@ -60,7 +64,11 @@
       <updated>1695114149734</updated>
       <workItem from="1695114150836" duration="4348000" />
       <workItem from="1695118546224" duration="2219000" />
-      <workItem from="1695126687025" duration="1871000" />
+      <workItem from="1695126687025" duration="7022000" />
+      <workItem from="1695157570444" duration="131000" />
+      <workItem from="1695386271652" duration="1948000" />
+      <workItem from="1695631649837" duration="3205000" />
+      <workItem from="1695634871002" duration="1141000" />
     </task>
     <servers />
   </component>

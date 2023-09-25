@@ -1,23 +1,33 @@
 import { Link, useParams } from 'react-router-dom';
 import React, {useState} from 'react';
-import {faDiscord, faMicrosoft, faSpotify} from '@fortawesome/free-brands-svg-icons';
+import {faDiscord, faFacebook, faMicrosoft, faSpotify, faTwitter} from '@fortawesome/free-brands-svg-icons';
 
 import ServiceComponent from '../components/ServiceComponent';
+import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 function ServiceScreen() {
   const [filter, setFilter] = useState('');
   const services = [
-    {title: 'Send a ping', color: 'blue', icon: faDiscord, serviceApp: 'Discord'},
-    {title: 'Send friend request', color: 'blue', icon: faDiscord, serviceApp: 'Discord'},
-    {title: 'Create a group', color: 'blue', icon: faDiscord, serviceApp: 'Discord'},
-  
-    {title: 'Create a playlist', color: 'green', icon: faSpotify, serviceApp: 'Spotify'},
-    {title: 'Lorem Ipsum', color: 'green', icon: faSpotify, serviceApp: 'Spotify'},
-    {title: 'Add a song', color: 'green', icon: faSpotify, serviceApp: 'Spotify'},
-  
-    {title: 'Send an email', color: 'blue', icon: faMicrosoft, serviceApp: 'Outlook 365'},
-    {title: 'Get last 5 emails', color: 'blue', icon: faMicrosoft, serviceApp: 'Outlook 365'},
-    {title: 'CC all your contacts', color: 'blue', icon: faMicrosoft, serviceApp: 'Outlook 365'},
+    {title: 'Send a ping', color: '#7289da', icon: faDiscord, serviceApp: 'Discord'},
+    {title: 'Send friend request', color: '#7289da', icon: faDiscord, serviceApp: 'Discord'},
+    {title: 'Create a group', color: '#7289da', icon: faDiscord, serviceApp: 'Discord'},
+
+    {title: 'Create a playlist', color: '#1db954', icon: faSpotify, serviceApp: 'Spotify'},
+    {title: 'Lorem Ipsum', color: '#1db954', icon: faSpotify, serviceApp: 'Spotify'},
+    {title: 'Add a song', color: '#1db954', icon: faSpotify, serviceApp: 'Spotify'},
+
+    {title: 'Send an email', color: '#ea4300', icon: faMicrosoft, serviceApp: 'Outlook 365'},
+    {title: 'Get last 5 emails', color: '#ea4300', icon: faMicrosoft, serviceApp: 'Outlook 365'},
+    {title: 'CC all your contacts', color: '#ea4300', icon: faMicrosoft, serviceApp: 'Outlook 365'},
+
+    { title: 'Twitter Service 1', color: '#1da1f2', icon: faTwitter, serviceApp: 'Twitter' },
+    { title: 'Twitter Service 2', color: '#1da1f2', icon: faTwitter, serviceApp: 'Twitter' },
+    { title: 'Twitter Service 3', color: '#1da1f2', icon: faTwitter, serviceApp: 'Twitter' },
+
+    { title: 'Facebook Service 1', color: '#1877f2', icon: faFacebook, serviceApp: 'Facebook' },
+    { title: 'Facebook Service 2', color: '#1877f2', icon: faFacebook, serviceApp: 'Facebook' },
+    { title: 'Facebook Service 3', color: '#1877f2', icon: faFacebook, serviceApp: 'Facebook' },
   ];
 
   const titleStyle = {
@@ -28,17 +38,17 @@ function ServiceScreen() {
     textAlign: 'center',
   };
 
-  const searchBarStyle = {
-    width: '100%',
-    padding: '10px',
-    fontSize: '1em',
+  const backButtonStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    textDecoration: 'none',
+    color: '#333',  // Couleur de texte personnalisée
     marginBottom: '20px',
-    borderRadius: 10,
   };
 
-  const handleSearch = (event) => {
-    const value = event.target.value.toLowerCase();
-    setFilter(value);
+  const backIconStyle = {
+    marginRight: '10px',
+    fontSize: '1.5em',
   };
 
   const filteredServices = services.filter((service) =>
@@ -48,8 +58,9 @@ function ServiceScreen() {
 
   return (
     <div>
-      <Link to={`/`}>
-        <h1 style={titleStyle}>Back</h1>  
+      <Link to={`/`} style={backButtonStyle}>
+        <FontAwesomeIcon icon={faArrowLeft} style={backIconStyle} />
+        <span>Back</span>
       </Link>
       <h1 style={titleStyle}>{service}</h1>
       <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
