@@ -32,13 +32,14 @@ function ServiceComponent(props: ServiceComponentProps) {
     width: '70%',
     height: 'auto',
     margin: '0 auto 10px',
+    color: 'white',
   };
 
   const titleStyle = {
     margin: 10,
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'black',
+    color: 'white',
   };
 
   const linkStyle = {
