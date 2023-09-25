@@ -1,7 +1,32 @@
-import * as ReactDOM from 'react-dom';
+import * as React from "react";
+import * as ReactDOM from "react-dom/client";
 
-function render() {
-  ReactDOM.render(<h2>Hello from React!</h2>, document.body);
-}
+import {
+  RouterProvider,
+  createHashRouter,
+} from "react-router-dom";
 
-render();
+import HomeScreen from './screens/HomeScreen'
+import ServiceScreen from "./screens/ServiceScreen";
+
+const router = createHashRouter([
+  {
+    path: "/",
+    element: <HomeScreen/>,
+  },
+  {
+    path: "/:service",
+    element: <ServiceScreen/>,
+  }
+]);
+
+ReactDOM.createRoot(
+  document.getElementById("root"),
+)
+.render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>,
+);
+
+postMessage({ payload: "removeLoading" }, "*");
