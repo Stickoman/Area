@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, {CSSProperties, useState} from 'react';
 import { faDiscord, faMicrosoft, faSpotify, faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons';
-import { Link } from 'react-router-dom';
 import ServiceComponent from '../components/ServiceComponent';
 
 function HomeScreen() {
@@ -13,19 +12,19 @@ function HomeScreen() {
     { title: 'Facebook', color: '#1877f2', icon: faFacebook },
   ];
 
-  const containerStyle = {
+  const containerStyle: CSSProperties = {
     padding: '16px',
     textAlign: 'center',
   };
 
-  const titleStyle = {
+  const titleStyle: CSSProperties = {
     fontSize: '56px',
     fontWeight: 'bold',
     marginBottom: '16px',
     color: '#333',
   };
 
-  const inputStyle = {
+  const inputStyle: CSSProperties = {
     width: '80%',
     padding: '12px',
     fontSize: '20px',
@@ -35,7 +34,7 @@ function HomeScreen() {
     color: '#333',
   };
 
-  const servicesContainerStyle = {
+  const servicesContainerStyle: CSSProperties = {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'center',

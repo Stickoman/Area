@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
-import React, {useState} from 'react';
+import React, {CSSProperties, useState} from 'react';
 import {faDiscord, faFacebook, faMicrosoft, faSpotify, faTwitter} from '@fortawesome/free-brands-svg-icons';
 
 import ServiceComponent from '../components/ServiceComponent';
@@ -30,7 +30,7 @@ function ServiceScreen() {
     { title: 'Facebook Service 3', color: '#1877f2', icon: faFacebook, serviceApp: 'Facebook' },
   ];
 
-  const titleStyle = {
+  const titleStyle: CSSProperties = {
     margin: 10,
     fontSize: '2em',
     fontWeight: 'bold',
@@ -38,7 +38,7 @@ function ServiceScreen() {
     textAlign: 'center',
   };
 
-  const backButtonStyle = {
+  const backButtonStyle: CSSProperties = {
     display: 'flex',
     alignItems: 'center',
     textDecoration: 'none',
@@ -46,7 +46,7 @@ function ServiceScreen() {
     marginBottom: '20px',
   };
 
-  const backIconStyle = {
+  const backIconStyle: CSSProperties = {
     marginRight: '10px',
     fontSize: '1.5em',
   };

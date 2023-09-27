@@ -1,8 +1,7 @@
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
 import {Link} from 'react-router-dom';
-import {MouseEventHandler} from 'react';
-import React from 'react';
+import React, {CSSProperties, MouseEventHandler} from 'react';
 
 type ServiceComponentProps = {
   onClick: MouseEventHandler;
@@ -15,7 +14,7 @@ function ServiceComponent(props: ServiceComponentProps) {
 
   const darkenedColor = darkenColor(props.color, 30);
 
-  const containerStyle = {
+  const containerStyle: CSSProperties = {
     borderRadius: 30,
     background: `linear-gradient(to bottom, ${props.color} 0%, ${darkenedColor} 100%)`,
     cursor: 'pointer',
@@ -28,21 +27,21 @@ function ServiceComponent(props: ServiceComponentProps) {
     margin: 20,
   };
 
-  const logoStyle = {
+  const logoStyle: CSSProperties = {
     width: '70%',
     height: 'auto',
     margin: '0 auto 10px',
     color: 'white',
   };
 
-  const titleStyle = {
+  const titleStyle: CSSProperties = {
     margin: 10,
     fontSize: 18,
     fontWeight: 'bold',
     color: 'white',
   };
 
-  const linkStyle = {
+  const linkStyle: CSSProperties = {
     textDecoration: 'none',
     color: 'inherit',
     display: 'inherit',
