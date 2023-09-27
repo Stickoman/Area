@@ -1,15 +1,15 @@
 import express from 'express';
-import {run} from './mongodb';
+import {connect} from './mongodb';
 
-const app = express();
-const port = 3000;
+const APP = express();
+const PORT = 8080;
 
-app.get('/', (req, res) => {
+APP.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.listen(port, () => {
-  return console.log(`Express is listening at http://localhost:${port}`);
+APP.listen(PORT, () => {
+  return console.log(`Express is listening at http://localhost:${PORT}`);
 });
 
-run().catch(console.dir);
+connect().catch(console.dir);
