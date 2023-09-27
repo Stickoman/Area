@@ -1,5 +1,4 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom/client";
 
 import {
   RouterProvider,
@@ -20,13 +19,12 @@ const router = createHashRouter([
   }
 ]);
 
-ReactDOM.createRoot(
-  document.getElementById("root"),
-)
-.render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>,
-);
+function App(): React.JSX.Element {
+  return (
+    <React.StrictMode>
+      <RouterProvider router={router}/>
+    </React.StrictMode>
+  );
+}
 
-postMessage({ payload: "removeLoading" }, "*");
+export default App;

@@ -26,7 +26,8 @@
  * ```
  */
 
-import './index.css';
-import './App';
+import '../src/index.css';
+import '../src/index.ts';
 
+postMessage({payload: "removeLoading"}, "*");
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
