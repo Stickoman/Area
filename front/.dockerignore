@@ -1,0 +1,6 @@
+node_modules/
+npm-debug.log
+
+electron/index.ts
+electron/preload.ts
+electron/renderer.ts
