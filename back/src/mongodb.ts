@@ -1,6 +1,7 @@
+require('dotenv').config();
 import {MongoClient, ServerApiVersion} from 'mongodb';
 
-const uri = 'mongodb+srv://area:SfWUBc8O4sQCEkG3@cluster0.djoggy6.mongodb.net/?retryWrites=true&w=majority';
+const uri = process.env.MONGODB_URI;
 
 const client = new MongoClient(uri, {
   serverApi: {
