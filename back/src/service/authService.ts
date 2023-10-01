@@ -1,5 +1,5 @@
 import {retrieveUser, saveUser} from '../repository/userRepository';
-import {genSalt, hash} from 'bcrypt';
+import {genSalt, hash, compare} from 'bcrypt';
 import {IUser} from '../model/user';
 
 type Credentials = {
@@ -41,4 +41,18 @@ async function register(credentials: Credentials): Promise<IUser> {
   });
 }
 
-export {register};
+async function login(credentials: Credentials): Promise<string> {
+  return retrieveUser(credentials.email)
+    .then(async user => {
+      const validCredentials = await compare(credentials.password, user.password);
+
+      if (!validCredentials)
+        return reject('Invalid credentials');
+      return '';
+    })
+    .catch(reason => {
+      return reject(reason);
+    })
+}
+
+export {register, login};
