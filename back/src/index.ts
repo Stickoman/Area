@@ -14,6 +14,7 @@ APP.get('/api/ping', (_req, res) => {
     .send('Pong');
 });
 
+APP.use(express.json());
 APP.use(areasRouter);
 APP.use(authRouter);
 APP.use(meRouter);

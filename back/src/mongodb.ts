@@ -2,10 +2,6 @@ import mongoose from 'mongoose';
 
 let isConnected = false;
 
-function reject(reason: string): Promise<never> {
-  return Promise.reject(new Error(reason));
-}
-
 async function connect() {
   if (isConnected) return;
 
