@@ -2,8 +2,12 @@ import {IUser} from '../model/user';
 import {JwtPayload, sign, verify} from 'jsonwebtoken';
 import {Request, Response, NextFunction} from 'express';
 
+interface UserPayload {
+  user: IUser;
+}
+
 interface AuthenticatedRequest extends Request {
-  token: string | JwtPayload;
+  user: IUser;
 }
 
 function generateAccessToken(user: IUser): string {
@@ -17,10 +21,14 @@ function authenticateMiddleware(req: AuthenticatedRequest, res: Response, next: 
   if (!header.startsWith('Bearer ') || !token)
     return res.sendStatus(401);
 
-  verify(token, process.env.ACCESS_TOKEN_SECRET, (hasError, jwt) => {
-    if (hasError)
+  verify(token, process.env.ACCESS_TOKEN_SECRET, (hasError, payload) => {
+    const isUser = (jwt: string | JwtPayload): jwt is UserPayload => {
+      return !!(jwt as UserPayload);
+    }
+
+    if (hasError || !isUser(payload))
       return res.sendStatus(401);
-    req.token = jwt;
+    req.user = payload.user;
     next();
   });
 }
