@@ -1,14 +1,21 @@
 import {retrieveUser, saveUser} from '../repository/userRepository';
 import {genSalt, hash, compare} from 'bcrypt';
 import {IUser} from '../model/user';
+import {generateAccessToken} from '../middleware/auth';
 
 type Credentials = {
   email: string;
   password: string;
 }
 
-function reject(reason: string): Promise<never> {
-  return Promise.reject(new Error(reason));
+function reject(reason: any): Promise<never> {
+  const isString = (object: any) : object is string  => {
+    return typeof object === 'string';
+  }
+
+  if (isString(reason))
+    return Promise.reject(new Error(reason));
+  return Promise.reject(reason);
 }
 
 async function hashPassword(credentials: Credentials): Promise<Credentials> {
@@ -48,7 +55,7 @@ async function login(credentials: Credentials): Promise<string> {
 
       if (!validCredentials)
         return reject('Invalid credentials');
-      return '';
+      return generateAccessToken(user);
     })
     .catch(reason => {
       return reject(reason);
