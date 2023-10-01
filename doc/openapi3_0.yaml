@@ -4,7 +4,7 @@ info:
   description: |-
     The goal of this project is to discover, as a whole, the software platform that you have chosen through the creation of a business application.  
     To do this, you must implement a software suite that functions similar to that of IFTTT and/or Zapier.
-  version: 1.1.0
+  version: 1.2.0
 externalDocs:
   description: Link to Github Repository
   url: https://github.com/EpitechPromo2026/B-DEV-500-LYN-5-1-area-timothe.medico
@@ -39,14 +39,14 @@ paths:
               $ref: '#/components/schemas/Credentials'
         required: true
       responses:
-        '200':
+        '201':
           description: Successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
         '400':
-          description: Invalid email or password
+          description: Invalid request body
         '403':
           description: Email already used
 
@@ -70,12 +70,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Credentials'
+                $ref: '#/components/schemas/Token'
+        '400':
+          description: Invalid request body
         '401':
           description: Invalid email/password combination
 
@@ -89,6 +86,8 @@ paths:
       responses:
         '200':
           description: Successful operation
+        '401':
+          description: Must be logged
 
   /me:
     get:
@@ -105,7 +104,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
         '401':
-          description: Unauthorized
+          description: Must be logged
+  /me/resetPassword:
+    post:
+      tags:
+        - User
+      summary: Reset user password
+      description: Returns a single pet
+      operationId: resetUserPassword
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Password'
+        '401':
+          description: Must be logged
 
   /services:
     get:
@@ -181,6 +196,22 @@ components:
           type: string
           format: date-time
           example: '2023-08-25T17:32:28Z'
+    Token:
+      required:
+        - token
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp
+    Password:
+      required:
+        - password
+      type: object
+      properties:
+        password:
+          type: string
+          example: N3wG3n3r@t3dP@$$w0rd
     Credentials:
       required:
         - email
