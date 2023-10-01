@@ -1,18 +1,24 @@
-require('dotenv').config();
 import mongoose from 'mongoose';
 
-const uri = process.env.MONGODB_URI;
+let isConnected = false;
+
+function reject(reason: string): Promise<never> {
+  return Promise.reject(new Error(reason));
+}
 
 async function connect() {
+  if (isConnected) return;
+
   try {
-    await mongoose.connect(uri, {
+    await mongoose.connect(process.env.MONGODB_URI, {
       autoIndex: true,
     });
 
-    console.log('Connected to MongoDB using Mongoose');
+    isConnected = true;
   } catch (error) {
-    console.error('Error connecting to MongoDB using Mongoose:', error);
+    isConnected = false;
+    return Promise.reject(error);
   }
 }
 
-export { connect };
+export {connect};
