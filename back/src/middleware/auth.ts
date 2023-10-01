@@ -18,7 +18,7 @@ function authenticateMiddleware(req: AuthenticatedRequest, res: Response, next: 
   const header = req.headers['authorization'];
   const token = header?.split(' ')[1];
 
-  if (!header.startsWith('Bearer ') || !token)
+  if (!header?.startsWith('Bearer ') || !token)
     return res.sendStatus(401);
 
   verify(token, process.env.ACCESS_TOKEN_SECRET, (hasError, payload) => {
@@ -33,4 +33,4 @@ function authenticateMiddleware(req: AuthenticatedRequest, res: Response, next: 
   });
 }
 
-export {generateAccessToken, authenticateMiddleware};
+export {AuthenticatedRequest, generateAccessToken, authenticateMiddleware};

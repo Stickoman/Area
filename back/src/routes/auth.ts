@@ -1,6 +1,6 @@
 import {Router, Request, Response} from 'express';
 import {login, register} from '../service/authService';
-import {authenticateMiddleware} from '../middleware/auth';
+import {AuthenticatedRequest, authenticateMiddleware} from '../middleware/auth';
 
 const router = Router();
 
@@ -42,7 +42,7 @@ router.post('/api/auth/login', [], async (req: Request, res: Response) => {
   }
 });
 
-router.post('/api/auth/logout', authenticateMiddleware, (req: Request, res: Response) => {
+router.post('/api/auth/logout', authenticateMiddleware, (req: AuthenticatedRequest, res: Response) => {
   return res.send('Logged out!');
 });
 

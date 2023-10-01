@@ -2,7 +2,7 @@ import express from 'express';
 import {connect} from './mongodb';
 import {areasRouter} from './routes/area';
 import {authRouter} from './routes/auth';
-import {meRouter} from './routes/me';
+import {profileRouter} from './routes/profile';
 import {servicesRouter} from './routes/services';
 import dotenv from 'dotenv';
 
@@ -17,7 +17,7 @@ APP.get('/api/ping', (_req, res) => {
 APP.use(express.json());
 APP.use(areasRouter);
 APP.use(authRouter);
-APP.use(meRouter);
+APP.use(profileRouter);
 APP.use(servicesRouter);
 
 APP.listen(PORT, () => {
