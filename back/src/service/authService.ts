@@ -8,11 +8,11 @@ type Credentials = {
   password: string;
 }
 
-function reject(reason: any): Promise<never> {
-  const isString = (object: any) : object is string  => {
-    return typeof object === 'string';
-  }
+const isString = (object: any) : object is string  => {
+  return typeof object === 'string';
+}
 
+function reject(reason: any): Promise<never> {
   if (isString(reason))
     return Promise.reject(new Error(reason));
   return Promise.reject(reason);
@@ -62,4 +62,4 @@ async function login(credentials: Credentials): Promise<string> {
     })
 }
 
-export {register, login};
+export {isString, register, login};
