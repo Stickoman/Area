@@ -5,6 +5,7 @@ import {faDiscord, faFacebook, faMicrosoft, faSpotify, faTwitter} from '@fortawe
 import ServiceComponent from '../components/ServiceComponent';
 import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import NavigationBar from '../components/NavBarComponent';
 
 function ServiceScreen() {
   const [filter, setFilter] = useState('');
@@ -58,6 +59,7 @@ function ServiceScreen() {
 
   return (
     <div>
+      <NavigationBar/>
       <Link to={`/`} style={backButtonStyle}>
         <FontAwesomeIcon icon={faArrowLeft} style={backIconStyle} />
         <span>Back</span>
