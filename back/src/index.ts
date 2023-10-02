@@ -1,15 +1,30 @@
 import express from 'express';
 import {connect} from './mongodb';
+import {areasRouter} from './routes/area';
+import {authRouter} from './routes/auth';
+import {profileRouter} from './routes/profile';
+import {servicesRouter} from './routes/services';
+import dotenv from 'dotenv';
 
 const APP = express();
 const PORT = 8080;
 
-APP.get('/', (req, res) => {
-  res.send('Hello World!');
+APP.get('/api/ping', (_req, res) => {
+  res.status(200)
+    .send('Pong');
 });
+
+APP.use(express.json());
+APP.use(areasRouter);
+APP.use(authRouter);
+APP.use(profileRouter);
+APP.use(servicesRouter);
 
 APP.listen(PORT, () => {
-  return console.log(`Express is listening at http://localhost:${PORT}`);
+  dotenv.config();
+
+  connect()
+    .then(() => console.log(`Express is listening at http://localhost:${PORT}`))
+    .catch(reason => console.error('Unable to connect to database: ' + reason));
 });
 
-connect().catch(console.dir);
