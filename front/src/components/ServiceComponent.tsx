@@ -39,7 +39,6 @@ function ServiceComponent(props: ServiceComponentProps) {
     textDecoration: 'none',
     color: 'inherit',
     display: 'flex',
-    flexDirection: 'column',
     background: `${props.color}`,
   };
 

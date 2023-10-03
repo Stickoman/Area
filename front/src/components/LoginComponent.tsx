@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import '../index.css';
 
 function LoginComponent() {
   const [formData, setFormData] = useState({
@@ -13,9 +14,7 @@ function LoginComponent() {
     margin: 'auto',
     marginTop: '50px',
     padding: '20px',
-    background: '#fff',
     borderRadius: '8px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
   };
 
   const inputStyle = {
@@ -49,7 +48,7 @@ function LoginComponent() {
   };
 
   const handleChange = (e: { target: { name: any; value: any; }; }) => {
-    const { name, value } = e.target;
+    const {name, value} = e.target;
     setFormData({
       ...formData,
       [name]: value,
@@ -70,35 +69,29 @@ function LoginComponent() {
 
   return (
     <div style={containerStyle}>
-      <h1 style={{ fontSize: '1.5rem', marginBottom: '20px', textAlign: 'center', fontWeight: 'bold' }}>Login</h1>
+      <h1 style={{fontSize: '30px', marginBottom: '20px', textAlign: 'center', fontWeight: 'bold'}}>Login</h1>
       <form onSubmit={handleLogin}>
-        <div>
-          <label htmlFor="email" style={labelStyle}>Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Enter your email"
-            required
-            style={inputStyle}
-          />
-        </div>
-        <div>
-          <label htmlFor="password" style={labelStyle}>Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Enter your password"
-            required
-            style={inputStyle}
-          />
-        </div>
-        <button type="submit" style={buttonStyle}>Login</button>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="Email"
+          required
+          className="inputStyle"
+        />
+        <input
+          type="password"
+          id="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="Password"
+          required
+          className="inputStyle"
+        />
+        <button type="submit" className="buttonStyle">Login</button>
       </form>
     </div>
   );

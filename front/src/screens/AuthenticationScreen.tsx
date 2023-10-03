@@ -9,9 +9,12 @@ function AuthenticationScreen() {
     <div>
       <NavigationBar/>
       {login ? (<LoginComponent/>) : (<RegisterComponent/>)}
-      <div>
-        {login ? (<p>Don't have an account?</p>) : (<p>Already have an account?</p>)}
-        {login ? (<div onClick={() => setLogin(false)}>Signup</div>) : (<div onClick={() => setLogin(true)}>Login</div>)}
+      <div className="toggleContainer">
+        {login ? (
+          <p className="toggleText">Don't have an account? <span className="toggleLink" onClick={() => setLogin(false)}>Signup</span></p>
+        ) : (
+          <p className="toggleText">Already have an account? <span className="toggleLink" onClick={() => setLogin(true)}>Login</span></p>
+        )}
       </div>
     </div>
   );
