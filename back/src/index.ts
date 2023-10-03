@@ -1,5 +1,6 @@
-import express from 'express';
+import express, {json} from 'express';
 import {connect} from './mongodb';
+import cors from 'cors';
 import {areasRouter} from './routes/area';
 import {authRouter} from './routes/auth';
 import {profileRouter} from './routes/profile';
@@ -14,7 +15,8 @@ APP.get('/api/ping', (_req, res) => {
     .send('Pong');
 });
 
-APP.use(express.json());
+APP.use(cors());
+APP.use(json());
 APP.use(areasRouter);
 APP.use(authRouter);
 APP.use(profileRouter);
