@@ -26,7 +26,7 @@ function LoginComponent() {
     borderRadius: '4px',
     outline: 'none',
     fontSize: '1rem',
-    boxSizing: 'border-box', // Ajout de cette ligne pour éviter le débordement
+    boxSizing: 'border-box',
   };
 
   const labelStyle = {
