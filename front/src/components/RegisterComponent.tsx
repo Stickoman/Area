@@ -1,14 +1,27 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import '../index.css';
+import {useNavigate} from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 function RegisterComponent() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     confirmPassword: '',
   });
-
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('/api/auth/login', formData);
+      const token = response.data.token;
+      Cookies.set('token', token);
+      navigate('/profile');
+    } catch (error) {
+      console.error('Error logging in:', error);
+    }
+  };
   const containerStyle = {
     maxWidth: '500px',
     margin: 'auto',
@@ -16,15 +29,6 @@ function RegisterComponent() {
     padding: '20px',
     borderRadius: '8px',
   };
-
-  const labelStyle = {
-    color: '#333',
-    marginBottom: '8px',
-    fontWeight: 'bold',
-    display: 'block',
-    fontSize: '1rem',
-  };
-
   const handleChange = (e: { target: { name: any; value: any; }; }) => {
     const {name, value} = e.target;
     setFormData({
@@ -32,7 +36,6 @@ function RegisterComponent() {
       [name]: value,
     });
   };
-
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -46,8 +49,8 @@ function RegisterComponent() {
         email: formData.email,
         password: formData.password,
       });
-
       console.log('User registered:', response.data);
+      await handleLogin(e)
     } catch (error) {
       console.error('Error registering:', error);
     }

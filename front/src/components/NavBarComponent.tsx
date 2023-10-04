@@ -4,11 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie';
 
+export function checkIfUserIsLoggedIn() {
+  const token = Cookies.get('token');
+  return !!token;
+}
 function NavigationBar() {
-  function checkIfUserIsLoggedIn() {
-    const token = Cookies.get('token');
-    return !!token;
-  }
+
   const isLoggedIn = checkIfUserIsLoggedIn();
 
   const navStyle = {

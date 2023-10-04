@@ -2,13 +2,24 @@ import React, {useState} from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import '../index.css';
-
+import {useNavigate} from 'react-router-dom';
 function LoginComponent() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-
+  const navigate = useNavigate();
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('/api/auth/login', formData);
+      const token = response.data.token;
+      Cookies.set('token', token);
+      navigate('/profile');
+    } catch (error) {
+      console.error('Error logging in:', error);
+    }
+  };
   const containerStyle = {
     maxWidth: '500px',
     margin: 'auto',
@@ -16,55 +27,12 @@ function LoginComponent() {
     padding: '20px',
     borderRadius: '8px',
   };
-
-  const inputStyle = {
-    width: '100%',
-    padding: '10px',
-    marginBottom: '20px',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    outline: 'none',
-    fontSize: '1rem',
-    boxSizing: 'border-box',
-  };
-
-  const labelStyle = {
-    color: '#333',
-    marginBottom: '8px',
-    fontWeight: 'bold',
-    display: 'block',
-    fontSize: '1rem',
-  };
-
-  const buttonStyle = {
-    width: '100%',
-    padding: '10px',
-    background: '#007bff',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '1rem',
-  };
-
   const handleChange = (e: { target: { name: any; value: any; }; }) => {
     const {name, value} = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
-  };
-
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('/api/auth/login', formData);
-      const token = response.data.token;
-      Cookies.set('token', token);
-      console.log('User logged in with token:', token);
-    } catch (error) {
-      console.error('Error logging in:', error);
-    }
   };
 
   return (
