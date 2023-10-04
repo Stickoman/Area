@@ -1,6 +1,7 @@
 import React, {CSSProperties, useState} from 'react';
 import { faDiscord, faMicrosoft, faSpotify, faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons';
 import ServiceComponent from '../components/ServiceComponent';
+import NavigationBar from '../components/NavBarComponent';
 
 function HomeScreen() {
   const [filter, setFilter] = useState('');
@@ -42,6 +43,7 @@ function HomeScreen() {
 
   return (
     <div style={containerStyle}>
+      <NavigationBar/>
       <h1 style={titleStyle}>Discover Services</h1>
       <input
         type="text"
