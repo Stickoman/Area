@@ -7,7 +7,7 @@ function AuthenticationScreen() {
   const [login, setLogin] = useState(true);
   return (
     <div>
-      <NavigationBar/>
+      <NavigationBar color={'#000'}/>
       {login ? (<LoginComponent/>) : (<RegisterComponent/>)}
       <div className="toggleContainer">
         {login ? (

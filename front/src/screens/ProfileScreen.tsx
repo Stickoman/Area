@@ -33,7 +33,7 @@ function ProfileScreen() {
 
   return (
     <div>
-      <NavigationBar/>
+      <NavigationBar color={'yellow'}/>
       <h6>Profile</h6>
       <div style={buttonContainerStyle}>
         <button type="submit" onClick={logout} className="buttonStyle">Logout</button>

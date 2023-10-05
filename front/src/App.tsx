@@ -9,6 +9,8 @@ import HomeScreen from './screens/HomeScreen';
 import ServiceScreen from './screens/ServiceScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import AuthenticationScreen from './screens/AuthenticationScreen';
+import NavigationBar from './components/NavBarComponent';
+import ServicesScreen from './screens/ServicesScreen';
 
 const router = createHashRouter([
   {
@@ -27,14 +29,20 @@ const router = createHashRouter([
     path: '/authentication',
     element: <AuthenticationScreen/>,
   },
+  {
+    path: '/services',
+    element: <ServicesScreen/>,
+  },
 ]);
 
 function App(): React.JSX.Element {
   return (
-    <React.StrictMode>
-      <RouterProvider router={router}/>
-    </React.StrictMode>
-  );
+    <div>
+      <React.StrictMode>
+        <RouterProvider router={router}/>
+      </React.StrictMode>
+    </div>
+);
 }
 
 export default App;
