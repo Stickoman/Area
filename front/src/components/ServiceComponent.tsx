@@ -1,6 +1,6 @@
 import '../index.css';
 
-import React, {useEffect, useState} from 'react';
+import React, {CSSProperties, useEffect, useState} from 'react';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
@@ -14,35 +14,35 @@ type ServiceComponentProps = {
   icon: IconProp;
 };
 
-function ServiceComponent(props: ServiceComponentProps) {
+function ServiceComponent(props: ServiceComponentProps): JSX.Element {
   const [width, setWidth] = useState<number>(window.innerWidth);
   const darkenedColor = darkenColor(props.color, 30);
 
   const containerStyle = {
   };
 
-  const logoStyle = {
+  const logoStyle: CSSProperties = {
     width: '70%',
     height: 'auto',
     margin: 'auto',
     color: 'white',
   };
 
-  const titleStyle = {
+  const titleStyle: CSSProperties = {
     margin: 10,
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
   };
 
-  const linkStyle = {
+  const linkStyle: CSSProperties = {
     textDecoration: 'none',
     color: 'inherit',
     display: 'flex',
     background: `${props.color}`,
   };
 
-  function darkenColor(color: string, percent: number) {
+  function darkenColor(color: string, percent: number): string {
     const num = parseInt(color.replace("#",""), 16);
     const amt = Math.round(2.55 * percent);
     const r = Math.max((num >> 16) - amt, 0);

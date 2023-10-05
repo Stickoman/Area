@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {CSSProperties} from 'react';
 import Cookies from 'js-cookie';
-import NavigationBar from '../components/NavBarComponent';
+import NavigationBar, {checkIfUserIsLoggedIn} from '../components/NavBarComponent';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 function ProfileScreen() {
   const navigate = useNavigate();
-  const buttonContainerStyle = {
+  const buttonContainerStyle: CSSProperties = {
     maxWidth: '500px',
     margin: 'auto',
     marginTop: '50px',
@@ -14,6 +14,9 @@ function ProfileScreen() {
   };
 
   async function logout() {
+    const isLoggedIn = checkIfUserIsLoggedIn();
+    if (!isLoggedIn)
+      return;
     try {
       const response = await axios.post('/api/auth/logout', {}, {
         headers: {
