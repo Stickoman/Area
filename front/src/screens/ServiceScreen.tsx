@@ -1,6 +1,7 @@
-import { Link, useParams } from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import React, {CSSProperties, useState} from 'react';
 import {faDiscord, faFacebook, faMicrosoft, faSpotify, faTwitter} from '@fortawesome/free-brands-svg-icons';
+import '../index.css';
 
 import ServiceComponent from '../components/ServiceComponent';
 import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
@@ -8,6 +9,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import NavigationBar from '../components/NavBarComponent';
 
 function ServiceScreen() {
+  const navigate = useNavigate();
   const [filter, setFilter] = useState('');
   const services = [
     {title: 'Send a ping', color: '#7289da', icon: faDiscord, serviceApp: 'Discord'},
@@ -43,8 +45,9 @@ function ServiceScreen() {
     display: 'flex',
     alignItems: 'center',
     textDecoration: 'none',
-    color: '#333',  // Couleur de texte personnalisée
-    marginBottom: '20px',
+    color: 'white',
+    margin: '20px',
+    width: '125px',
   };
 
   const backIconStyle: CSSProperties = {
@@ -57,13 +60,15 @@ function ServiceScreen() {
   );
   const { service } = useParams();
 
+  const selectedService = filteredServices.find(serviceApp => serviceApp.serviceApp === service);
+
   return (
     <div>
-      <NavigationBar/>
-      <Link to={`/`} style={backButtonStyle}>
+      {selectedService && <NavigationBar color={selectedService.color} />}
+      <button onClick={() => navigate('/services')} style={backButtonStyle} className={'buttonStyle'}>
         <FontAwesomeIcon icon={faArrowLeft} style={backIconStyle} />
         <span>Back</span>
-      </Link>
+      </button>
       <h1 style={titleStyle}>{service}</h1>
       <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
         {filteredServices.map((serviceApp, index) => (
