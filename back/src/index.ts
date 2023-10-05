@@ -2,10 +2,11 @@ import express, {json} from 'express';
 import {connect} from './mongodb';
 import cors from 'cors';
 import {areasRouter} from './routes/area';
-import {authRouter} from './routes/auth';
+import {basicAuthRouter} from './routes/auth/basic';
 import {profileRouter} from './routes/profile';
 import {servicesRouter} from './routes/services';
 import dotenv from 'dotenv';
+import {twitterAuthRouter} from './routes/auth/twitter';
 
 const APP = express();
 const PORT = 8080;
@@ -18,7 +19,8 @@ APP.get('/api/ping', (_req, res) => {
 APP.use(cors());
 APP.use(json());
 APP.use(areasRouter);
-APP.use(authRouter);
+APP.use(basicAuthRouter);
+APP.use(twitterAuthRouter);
 APP.use(profileRouter);
 APP.use(servicesRouter);
 

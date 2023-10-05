@@ -19,7 +19,7 @@ function ProfileScreen() {
       const response = await axios.post('/api/auth/logout', {}, {
         headers: {
           'Authorization': `Bearer ${Cookies.get('token')}`
-        }
+        },
       });
       if (response.status === 200) {
         Cookies.remove('token');
