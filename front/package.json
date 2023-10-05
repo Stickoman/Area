@@ -10,6 +10,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
+    "start-react": "react-scripts start",
     "build": "react-scripts build",
     "web": "serve -s build -l 3000"
   },
