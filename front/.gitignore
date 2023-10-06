@@ -88,9 +88,10 @@ typings/
 # Vite
 .vite/
 
-# Electron-Forge
-out/
-
 build/
 
 .idea/
+
+www/
+
+platforms/
