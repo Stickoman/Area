@@ -6,17 +6,15 @@ import {useNavigate} from 'react-router-dom';
 function ProfileScreen() {
   const navigate = useNavigate();
   const buttonContainerStyle: CSSProperties = {
-    maxWidth: '500px',
     margin: 'auto',
-    marginTop: '50px',
-    padding: '20px',
-    borderRadius: '8px',
   };
 
   async function logout() {
     const isLoggedIn = checkIfUserIsLoggedIn();
-    if (!isLoggedIn)
+    if (!isLoggedIn) {
+      navigate('/authentication');
       return;
+    }
     try {
       const response = await axios.post('/api/auth/logout', {}, {
         headers: {
@@ -31,6 +29,7 @@ function ProfileScreen() {
       }
     } catch (error) {
       console.error(error);
+      navigate('/authentication');
     }
   }
 
@@ -38,7 +37,7 @@ function ProfileScreen() {
     <div>
       <NavigationBar color={'yellow'}/>
       <h6>Profile</h6>
-      <div style={buttonContainerStyle}>
+      <div style={buttonContainerStyle} className={'buttonContainerStyle'}>
         <button type="submit" onClick={logout} className="buttonStyle">Logout</button>
       </div>
     </div>

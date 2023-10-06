@@ -14,6 +14,9 @@ body {
   transition: all 0.3s ease-in-out;
 }
 
+.googleButtonStyle,
+.twitterButtonStyle,
+.facebookButtonStyle,
 .buttonStyle {
   border: none;
   padding: 10px 20px;
@@ -104,7 +107,6 @@ body {
 
 .toggleContainer {
   text-align: center;
-  margin-top: 20px;
 }
 
 .toggleText {
@@ -122,4 +124,69 @@ body {
 
 .toggleLink:hover {
   text-decoration: underline;
+}
+
+.buttonContainerStyle {
+  max-width: 500px;
+  margin-top: 50px;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.nav-link:hover {
+  color: #ccc;
+  font-size: 28px;
+}
+
+.nav-icon:hover {
+  color: #ccc;
+  font-size: 35px;
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 20px;
+  font-size: 24px;
+  transition: all 0.2s ease-in-out;
+
+}
+
+.nav-icon {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 20px;
+  font-size: 30px;
+  transition: all 0.2s ease-in-out;
+}
+
+.googleButtonStyle {
+  border: 2px solid #333;
+  background: white;
+  color: black;
+  margin: auto;
+}
+
+.googleButtonStyle:hover {
+  background-color: #ccc;
+}
+
+.twitterButtonStyle {
+  background: #1da1f2;
+  color: white;
+  margin: auto;
+}
+
+.twitterButtonStyle:hover {
+  background-color: #333;
+}
+
+.facebookButtonStyle {
+  color: white;
+  background: #1877f2;
+  margin: auto;
+}
+
+.facebookButtonStyle:hover {
+  background-color: #333;
 }

@@ -23,7 +23,6 @@ function LoginComponent() {
   const containerStyle = {
     maxWidth: '500px',
     margin: 'auto',
-    marginTop: '50px',
     padding: '20px',
     borderRadius: '8px',
   };

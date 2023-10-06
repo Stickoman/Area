@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faUser} from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie';
+import "../index.css"
 
 export function checkIfUserIsLoggedIn() {
   const token = Cookies.get('token');
@@ -23,28 +24,16 @@ function NavigationBar(props: {color: string}) {
     boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
     height: '70px',
   };
-
-  const linkStyle = {
-    color: '#fff',
-    textDecoration: 'none',
-    margin: '0 20px',
-    fontSize: '24px',
-  };
-
-  const userIconStyle = {
-    fontSize: '30px',
-  };
-
-  return (
+    return (
     <nav style={navStyle}>
-      <Link to="/" style={linkStyle}>
+      <Link to="/" className={'nav-link'}>
         Home
       </Link>
-      <Link to="/services" style={linkStyle}>
+      <Link to="/services" className={'nav-link'}>
         Services
       </Link>
-      <Link to={isLoggedIn ? '/profile' : '/authentication'} style={linkStyle}>
-        <FontAwesomeIcon icon={faUser} style={userIconStyle}/>
+      <Link to={isLoggedIn ? '/profile' : '/authentication'} className={'nav-icon'}>
+        <FontAwesomeIcon icon={faUser}/>
       </Link>
     </nav>
   );
