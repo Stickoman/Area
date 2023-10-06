@@ -26,4 +26,16 @@ router.get('/api/services/reddit', authenticateMiddleware, (req: AuthenticatedRe
     });
 });
 
+router.get('/api/services/timer', [], (req: Request, res: Response) => {
+  try {
+    const currentDate = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
+    const currentTime = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+
+    res.json({ currentDate, currentTime });
+  } catch (error) {
+    return res.status(500)
+      .json({message: 'Server Error'});
+  }
+});
+
 export {router as servicesRouter};
