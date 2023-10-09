@@ -7,11 +7,11 @@
   "homepage": "./",
   "startScript": "./dev.js",
   "scripts": {
-    "lint": "eslint --ext .ts,.tsx .",
-    "start-react": "react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "build-cordova": "node scripts/build.js",
-    "web": "serve -s build -l 3000"
+    "web": "serve -s build -l 3000",
+    "lint": "eslint --ext .ts,.tsx ."
   },
   "keywords": [],
   "author": {
