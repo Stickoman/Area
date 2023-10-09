@@ -10,6 +10,7 @@ services:
       - "8081:8081"
     depends_on:
       - back
+      - mobile
 
   back:
     build:
@@ -18,3 +19,9 @@ services:
     container_name: server
     ports:
       - "8080:8080"
+
+  mobile:
+    build:
+      context: ./front
+      dockerfile: ./mobile/Dockerfile
+    container_name: client_mobile
