@@ -9,7 +9,7 @@ import ServiceScreen from './screens/ServiceScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import AuthenticationScreen from './screens/AuthenticationScreen';
 import ServicesScreen from './screens/ServicesScreen';
-import TwitterCallbackScreen from './screens/TwitterCallbackScreen';
+import OAuthScreen from './screens/OAuthScreen';
 import LoginScreen from './screens/LoginScreen';
 
 const router = createBrowserRouter([
@@ -34,8 +34,8 @@ const router = createBrowserRouter([
     element: <ServicesScreen/>,
   },
   {
-    path: '/twitterCallback',
-    element: <TwitterCallbackScreen/>,
+    path: '/oauth',
+    element: <OAuthScreen/>,
   },
   {
     path: '/login',

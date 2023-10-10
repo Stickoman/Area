@@ -1,34 +1,33 @@
 import React, {CSSProperties, useState} from 'react';
-import axios from 'axios';
-import Cookies from 'js-cookie';
 import '../index.css';
-import {useNavigate} from 'react-router-dom';
 
-function LoginComponent() {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-  const navigate = useNavigate();
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+interface LoginFormData {
+  email: string;
+  password: string;
+}
+
+interface LoginComponentProps {
+  callback: (data: LoginFormData) => void;
+}
+
+function LoginComponent(props: LoginComponentProps) {
+  const [formData, setFormData] = useState({email: '', password: ''} as LoginFormData);
+
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('/api/auth/login', formData);
-      const token = response.data.token;
-      Cookies.set('token', token);
-      navigate('/profile');
-    } catch (error) {
-      console.error('Error logging in:', error);
-    }
+    props.callback(formData);
   };
+
   const containerStyle: CSSProperties = {
     maxWidth: '500px',
     margin: 'auto',
     padding: '20px',
     borderRadius: '8px',
   };
-  const handleChange = (e: { target: { name: any; value: any; }; }) => {
+
+  const handleChange = (e: { target: { name: string, value: string; }; }) => {
     const {name, value} = e.target;
+
     setFormData({
       ...formData,
       [name]: value,
@@ -65,4 +64,5 @@ function LoginComponent() {
   );
 }
 
+export {LoginFormData};
 export default LoginComponent;

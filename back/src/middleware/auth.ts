@@ -24,7 +24,7 @@ function authenticateMiddleware(req: AuthenticatedRequest, res: Response, next: 
   verify(token, process.env.ACCESS_TOKEN_SECRET, (hasError, payload) => {
     const isUser = (jwt: string | JwtPayload): jwt is UserPayload => {
       return !!(jwt as UserPayload);
-    }
+    };
 
     if (hasError || !isUser(payload))
       return res.sendStatus(401);
