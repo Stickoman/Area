@@ -3,7 +3,6 @@ import oAuth1a from 'twitter-v1-oauth';
 import axios from 'axios';
 import qs from 'querystring';
 import {isString} from './authService';
-import {IUser, User} from '../model/user';
 import {ITwitterAuthentication, TwitterAuthentication} from '../model/twitterAuth';
 
 interface TwitterResponse {

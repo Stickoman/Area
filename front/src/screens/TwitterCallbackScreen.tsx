@@ -1,7 +1,7 @@
 import React, {CSSProperties} from 'react';
 import NavigationBar, {checkIfUserIsLoggedIn} from '../components/NavBarComponent';
 
-function TwitterScreen(): React.JSX.Element {
+function TwitterCallbackScreen(): React.JSX.Element {
   const wrapperStyle: CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
@@ -32,4 +32,4 @@ function TwitterScreen(): React.JSX.Element {
   );
 }
 
-export default TwitterScreen;
+export default TwitterCallbackScreen;

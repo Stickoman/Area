@@ -38,10 +38,10 @@ router.get('/api/auth/twitter/callback', [], async (req: Request, res: Response)
         document.twitterId = account.userId;
         await document.save();
 
-        res.redirect(`http://localhost:3000/#/login?jwt=${generateAccessToken(user)}&name=${account.screenName}`);
+        res.redirect(`http://localhost:3000/login?jwt=${generateAccessToken(user)}&name=${account.screenName}`);
       })
       .catch(() => {
-        res.redirect(`http://localhost:3000/#/twitter?id=${account.userId}&name=${account.screenName}`);
+        res.redirect(`http://localhost:3000/twitterCallback?id=${account.userId}&name=${account.screenName}`);
       });
   } catch (error) {
     res.status(500).send('Error during Twitter callback processing');
