@@ -6,6 +6,7 @@ interface IUser {
   lastName: string;
   email: string;
   password: string;
+  twitterId: string,
 }
 
 const schema = new Schema<IUser>({
@@ -24,6 +25,10 @@ const schema = new Schema<IUser>({
   password: {
     type: String,
     required: true,
+  },
+  twitterId: {
+    type: String,
+    required: false,
   },
 });
 

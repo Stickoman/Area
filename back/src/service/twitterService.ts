@@ -3,6 +3,8 @@ import oAuth1a from 'twitter-v1-oauth';
 import axios from 'axios';
 import qs from 'querystring';
 import {isString} from './authService';
+import {IUser, User} from '../model/user';
+import {ITwitterAuthentication, TwitterAuthentication} from '../model/twitterAuth';
 
 interface TwitterResponse {
   oauth_token: string;
@@ -78,5 +80,20 @@ async function requestAccessToken(token: string, verifier: string): Promise<Twit
     });
 }
 
-export {requestToken, requestAccessToken};
+async function registerTwitterAccount(response: TwitterResponse): Promise<ITwitterAuthentication> {
+  let twitterAuth = await TwitterAuthentication.findOne({userId: response.user_id}).exec();
+
+  if (twitterAuth === null) {
+    twitterAuth = await new TwitterAuthentication({
+      userId: response.user_id,
+      oauthToken: response.oauth_token,
+      oauthTokenSecret: response.oauth_token_secret,
+      screenName: response.screen_name,
+    }).save();
+  }
+
+  return twitterAuth;
+}
+
+export {requestToken, requestAccessToken, registerTwitterAccount};
 export type {TwitterResponse};

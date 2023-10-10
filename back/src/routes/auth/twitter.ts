@@ -1,6 +1,9 @@
 import {Router, Response, Request} from 'express';
-import {isString} from '../../service/authService';
-import {requestAccessToken, requestToken, TwitterResponse} from '../../service/twitterService';
+import {isString, retrieveAssociatedTwitterUser} from '../../service/authService';
+import {registerTwitterAccount, requestAccessToken, requestToken, TwitterResponse} from '../../service/twitterService';
+import {ITwitterAuthentication} from '../../model/twitterAuth';
+import {User} from '../../model/user';
+import {generateAccessToken} from '../../middleware/auth';
 
 const router = Router();
 
@@ -19,13 +22,27 @@ router.get('/api/auth/twitter/callback', [], async (req: Request, res: Response)
   const oauth_token = req.query.oauth_token as string | undefined;
   const oauth_verifier = req.query.oauth_verifier as string | undefined;
 
-  if (!isString(oauth_token) || !isString(oauth_verifier)) return;
+  if (!isString(oauth_token) || !isString(oauth_verifier)) {
+    res.status(400).send('Unable to parse parameters oauth_token and oauth_verifier');
+    return;
+  }
 
   try {
     const response: TwitterResponse = await requestAccessToken(oauth_token, oauth_verifier);
+    const account: ITwitterAuthentication = await registerTwitterAccount(response);
 
-    console.log(response);
-    res.redirect('/');
+    retrieveAssociatedTwitterUser(account.userId)
+      .then(async user => {
+        const document = await User.findOne({twitterId: account.userId}).exec();
+
+        document.twitterId = account.userId;
+        await document.save();
+
+        res.redirect(`http://localhost:3000/#/login?jwt=${generateAccessToken(user)}&name=${account.screenName}`);
+      })
+      .catch(() => {
+        res.redirect(`http://localhost:3000/#/twitter?id=${account.userId}&name=${account.screenName}`);
+      });
   } catch (error) {
     res.status(500).send('Error during Twitter callback processing');
   }

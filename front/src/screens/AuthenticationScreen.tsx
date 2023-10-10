@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import NavigationBar, {checkIfUserIsLoggedIn} from '../components/NavBarComponent';
+import NavigationBar from '../components/NavBarComponent';
 import LoginComponent from '../components/LoginComponent';
 import RegisterComponent from '../components/RegisterComponent';
 import GoogleAuthComponent from '../components/GoogleAuthComponent';
