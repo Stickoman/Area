@@ -1,18 +1,18 @@
 import * as React from 'react';
 
 import {
-  RouterProvider,
-  createHashRouter,
+  RouterProvider, createBrowserRouter,
 } from 'react-router-dom';
 
 import HomeScreen from './screens/HomeScreen';
 import ServiceScreen from './screens/ServiceScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import AuthenticationScreen from './screens/AuthenticationScreen';
-import NavigationBar from './components/NavBarComponent';
 import ServicesScreen from './screens/ServicesScreen';
+import OAuthScreen from './screens/OAuthScreen';
+import LoginScreen from './screens/LoginScreen';
 
-const router = createHashRouter([
+const router = createBrowserRouter([
   {
     path: '/',
     element: <HomeScreen/>,
@@ -33,6 +33,14 @@ const router = createHashRouter([
     path: '/services',
     element: <ServicesScreen/>,
   },
+  {
+    path: '/oauth',
+    element: <OAuthScreen/>,
+  },
+  {
+    path: '/login',
+    element: <LoginScreen/>,
+  },
 ]);
 
 function App(): React.JSX.Element {
@@ -42,7 +50,7 @@ function App(): React.JSX.Element {
         <RouterProvider router={router}/>
       </React.StrictMode>
     </div>
-);
+  );
 }
 
 export default App;

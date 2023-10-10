@@ -1,4 +1,4 @@
-import {IUser} from '../model/user';
+import {IUser, User} from '../model/user';
 import {JwtPayload, sign, verify} from 'jsonwebtoken';
 import {Request, Response, NextFunction} from 'express';
 
@@ -21,14 +21,14 @@ function authenticateMiddleware(req: AuthenticatedRequest, res: Response, next: 
   if (!header?.startsWith('Bearer ') || !token)
     return res.sendStatus(401);
 
-  verify(token, process.env.ACCESS_TOKEN_SECRET, (hasError, payload) => {
+  verify(token, process.env.ACCESS_TOKEN_SECRET, async (hasError, payload) => {
     const isUser = (jwt: string | JwtPayload): jwt is UserPayload => {
       return !!(jwt as UserPayload);
-    }
+    };
 
     if (hasError || !isUser(payload))
       return res.sendStatus(401);
-    req.user = payload.user;
+    req.user = await User.findOne({_id: payload.user._id}).exec();
     next();
   });
 }

@@ -1,6 +1,6 @@
 import {retrieveUser, saveUser} from '../repository/userRepository';
 import {genSalt, hash, compare} from 'bcrypt';
-import {IUser} from '../model/user';
+import {IUser, User} from '../model/user';
 import {generateAccessToken} from '../middleware/auth';
 
 type Credentials = {
@@ -8,18 +8,18 @@ type Credentials = {
   password: string;
 }
 
-const isString = (object: any) : object is string  => {
+const isString = (object: string | object) : object is string  => {
   return typeof object === 'string';
-}
+};
 
-function reject(reason: any): Promise<never> {
+function reject(reason: string | Error): Promise<never> {
   if (isString(reason))
     return Promise.reject(new Error(reason));
   return Promise.reject(reason);
 }
 
 async function hashPassword(credentials: Credentials): Promise<Credentials> {
-  let salt = await genSalt(10);
+  const salt = await genSalt(10);
 
   return {
     ...credentials,
@@ -44,6 +44,7 @@ async function register(credentials: Credentials): Promise<IUser> {
   return saveUser({
     firstName: '',
     lastName: '',
+    twitterId: '',
     ...await hashPassword(credentials),
   });
 }
@@ -59,7 +60,15 @@ async function login(credentials: Credentials): Promise<string> {
     })
     .catch(reason => {
       return reject(reason);
-    })
+    });
 }
 
-export {isString, register, login};
+async function retrieveAssociatedTwitterUser(twitterId: string): Promise<IUser> {
+  const user = await User.findOne({twitterId: twitterId}).exec();
+
+  if (user === null)
+    return reject('Unable to find a user associated with this Twitter account');
+  return user as IUser;
+}
+
+export {isString, register, login, retrieveAssociatedTwitterUser};
