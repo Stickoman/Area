@@ -11,6 +11,8 @@ services:
     depends_on:
       - back
       - mobile
+    volumes:
+      - shared-volume:/shared  # Create a shared volume for client_mobile and client_web
 
   back:
     build:
@@ -25,3 +27,8 @@ services:
       context: ./front
       dockerfile: ./mobile/Dockerfile
     container_name: client_mobile
+    volumes:
+      - shared-volume:/shared  # Mount the same shared volume from client_web
+
+volumes:
+  shared-volume:

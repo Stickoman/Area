@@ -31,6 +31,8 @@ FROM node:20
 
 WORKDIR /usr/src/app
 
-COPY --from=build /usr/src/app/platforms/android/app/build/outputs/apk/debug/app-debug.apk ./client.apk
+RUN mkdir -p /usr/src/app/apk
+
+COPY --from=build /usr/src/app/platforms/android/app/build/outputs/apk/debug/app-debug.apk /usr/src/app/apk/client.apk
 
 CMD ["cordova", "run", "android"]
