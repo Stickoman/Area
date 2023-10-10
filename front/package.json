@@ -7,10 +7,10 @@
   "homepage": "./",
   "startScript": "./dev.js",
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=8081 react-scripts start",
     "build": "react-scripts build",
     "build-cordova": "node scripts/build.js",
-    "web": "serve -s build -l 3000",
+    "web": "serve -s build -l 8081",
     "lint": "eslint --ext .ts,.tsx ."
   },
   "keywords": [],

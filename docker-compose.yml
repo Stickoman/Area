@@ -5,16 +5,30 @@ services:
     build:
       context: ./front
       dockerfile: Dockerfile
-    container_name: frontend_container
+    container_name: client_web
     ports:
-      - "3000:3000"
+      - "8081:8081"
     depends_on:
       - back
+      - mobile
+    volumes:
+      - shared-volume:/shared  # Create a shared volume for client_mobile and client_web
 
   back:
     build:
       context: ./back
       dockerfile: Dockerfile
-    container_name: backend_container
+    container_name: server
     ports:
       - "8080:8080"
+
+  mobile:
+    build:
+      context: ./front
+      dockerfile: ./mobile/Dockerfile
+    container_name: client_mobile
+    volumes:
+      - shared-volume:/shared  # Mount the same shared volume from client_web
+
+volumes:
+  shared-volume:
