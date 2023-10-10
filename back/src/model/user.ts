@@ -6,7 +6,7 @@ interface IUser {
   lastName: string;
   email: string;
   password: string;
-  twitterId: string,
+  twitterId?: string,
 }
 
 const schema = new Schema<IUser>({

@@ -3,7 +3,7 @@ import {isString, retrieveAssociatedTwitterUser} from '../../service/authService
 import {registerTwitterAccount, requestAccessToken, requestToken, TwitterResponse} from '../../service/twitterService';
 import {ITwitterAuthentication} from '../../model/twitterAuth';
 import {User} from '../../model/user';
-import {generateAccessToken} from '../../middleware/auth';
+import {AuthenticatedRequest, authenticateMiddleware, generateAccessToken} from '../../middleware/auth';
 import {initOAuthFlow} from '../../service/oauthService';
 
 const router = Router();
@@ -48,6 +48,17 @@ router.get('/api/auth/twitter/callback', [], async (req: Request, res: Response)
       });
   } catch (error) {
     res.status(500).send('Error during Twitter callback processing');
+  }
+});
+
+router.post('/api/auth/twitter/disassociate', authenticateMiddleware, async (req: AuthenticatedRequest, res: Response) => {
+  const document = await User.findOne({_id: req.user._id}).exec();
+
+  if (document !== null) {
+    document.twitterId = '';
+    await document.save();
+  } else {
+    res.sendStatus(401);
   }
 });
 
