@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import NavigationBar, {checkIfUserIsLoggedIn} from '../components/NavBarComponent';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+
 function ProfileScreen() {
   const navigate = useNavigate();
   const buttonContainerStyle: CSSProperties = {
@@ -15,27 +16,23 @@ function ProfileScreen() {
       navigate('/authentication');
       return;
     }
-    try {
-      const response = await axios.post('/api/auth/logout', {}, {
-        headers: {
-          'Authorization': `Bearer ${Cookies.get('token')}`
-        },
-      });
-      if (response.status === 200) {
+    await axios.post('/api/auth/logout', {}, {
+      headers: {
+        'Authorization': `Bearer ${Cookies.get('token')}`,
+      },
+    })
+      .catch(reason => {
+        console.warn('Unable to logout: ', reason);
+      })
+      .finally(() => {
         Cookies.remove('token');
         navigate('/authentication');
-      } else {
-        throw new Error('Erreur lors de la déconnexion');
-      }
-    } catch (error) {
-      console.error(error);
-      navigate('/authentication');
-    }
+      });
   }
 
   return (
     <div>
-      <NavigationBar color={'yellow'}/>
+      <NavigationBar color={'purple'}/>
       <h6>Profile</h6>
       <div style={buttonContainerStyle} className={'buttonContainerStyle'}>
         <button type="submit" onClick={logout} className="buttonStyle">Logout</button>
@@ -43,4 +40,5 @@ function ProfileScreen() {
     </div>
   );
 }
+
 export default ProfileScreen;
