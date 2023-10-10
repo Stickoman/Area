@@ -26,7 +26,6 @@ RUN cordova platform add android
 
 RUN cordova build android
 
-# Copy the APK to the final image
 FROM node:20
 
 WORKDIR /usr/src/app
