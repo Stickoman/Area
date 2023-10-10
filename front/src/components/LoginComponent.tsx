@@ -61,29 +61,6 @@ function LoginComponent() {
         />
         <button type="submit" className="buttonStyle">Login</button>
       </form>
-
-
-      <div onClick={async () => {
-        try {
-          window.location.href = "http://localhost:8080/api/auth/twitter";
-          /*const response = await axios.get('/api/auth/twitter', {});
-
-          if (response.data && response.data.url) {
-            window.location.href = response.data.url;
-          } else {
-            console.error('Unable to parse response', response);
-          }*/
-        } catch (error) {
-          console.error('Twitter login failed:', error);
-          alert('Failed to login with Twitter. Please try again.');
-        }
-      }}>
-        <img
-          src="https://cdn.cms-twdigitalassets.com/content/dam/developer-twitter/auth-docs/sign-in-with-twitter-link.png.twimg.1920.png"
-          width="141px" height="16px"
-          data-src="https://cdn.cms-twdigitalassets.com/content/dam/developer-twitter/auth-docs/sign-in-with-twitter-link.png.twimg.1920.png"
-          alt="" data-object-fit="cover"/>
-      </div>
     </div>
   );
 }

@@ -27,7 +27,7 @@ function facebookAuthComponent() {
     <div style={containerStyle}>
       <button onClick={handleFacebookLogin} className={'facebookButtonStyle'}>
         <FontAwesomeIcon icon={faFacebook}/>
-        <span style={{marginLeft: '10px'}}>Continue with facebook</span>
+        <span style={{marginLeft: '10px'}}>Continue with Facebook</span>
       </button>
     </div>
   )

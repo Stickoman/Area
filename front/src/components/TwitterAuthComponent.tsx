@@ -1,19 +1,12 @@
-import Axios from 'axios';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faTwitter} from '@fortawesome/free-brands-svg-icons';
 import '../index.css'
 import {CSSProperties} from 'react';
 
 function handleTwitterLogin() {
-  Axios.post('api/auth/twitter', {
-  })
-    .then(response => {
-      console.log(response.data);
-    })
-    .catch(error => {
-      console.error(error);
-    });
+  window.location.href = 'http://localhost:8080/api/auth/twitter';
 }
+
 function twitterAuthComponent() {
   const containerStyle: CSSProperties = {
     maxWidth: '500px',
@@ -26,7 +19,7 @@ function twitterAuthComponent() {
     <div style={containerStyle}>
       <button onClick={handleTwitterLogin} className={'twitterButtonStyle'}>
         <FontAwesomeIcon icon={faTwitter}/>
-        <span style={{marginLeft: '10px'}}>Continue with twitter</span>
+        <span style={{marginLeft: '10px'}}>Continue with Twitter</span>
       </button>
     </div>
   )
