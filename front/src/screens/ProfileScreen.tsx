@@ -21,9 +21,7 @@ function ProfileScreen() {
 
   async function updateUserData() {
     const response = await axios.get('/api/me', {
-      headers: {
-        'Authorization': `Bearer ${Cookies.get('token')}`,
-      },
+      headers: getAuthorizedHeader(),
     });
 
     setProfile(response.data);
@@ -33,26 +31,6 @@ function ProfileScreen() {
     updateUserData()
       .catch(reason => console.warn(reason));
   }, []);
-
-  async function logout() {
-    const isLoggedIn = checkIfUserIsLoggedIn();
-    if (!isLoggedIn) {
-      navigate('/authentication');
-      return;
-    }
-    await axios.post('/api/auth/logout', {}, {
-      headers: {
-        'Authorization': `Bearer ${Cookies.get('token')}`,
-      },
-    })
-      .catch(reason => {
-        console.warn('Unable to logout: ', reason);
-      })
-      .finally(() => {
-        Cookies.remove('token');
-        navigate('/authentication');
-      });
-  }
 
   if (profile === null) {
     return (
@@ -79,7 +57,7 @@ function ProfileScreen() {
             })
               .then(() => navigate('/profile'));
           }}>Click here to disassociate</span></p>}
-
+          <button type="submit" onClick={goToUpdate} className="buttonStyle">Modify your profile</button>
           <button type="submit" onClick={logout} className="buttonStyle">Logout</button>
         </div>
       </div>

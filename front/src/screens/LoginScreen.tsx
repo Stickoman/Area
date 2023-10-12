@@ -18,7 +18,7 @@ function LoginScreen(): React.JSX.Element {
 
   const navigate = useNavigate();
 
-  const queryParameters = new URLSearchParams(window.location.href);
+  const queryParameters = new URLSearchParams(window.location.search);
   const jwt: string = queryParameters.get('jwt');
   const name: string = queryParameters.get('name');
 
