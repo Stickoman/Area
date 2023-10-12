@@ -17,7 +17,7 @@ function ProfileScreen() {
           'Authorization': `Bearer ${Cookies.get('token')}`,
         },
       });
-      setUserData(response.data._doc);
+      setUserData(response.data);
     } catch (error) {
       console.error(error);
       navigate('/authentication');
