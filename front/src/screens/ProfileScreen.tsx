@@ -34,6 +34,10 @@ function ProfileScreen() {
       .catch(reason => console.warn(reason));
   }, []);
 
+  function goToUpdate() {
+    navigate('/profile/update');
+  }
+
   async function logout() {
     const isLoggedIn = checkIfUserIsLoggedIn();
     if (!isLoggedIn) {
@@ -79,7 +83,7 @@ function ProfileScreen() {
             })
               .then(() => navigate('/profile'));
           }}>Click here to disassociate</span></p>}
-
+          <button type="submit" onClick={goToUpdate} className="buttonStyle">Modify your profile</button>
           <button type="submit" onClick={logout} className="buttonStyle">Logout</button>
         </div>
       </div>
