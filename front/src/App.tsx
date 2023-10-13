@@ -11,8 +11,6 @@ import AuthenticationScreen from './screens/AuthenticationScreen';
 import ServicesScreen from './screens/ServicesScreen';
 import OAuthScreen from './screens/OAuthScreen';
 import LoginScreen from './screens/LoginScreen';
-import ProfileUpdateScreen from './screens/ProfileUpdateScreen';
-
 
 const router = createBrowserRouter([
   {
@@ -26,10 +24,6 @@ const router = createBrowserRouter([
   {
     path: '/profile',
     element: <ProfileScreen/>,
-  },
-  {
-    path: '/profile/update',
-    element: <ProfileUpdateScreen/>,
   },
   {
     path: '/authentication',
