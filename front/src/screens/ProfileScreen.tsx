@@ -1,8 +1,10 @@
 import React, {CSSProperties, useEffect, useState} from 'react';
 import Cookies from 'js-cookie';
-import NavigationBar, {checkIfUserIsLoggedIn} from '../components/NavBarComponent';
+import NavigationBar from '../components/NavBarComponent';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+import ProfileComponent from '../components/profile/ProfileComponent';
+import {disassociateTwitter, getAuthorizedHeader, logout} from '../common/auth';
 
 interface IProfile {
   email: string;
@@ -11,10 +13,50 @@ interface IProfile {
   twitterId?: string;
 }
 
-function ProfileScreen() {
+interface ProfileContentProperties {
+  profile: IProfile;
+}
+
+function ProfileContent(props: ProfileContentProperties): React.JSX.Element {
+  const {profile} = props;
   const navigate = useNavigate();
-  const buttonContainerStyle: CSSProperties = {
+
+  if (profile === null) {
+    return (
+      <div>
+        <p>Loading...</p>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+      <ProfileComponent user={profile}/>
+
+      {
+        profile.twitterId && (
+          <div>
+            <p>Twitter Associated!</p>
+            <span style={{cursor: 'pointer'}} onClick={disassociateTwitter}>Click here to disassociate</span>
+          </div>
+        )
+      }
+      <button type="submit" onClick={() => logout(navigate)} className="buttonStyle">Logout</button>
+      </div>
+    );
+  }
+}
+
+function ProfileScreen(): React.JSX.Element {
+  const titleStyle: CSSProperties = {
+    marginTop: 15,
+    textAlign: 'center',
+    fontSize: 35,
+    fontWeight: 'bold',
+  };
+  const profileContainerStyle: CSSProperties = {
     margin: 'auto',
+    width: '35%',
+    height: '70%',
   };
 
   const [profile, setProfile] = useState(null as IProfile);
@@ -32,37 +74,20 @@ function ProfileScreen() {
       .catch(reason => console.warn(reason));
   }, []);
 
-  if (profile === null) {
-    return (
-      <div>
-        <NavigationBar color={'purple'}/>
-        <h6>Profile</h6>
+  return (
+    <div>
+      <NavigationBar color={'purple'}/>
 
-        <p>Loading...</p>
-      </div>
-    )
-  } else {
-    return (
       <div>
-        <NavigationBar color={'purple'}/>
-        <h6>Profile</h6>
-        <div style={buttonContainerStyle} className={'buttonContainerStyle'}>
-          <p>Email: {profile.email}</p>
+        <h6 style={titleStyle}>Profile</h6>
 
-          {profile.twitterId && <p>Twitter Associated! <span style={{cursor: 'pointer'}} onClick={async () => {
-            await axios.post('/api/auth/twitter/disassociate', {}, {
-              headers: {
-                'Authorization': `Bearer ${Cookies.get('token')}`,
-              },
-            })
-              .then(() => navigate('/profile'));
-          }}>Click here to disassociate</span></p>}
-          <button type="submit" onClick={goToUpdate} className="buttonStyle">Modify your profile</button>
-          <button type="submit" onClick={logout} className="buttonStyle">Logout</button>
+        <div style={profileContainerStyle}>
+          <ProfileContent profile={profile}/>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
+export type {IProfile};
 export default ProfileScreen;
