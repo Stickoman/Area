@@ -1,22 +1,7 @@
 import app from '../../src/app';
 
 import request from 'supertest';
-import {User} from '../../src/model/user';
-import {Credentials, hashPassword} from '../../src/service/authService';
-
-const USER_CREDENTIALS: Credentials = {
-  email: 'user@gmail.com',
-  password: 'password!',
-};
-
-async function saveUser(credentials: Credentials) {
-  const hashedCredentials: Credentials = {
-    ...credentials,
-    password: await hashPassword(credentials.password),
-  };
-
-  await new User(hashedCredentials).save();
-}
+import {saveUser, USER_CREDENTIALS} from '../common/user';
 
 describe('Basic Auth Login', () => {
   beforeEach(async () => {
