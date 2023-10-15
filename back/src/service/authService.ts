@@ -8,7 +8,7 @@ type Credentials = {
   password: string;
 }
 
-const isString = (object: string | object) : object is string  => {
+const isString = (object: string | object): object is string => {
   return typeof object === 'string';
 };
 
@@ -18,13 +18,10 @@ function reject(reason: string | Error): Promise<never> {
   return Promise.reject(reason);
 }
 
-async function hashPassword(credentials: Credentials): Promise<Credentials> {
+async function hashPassword(password: string): Promise<string> {
   const salt = await genSalt(10);
 
-  return {
-    ...credentials,
-    password: await hash(credentials.password, salt),
-  };
+  return await hash(password, salt);
 }
 
 async function userExists(email: string): Promise<boolean> {
@@ -42,10 +39,11 @@ async function register(credentials: Credentials): Promise<IUser> {
   if (exists)
     return reject('User with this email already exists');
   return saveUser({
+    email: credentials.email,
+    password: await hashPassword(credentials.password),
     firstName: '',
     lastName: '',
     twitterId: '',
-    ...await hashPassword(credentials),
   });
 }
 
@@ -71,4 +69,5 @@ async function retrieveAssociatedTwitterUser(twitterId: string): Promise<IUser> 
   return user as IUser;
 }
 
-export {isString, register, login, retrieveAssociatedTwitterUser};
+export type {Credentials};
+export {isString, register, login, retrieveAssociatedTwitterUser, hashPassword};
