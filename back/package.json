@@ -5,7 +5,7 @@
     "start": "tsc && node dist/index.js",
     "dev": "nodemon",
     "lint": "eslint . --ext .ts",
-    "test": "jest --runInBand"
+    "test": "jest --verbose --runInBand --testMatch='**/?(*.)+(spec|test).ts'"
   },
   "dependencies": {
     "axios": "^1.5.1",
