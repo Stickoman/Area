@@ -1,20 +1,29 @@
-import mongoose from 'mongoose';
+import mongoose, {ConnectOptions} from 'mongoose';
 
-let isConnected = false;
+let connected = false;
 
 async function connect() {
-  if (isConnected) return;
+  if (connected) return;
 
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
-      autoIndex: true,
-    });
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    } as ConnectOptions);
 
-    isConnected = true;
+    connected = true;
   } catch (error) {
-    isConnected = false;
+    connected = false;
     return Promise.reject(error);
   }
 }
 
-export {connect};
+async function clearDatabase(): Promise<boolean> {
+  return await mongoose.connection.db.dropDatabase();
+}
+
+function isConnected(): boolean {
+  return connected;
+}
+
+export {connect, isConnected, clearDatabase};
