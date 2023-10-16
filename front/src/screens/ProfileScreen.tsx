@@ -4,7 +4,7 @@ import NavigationBar from '../components/NavBarComponent';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import ProfileComponent from '../components/profile/ProfileComponent';
-import {disassociateTwitter, getAuthorizedHeader, logout} from '../common/auth';
+import {disassociateTwitter, disassociateDiscord, getAuthorizedHeader, logout} from '../common/auth';
 
 interface IProfile {
   email: string;
@@ -45,7 +45,7 @@ function ProfileContent(props: ProfileContentProperties): React.JSX.Element {
         profile.discordId && (
           <div>
             <p>Discord Associated!</p>
-            <span style={{cursor: 'pointer'}} onClick={disassociateTwitter}>Click here to disassociate</span>// to do later discord
+            <span style={{cursor: 'pointer'}} onClick={disassociateDiscord}>Click here to disassociate</span>
           </div>
         )
       }

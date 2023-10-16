@@ -25,4 +25,4 @@ function disassociateDiscord() {
     .catch(reason => console.warn('Unable to disassociate Discord: ', reason));
 }
 
-export {logout, disassociateTwitter, getAuthorizedHeader};
+export {logout, disassociateTwitter, disassociateDiscord, getAuthorizedHeader};
