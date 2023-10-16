@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {CSSProperties, useState} from 'react';
 import InputText from '../common/InputText';
 import {IProfile} from '../../screens/ProfileScreen';
 import {handleFormSubmit} from '../../common/profile';
@@ -11,19 +11,35 @@ function ProfileComponent(props: ProfileComponentProperties) {
   const [isEditing, setEditing] = useState(false);
   const [user, _] = useState(props.user);
 
+  const wrapperStyle: CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: '25px',
+  }
+  const inputsStyle: CSSProperties = {
+    width: '100%',
+    marginBottom: 15,
+  };
+
+  function saveProfile() {
+    setEditing(false);
+
+    handleFormSubmit(user)
+      .catch(reason => console.log(reason));
+  }
+
   return (
-    <div className="centered-container">
-      <InputText type={'text'} disabled={!isEditing} value={user.firstName} callback={value => user.firstName = value} />
-      <InputText type={'text'} disabled={!isEditing} value={user.lastName} callback={value => user.lastName = value} />
-      <InputText type={'email'} disabled={!isEditing} value={user.email} callback={value => user.email = value} />
+    <div style={wrapperStyle}>
+      <div style={inputsStyle}>
+        <InputText type={'text'} disabled={!isEditing} value={user.firstName} callback={value => user.firstName = value} />
+        <InputText type={'text'} disabled={!isEditing} value={user.lastName} callback={value => user.lastName = value} />
+        <InputText type={'email'} disabled={!isEditing} value={user.email} callback={value => user.email = value} />
+      </div>
 
       {!isEditing && <button className="buttonStyle" onClick={() => setEditing(true)}>Edit</button>}
-      {isEditing && <button className="buttonStyle" onClick={() => {
-        setEditing(false);
-
-        handleFormSubmit(user)
-          .catch(reason => { console.log(reason) });
-      }}>Save</button>}
+      {isEditing && <button className="buttonStyle" onClick={() => saveProfile()}>Save</button>}
     </div>
   )
 }
