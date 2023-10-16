@@ -19,6 +19,12 @@ APP.get('/api/status', (_req, res) => {
   res.sendStatus(isConnected() ? 200 : 500);
 });
 
+APP.get('/api/mobile', (req, res) => {
+  const file = `/usr/src/app/shared/client.apk`;
+
+  res.download(file);
+});
+
 APP.use(cors());
 APP.use(json());
 APP.use(areasRouter);

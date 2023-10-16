@@ -11,7 +11,7 @@ import AuthenticationScreen from './screens/AuthenticationScreen';
 import ServicesScreen from './screens/ServicesScreen';
 import OAuthScreen from './screens/OAuthScreen';
 import LoginScreen from './screens/LoginScreen';
-import APKDownloadScreen from './screens/ApkDownloadScreen';
+import MobileDownloadScreen from './screens/MobileDownloadScreen';
 
 const router = createBrowserRouter([
   {
@@ -44,7 +44,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/client.apk',
-    element: <APKDownloadScreen />,
+    element: <MobileDownloadScreen />,
   },
 ]);
 
