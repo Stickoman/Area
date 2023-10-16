@@ -8,6 +8,7 @@ import FacebookAuthComponent from '../components/FacebookAuthComponent';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import {useNavigate} from 'react-router-dom';
+import DiscordAuthComponent from '../components/DiscordAuthComponent';
 
 function AuthenticationScreen() {
   const [login, setLogin] = useState(true);
@@ -36,6 +37,7 @@ function AuthenticationScreen() {
       </div>
       <GoogleAuthComponent/>
       <TwitterAuthComponent/>
+      <DiscordAuthComponent/>
       <FacebookAuthComponent/>
     </div>
   );
