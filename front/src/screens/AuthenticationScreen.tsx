@@ -5,6 +5,7 @@ import RegisterComponent from '../components/RegisterComponent';
 import GoogleAuthComponent from '../components/GoogleAuthComponent';
 import TwitterAuthComponent from '../components/TwitterAuthComponent';
 import FacebookAuthComponent from '../components/FacebookAuthComponent';
+import GithubAuthComponent from '../components/GithubAuthComponent';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import {useNavigate} from 'react-router-dom';
@@ -38,6 +39,7 @@ function AuthenticationScreen() {
       <GoogleAuthComponent/>
       <TwitterAuthComponent/>
       <DiscordAuthComponent/>
+      <GithubAuthComponent/>
       <FacebookAuthComponent/>
     </div>
   );

@@ -4,7 +4,13 @@ import NavigationBar from '../components/NavBarComponent';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import ProfileComponent from '../components/profile/ProfileComponent';
-import {disassociateTwitter, disassociateDiscord, getAuthorizedHeader, logout} from '../common/auth';
+import {
+  disassociateTwitter,
+  disassociateDiscord,
+  getAuthorizedHeader,
+  logout,
+  disassociateGithub, disassociateGoogle,
+} from '../common/auth';
 
 interface IProfile {
   email: string;
@@ -12,6 +18,8 @@ interface IProfile {
   lastName: string;
   twitterId?: string;
   discordId?: string;
+  githubId?: string;
+  googleId?: string;
 }
 
 interface ProfileContentProperties {
@@ -46,6 +54,22 @@ function ProfileContent(props: ProfileContentProperties): React.JSX.Element {
           <div>
             <p>Discord Associated!</p>
             <span style={{cursor: 'pointer'}} onClick={disassociateDiscord}>Click here to disassociate</span>
+          </div>
+        )
+      }
+      {
+        profile.githubId && (
+          <div>
+            <p>Github Associated!</p>
+            <span style={{cursor: 'pointer'}} onClick={disassociateGithub}>Click here to disassociate</span>
+          </div>
+        )
+      }
+      {
+        profile.googleId && (
+          <div>
+            <p>Google Associated!</p>
+            <span style={{cursor: 'pointer'}} onClick={disassociateGoogle}>Click here to disassociate</span>
           </div>
         )
       }

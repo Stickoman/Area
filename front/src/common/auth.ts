@@ -25,4 +25,14 @@ function disassociateDiscord() {
     .catch(reason => console.warn('Unable to disassociate Discord: ', reason));
 }
 
-export {logout, disassociateTwitter, disassociateDiscord, getAuthorizedHeader};
+function disassociateGithub() {
+  axios.post('/api/auth/github/disassociate', {}, {headers: getAuthorizedHeader()})
+    .catch(reason => console.warn('Unable to disassociate Github: ', reason));
+}
+
+function disassociateGoogle() {
+  axios.post('/api/auth/google/disassociate', {}, {headers: getAuthorizedHeader()})
+    .catch(reason => console.warn('Unable to disassociate Google: ', reason));
+}
+
+export {logout, disassociateTwitter, disassociateDiscord, getAuthorizedHeader, disassociateGoogle, disassociateGithub};
