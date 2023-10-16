@@ -1,7 +1,7 @@
 import {v4 as UUID} from 'uuid';
 import {IUser, User} from '../model/user';
 
-type OAuthService = 'twitter' | 'facebook' | 'microsoft';
+type OAuthService = 'twitter' | 'facebook' | 'microsoft' | 'discord';
 type ConnectionType = 'register' | 'login';
 
 interface FlowData {
@@ -38,6 +38,8 @@ async function associateAccount(user: IUser, flow: FlowData) {
 
   if (flow.service == 'twitter')
     document.twitterId = flow.userId;
+  if (flow.service == 'discord')
+    document.discordId = flow.userId;
   await document.save();
 }
 

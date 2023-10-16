@@ -20,4 +20,9 @@ function disassociateTwitter() {
     .catch(reason => console.warn('Unable to disassociate Twitter: ', reason));
 }
 
-export {logout, disassociateTwitter, getAuthorizedHeader};
+function disassociateDiscord() {
+  axios.post('/api/auth/discord/disassociate', {}, {headers: getAuthorizedHeader()})
+    .catch(reason => console.warn('Unable to disassociate Discord: ', reason));
+}
+
+export {logout, disassociateTwitter, disassociateDiscord, getAuthorizedHeader};

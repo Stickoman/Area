@@ -6,7 +6,9 @@ import {basicAuthRouter} from './routes/auth/basic';
 import {profileRouter} from './routes/profile';
 import {servicesRouter} from './routes/services';
 import {twitterAuthRouter} from './routes/auth/twitter';
+import {discordAuthRouter} from './routes/auth/discord';
 import {oauthRouter} from './routes/auth/oauth';
+import {DiscordAuthentication} from './model/discordAuth';
 
 const APP = express();
 
@@ -24,6 +26,7 @@ APP.use(json());
 APP.use(areasRouter);
 APP.use(basicAuthRouter);
 APP.use(twitterAuthRouter);
+APP.use(discordAuthRouter);
 APP.use(profileRouter);
 APP.use(servicesRouter);
 APP.use(oauthRouter);

@@ -27,7 +27,7 @@ function Callback(props: FlowProps): React.JSX.Element {
   return (
     <div style={{textAlign: 'center'}}>
       <p style={titleStyle}>Welcome Back {flow.userName}!</p>
-      <p>This Twitter account is not associated with any account.</p>
+      <p>This {flow.service} account is not associated with any account.</p>
       <p>Please log-in or register!</p>
 
       <button onClick={() => {
