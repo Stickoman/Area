@@ -12,7 +12,7 @@ services:
       - back
       - mobile
     volumes:
-      - shared-volume:/shared
+      - shared-volume:/usr/src/app/shared
 
   back:
     build:
@@ -28,7 +28,7 @@ services:
       dockerfile: ./mobile/Dockerfile
     container_name: client_mobile
     volumes:
-      - shared-volume:/shared
+      - shared-volume:/usr/src/app/shared
 
 volumes:
   shared-volume:
