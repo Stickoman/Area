@@ -8,6 +8,7 @@ import {servicesRouter} from './routes/services';
 import {twitterAuthRouter} from './routes/auth/twitter';
 import {discordAuthRouter} from './routes/auth/discord';
 import {githubAuthRouter} from './routes/auth/github';
+import {googleAuthRouter} from './routes/auth/google';
 import {oauthRouter} from './routes/auth/oauth';
 
 const APP = express();
@@ -28,6 +29,7 @@ APP.use(basicAuthRouter);
 APP.use(twitterAuthRouter);
 APP.use(discordAuthRouter);
 APP.use(githubAuthRouter);
+APP.use(googleAuthRouter);
 APP.use(profileRouter);
 APP.use(servicesRouter);
 APP.use(oauthRouter);

@@ -5,14 +5,7 @@ import '../index.css'
 import {CSSProperties} from 'react';
 
 function handleGoogleLogin() {
-  Axios.post('api/auth/google', {
-  })
-    .then(response => {
-      console.log(response.data);
-    })
-    .catch(error => {
-      console.error(error);
-    });
+  window.location.href = 'http://localhost:8080/api/auth/google';
 }
 function GoogleAuthComponent() {
   const containerStyle: CSSProperties = {

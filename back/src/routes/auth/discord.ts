@@ -9,7 +9,6 @@ import {AuthenticatedRequest, authenticateMiddleware, generateAccessToken} from 
 import {initOAuthFlow} from '../../service/oauthService';
 
 const router = Router();
-const user = model<IUser>('User');
 
 router.get('/api/auth/discord', [], async (req: Request, res: Response) => {
   try {

@@ -102,5 +102,13 @@ async function retrieveAssociatedGithub(githubId: string): Promise<IUser> {
   return user as IUser;
 }
 
+async function retrieveAssociatedGoogle(googleId: string): Promise<IUser> {
+  const user = await User.findOne({googleId: googleId}).exec();
+
+  if (user === null)
+    return reject('Unable to find a user associated with this Google account');
+  return user as IUser;
+}
+
 export type {Credentials};
-export {isString, register, login, retrieveAssociatedTwitterUser, retrieveAssociatedGithub, retrieveAssociatedDiscord, hashPassword};
+export {isString, register, login, retrieveAssociatedTwitterUser, retrieveAssociatedGithub, retrieveAssociatedDiscord, retrieveAssociatedGoogle, hashPassword};
