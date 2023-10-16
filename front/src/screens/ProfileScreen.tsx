@@ -11,6 +11,7 @@ interface IProfile {
   firstName: string;
   lastName: string;
   twitterId?: string;
+  discordId?: string;
 }
 
 interface ProfileContentProperties {
@@ -37,6 +38,14 @@ function ProfileContent(props: ProfileContentProperties): React.JSX.Element {
           <div>
             <p>Twitter Associated!</p>
             <span style={{cursor: 'pointer'}} onClick={disassociateTwitter}>Click here to disassociate</span>
+          </div>
+        )
+      }
+      {
+        profile.discordId && (
+          <div>
+            <p>Discord Associated!</p>
+            <span style={{cursor: 'pointer'}} onClick={disassociateTwitter}>Click here to disassociate</span>// to do later discord
           </div>
         )
       }

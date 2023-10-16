@@ -31,6 +31,10 @@ const schema = new Schema<IUser>({
     type: String,
     required: false,
   },
+  discordId: {
+    type: String,
+    required: false,
+  },
 });
 
 const User = model<IUser>('User', schema);

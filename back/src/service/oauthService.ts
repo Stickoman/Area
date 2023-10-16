@@ -38,6 +38,8 @@ async function associateAccount(user: IUser, flow: FlowData) {
 
   if (flow.service == 'twitter')
     document.twitterId = flow.userId;
+  if (flow.service == 'discord')
+    document.discordId = flow.userId;
   await document.save();
 }
 

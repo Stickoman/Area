@@ -5,7 +5,7 @@ import {IUser, User} from '../../model/user';
 import {model} from 'mongoose';
 import {ITwitterAuthentication} from '../../model/twitterAuth';
 import {IDiscordAuthentication} from '../../model/discordAuth';
-import {generateAccessToken} from '../../middleware/auth';
+import {AuthenticatedRequest, authenticateMiddleware, generateAccessToken} from '../../middleware/auth';
 import {initOAuthFlow} from '../../service/oauthService';
 
 const router = Router();
@@ -51,6 +51,17 @@ router.get('/api/auth/discord/callback', [], async (req: Request, res: Response)
   } catch (error) {
     res.status(500).send('Error during Discord callback processing');
     console.warn(error);
+  }
+});
+
+router.post('/api/auth/discord/disassociate', authenticateMiddleware, async (req: AuthenticatedRequest, res: Response) => {
+  const document = await User.findOne({_id: req.user._id}).exec();
+
+  if (document !== null) {
+    document.discordId = '';
+    await document.save();
+  } else {
+    res.sendStatus(401);
   }
 });
 
