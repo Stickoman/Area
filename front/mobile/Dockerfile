@@ -26,10 +26,6 @@ RUN cordova platform add android
 
 RUN cordova build android
 
-FROM node:20
+RUN mkdir -p /usr/shared
 
-WORKDIR /usr/src/app
-
-RUN mkdir -p /usr/src/app/apk
-
-COPY --from=build /usr/src/app/platforms/android/app/build/outputs/apk/debug/app-debug.apk /usr/src/app/apk/client.apk
+RUN cp /usr/src/app/platforms/android/app/build/outputs/apk/debug/app-debug.apk /usr/shared/client.apk

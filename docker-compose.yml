@@ -12,7 +12,7 @@ services:
       - back
       - mobile
     volumes:
-      - shared-volume:/shared
+      - shared-volume:/usr/src/app/src/shared
 
   back:
     build:
@@ -21,6 +21,10 @@ services:
     container_name: server
     ports:
       - "8080:8080"
+    depends_on:
+      - mobile
+    volumes:
+      - shared-volume:/usr/src/app/shared
 
   mobile:
     build:
@@ -28,7 +32,7 @@ services:
       dockerfile: ./mobile/Dockerfile
     container_name: client_mobile
     volumes:
-      - shared-volume:/shared
+      - shared-volume:/usr/shared
 
 volumes:
   shared-volume:
