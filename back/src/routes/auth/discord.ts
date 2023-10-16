@@ -1,8 +1,12 @@
 import {Router, Response, Request} from 'express';
-import {isString} from '../../service/authService';
+import {isString, retrieveAssociatedDiscord} from '../../service/authService';
 import {DiscordResponse, registerDiscordAccount, requestAccessToken} from '../../service/discordService';
-import {IUser} from '../../model/user';
+import {IUser, User} from '../../model/user';
 import {model} from 'mongoose';
+import {ITwitterAuthentication} from '../../model/twitterAuth';
+import {IDiscordAuthentication} from '../../model/discordAuth';
+import {generateAccessToken} from '../../middleware/auth';
+import {initOAuthFlow} from '../../service/oauthService';
 
 const router = Router();
 const user = model<IUser>('User');
@@ -30,11 +34,23 @@ router.get('/api/auth/discord/callback', [], async (req: Request, res: Response)
 
   try {
     const response: DiscordResponse = await requestAccessToken(code);
-    await registerDiscordAccount(response);
+    const account: IDiscordAuthentication = await registerDiscordAccount(response);
+    retrieveAssociatedDiscord(account.id)
+      .then(async user => {
+        const document = await User.findOne({discordId: account.id}).exec();
 
-    res.sendStatus(200);
+        document.discordId = account.id;
+        await document.save();
+
+        res.redirect(`http://localhost:8081/login?jwt=${generateAccessToken(user)}&name=${account.screenName}`);
+      })
+      .catch(() => {
+        const id: string = initOAuthFlow('discord', account.id, account.screenName);
+        res.redirect(`http://localhost:8081/oauth?id=${id}`);
+      });
   } catch (error) {
     res.status(500).send('Error during Discord callback processing');
+    console.warn(error);
   }
 });
 

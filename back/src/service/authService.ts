@@ -86,6 +86,13 @@ async function retrieveAssociatedTwitterUser(twitterId: string): Promise<IUser> 
     return reject('Unable to find a user associated with this Twitter account');
   return user as IUser;
 }
+async function retrieveAssociatedDiscord(discordId: string): Promise<IUser> {
+  const user = await User.findOne({discordId: discordId}).exec();
+
+  if (user === null)
+    return reject('Unable to find a user associated with this Discord account');
+  return user as IUser;
+}
 
 export type {Credentials};
-export {isString, register, login, retrieveAssociatedTwitterUser, hashPassword};
+export {isString, register, login, retrieveAssociatedTwitterUser, retrieveAssociatedDiscord, hashPassword};

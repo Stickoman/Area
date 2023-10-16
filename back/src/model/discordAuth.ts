@@ -1,22 +1,27 @@
 import {model, Schema} from 'mongoose';
 
 interface IDiscordAuthentication {
-  oauthToken: string;
-  oauthTokenSecret: string;
-  userId: string;
+  token_type: string;
+  access_token: string;
+  expires_in: string;
+  id: string;
   screenName: string;
 }
 
 const schema = new Schema<IDiscordAuthentication>({
-  oauthToken: {
+  token_type: {
     type: String,
     required: true,
   },
-  oauthTokenSecret: {
+  access_token: {
     type: String,
     required: true,
   },
-  userId: {
+  expires_in: {
+    type: String,
+    required: true,
+  },
+  id: {
     type: String,
     required: true,
   },

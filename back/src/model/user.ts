@@ -7,6 +7,7 @@ interface IUser {
   email: string;
   password: string;
   twitterId?: string,
+  discordId?: string,
 }
 
 const schema = new Schema<IUser>({
