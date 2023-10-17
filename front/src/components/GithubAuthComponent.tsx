@@ -11,13 +11,13 @@ function GithubAuthComponent() {
   const containerStyle: CSSProperties = {
     maxWidth: '500px',
     margin: 'auto',
-    padding: '20px',
+    padding: '5px',
     borderRadius: '8px',
   };
 
   return (
     <div style={containerStyle}>
-      <button onClick={handleGithubLogin} className={'twitterButtonStyle'}>
+      <button onClick={handleGithubLogin} className={'githubButtonStyle'}>
         <FontAwesomeIcon icon={faGithub}/>
         <span style={{marginLeft: '10px'}}>Continue with Github</span>
       </button>

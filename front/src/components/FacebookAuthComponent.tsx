@@ -20,6 +20,7 @@ function facebookAuthComponent() {
     margin: 'auto',
     paddingLeft: '20px',
     paddingRight: '20px',
+    padding: '5px',
     borderRadius: '8px',
   };
 

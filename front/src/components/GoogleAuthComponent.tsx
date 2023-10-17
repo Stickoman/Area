@@ -13,7 +13,7 @@ function GoogleAuthComponent() {
     margin: 'auto',
     paddingLeft: '20px',
     paddingRight: '20px',
-    paddingTop: '20px',
+    padding: '5px',
     borderRadius: '8px',
   };
 

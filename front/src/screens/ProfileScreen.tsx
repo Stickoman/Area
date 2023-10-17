@@ -4,13 +4,14 @@ import NavigationBar from '../components/NavBarComponent';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import ProfileComponent from '../components/profile/ProfileComponent';
+import DisassociateComponent from '../components/oauth/DisassociateComponent';
 import {
-  disassociateTwitter,
-  disassociateDiscord,
+  disassociateDiscord, disassociateTwitter,
   getAuthorizedHeader,
   logout,
   disassociateGithub, disassociateGoogle,
 } from '../common/auth';
+import {faDiscord, faGithub, faGoogle, faTwitter} from '@fortawesome/free-brands-svg-icons';
 
 interface IProfile {
   email: string;
@@ -39,41 +40,30 @@ function ProfileContent(props: ProfileContentProperties): React.JSX.Element {
   } else {
     return (
       <div>
-      <ProfileComponent user={profile}/>
+        <ProfileComponent user={profile}/>
 
-      {
-        profile.twitterId && (
-          <div>
-            <p>Twitter Associated!</p>
-            <span style={{cursor: 'pointer'}} onClick={disassociateTwitter}>Click here to disassociate</span>
-          </div>
-        )
-      }
-      {
+        {
+          profile.twitterId && (
+            <DisassociateComponent name={'Twitter'} handleClick={disassociateTwitter} icon={faTwitter}
+                                   style={'twitterButtonStyle'}/>)
+        }{
         profile.discordId && (
-          <div>
-            <p>Discord Associated!</p>
-            <span style={{cursor: 'pointer'}} onClick={disassociateDiscord}>Click here to disassociate</span>
-          </div>
-        )
-      }
-      {
+          <DisassociateComponent name={'Discord'} handleClick={disassociateDiscord} icon={faDiscord}
+                                 style={'discordButtonStyle'}/>)
+      }{
         profile.githubId && (
-          <div>
-            <p>Github Associated!</p>
-            <span style={{cursor: 'pointer'}} onClick={disassociateGithub}>Click here to disassociate</span>
-          </div>
-        )
-      }
-      {
+          <DisassociateComponent name={'Github'} handleClick={disassociateGithub} icon={faGithub}
+                                 style={'githubButtonStyle'}/>)
+      }{
         profile.googleId && (
-          <div>
-            <p>Google Associated!</p>
-            <span style={{cursor: 'pointer'}} onClick={disassociateGoogle}>Click here to disassociate</span>
-          </div>
-        )
+          <DisassociateComponent name={'Google'} handleClick={disassociateGoogle} icon={faGoogle}
+                                 style={'googleButtonStyle'}/>)
       }
-      <button type="submit" onClick={() => logout(navigate)} className="buttonStyle">Logout</button>
+        <button type="submit" onClick={() => logout(navigate)} className="buttonStyle" style={{
+          marginTop: '10px',
+          marginBottom: '10px',
+        }}>Logout
+        </button>
       </div>
     );
   }
