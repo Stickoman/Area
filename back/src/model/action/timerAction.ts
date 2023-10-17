@@ -1,7 +1,12 @@
 import {model, Schema} from 'mongoose';
 
+type IntervalValue = number | '*';
+type DayInterval = `${IntervalValue} ${IntervalValue} ${IntervalValue} ${IntervalValue} ${IntervalValue} ${IntervalValue}`;
+// second minute hour day month dayofweek
+// 0-59 0-59 0-23 1-31 1-12 0-7
+
 interface ITimerData {
-  each?: string;
+  each?: DayInterval;
 }
 
 interface ITimerAction extends ITimerData {

@@ -1,5 +1,7 @@
 import {ReactionType} from '../../common/reaction.interface';
 import {DiscordWebhookReaction, IDiscordWebhookData} from '../../model/reaction/discordWebhookReaction';
+import {ActionType} from '../../common/action.interface';
+import {ITimerData, TimerAction} from '../../model/action/timerAction';
 
 type ActionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -21,4 +23,16 @@ async function createReaction(userId: string, type: ReactionType, data: object):
   }
 }
 
-export {createReaction};
+async function retrieveReactionData(id: string, type: ReactionType): Promise<object> {
+  let data: object = {};
+
+  switch (type) {
+  case 'discord-webhook':
+    data = (await DiscordWebhookReaction.findById(id).exec()) as ITimerData;
+    break;
+  }
+
+  return data;
+}
+
+export {createReaction, retrieveReactionData};
