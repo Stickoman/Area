@@ -33,21 +33,24 @@ const formatText = (value: string) => value
 
 function AreaDetails(props: IAreaDetailsProperties): React.JSX.Element {
   const details: object = props.details;
-  const detailsRendered: React.JSX.Element[] = Object.getOwnPropertyNames(details)
-    .filter((field: string) => !['_id', 'userId', '__v'].includes(field))
-    .map((field: string) => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const data: object = details[field];
 
-      return (<p key={field}>
-        <span className={'key'}>{field}:</span> {JSON.stringify(data)}
-      </p>);
-    });
+  function renderDetails() {
+    return Object.getOwnPropertyNames(details)
+      .filter((field: string) => !['_id', 'userId', '__v'].includes(field))
+      .map((field: string) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const data: object = details[field];
+
+        return (<p key={field}>
+          <span className={'key'}>{field}:</span> {JSON.stringify(data)}
+        </p>);
+      });
+  }
 
   return (
     <div className={'details'}>
-      {detailsRendered}
+      {details && renderDetails()}
     </div>
   );
 }

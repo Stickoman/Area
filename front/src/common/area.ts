@@ -19,6 +19,8 @@ interface IArea {
 async function loadAreas(): Promise<IArea[]> {
   return axios.get('/api/areas', {headers: getAuthorizedHeader()})
     .then(response => {
+      if (response.status === 204)
+        return [] as IArea[];
       const areas: IArea[] = response.data.areas;
 
       return areas;

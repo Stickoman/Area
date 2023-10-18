@@ -11,12 +11,14 @@ function AreasContainer(): React.JSX.Element {
   useEffect(() => {
     loadAreas()
       .then(data => {
-
         setCards(data.map(area => {
           return <AreaCard key={area._id} area={area} refresh={() => setRefresh(refresh + 1)}/>;
         }));
       })
-      .catch(() => setCards(null));
+      .catch(reason => {
+        console.log(reason);
+        setCards(null);
+      });
   }, [refresh]);
 
   return (
@@ -24,6 +26,7 @@ function AreasContainer(): React.JSX.Element {
       <h6>Configuration</h6>
 
       {!!cards && cards}
+      {!!cards && cards.length === 0 && <p>You must create an AREA before configure it!</p>}
       {!cards && <p>Unable to load AREAs</p>}
     </div>
   );
