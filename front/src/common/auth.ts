@@ -17,12 +17,26 @@ function logout(navigate: NavigateFunction) {
 
 function disassociateTwitter() {
   axios.post('/api/auth/twitter/disassociate', {}, {headers: getAuthorizedHeader()})
+    .then(() => window.location.reload())
     .catch(reason => console.warn('Unable to disassociate Twitter: ', reason));
 }
 
 function disassociateDiscord() {
   axios.post('/api/auth/discord/disassociate', {}, {headers: getAuthorizedHeader()})
+    .then(() => window.location.reload())
     .catch(reason => console.warn('Unable to disassociate Discord: ', reason));
 }
 
-export {logout, disassociateTwitter, disassociateDiscord, getAuthorizedHeader};
+function disassociateGithub() {
+  axios.post('/api/auth/github/disassociate', {}, {headers: getAuthorizedHeader()})
+    .then(() => window.location.reload())
+    .catch(reason => console.warn('Unable to disassociate Github: ', reason));
+}
+
+function disassociateGoogle() {
+  axios.post('/api/auth/google/disassociate', {}, {headers: getAuthorizedHeader()})
+    .then(() => window.location.reload())
+    .catch(reason => console.warn('Unable to disassociate Google: ', reason));
+}
+
+export {logout, disassociateTwitter, disassociateDiscord, getAuthorizedHeader, disassociateGoogle, disassociateGithub};

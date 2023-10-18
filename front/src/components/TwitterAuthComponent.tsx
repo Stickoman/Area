@@ -11,7 +11,7 @@ function twitterAuthComponent() {
   const containerStyle: CSSProperties = {
     maxWidth: '500px',
     margin: 'auto',
-    padding: '20px',
+    padding: '5px',
     borderRadius: '8px',
   };
 

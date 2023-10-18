@@ -19,6 +19,8 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .InputText {
@@ -30,8 +32,13 @@ body {
 }
 
 .googleButtonStyle,
+.microsoftButtonStyle,
+.metaButtonStyle,
 .twitterButtonStyle,
 .facebookButtonStyle,
+.discordButtonStyle,
+.instagramButtonStyle,
+.githubButtonStyle,
 .buttonStyle {
   border: none;
   padding: 10px 20px;
@@ -176,14 +183,14 @@ body {
 }
 
 .googleButtonStyle {
-  border: 2px solid #333;
+  border: 2px solid #db4a39;
   background: white;
-  color: black;
+  color: #db4a39;
   margin: auto;
 }
 
 .googleButtonStyle:hover {
-  background-color: #ccc;
+  background-color: #999;
 }
 
 .twitterButtonStyle {
@@ -192,8 +199,14 @@ body {
   margin: auto;
 }
 
+.githubButtonStyle:hover,
+.metaButtonStyle:hover,
+.microsoftButtonStyle:hover,
+.facebookButtonStyle:hover,
+.discordButtonStyle:hover,
+.instagramButtonStyle:hover,
 .twitterButtonStyle:hover {
-  background-color: #333;
+  background: #555;
 }
 
 .facebookButtonStyle {
@@ -202,6 +215,35 @@ body {
   margin: auto;
 }
 
-.facebookButtonStyle:hover {
-  background-color: #333;
+.githubButtonStyle {
+  color: white;
+  background: #333;
+  margin: auto;
+}
+.discordButtonStyle {
+  color: white;
+  background: #7289DA;
+  margin: auto;
+}
+
+.microsoftButtonStyle {
+  color: white;
+  background: #ea4300;
+  margin: auto;
+}
+
+.metaButtonStyle {
+  color: white;
+  background: #1877f2;
+  margin: auto;
+}
+
+.instagramButtonStyle {
+  color: white;
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  margin: auto;
+}
+
+.instagramButtonStyle:hover {
+  filter: brightness(120%);
 }
