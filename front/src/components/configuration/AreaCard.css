@@ -1,0 +1,81 @@
+.card-container {
+    border-radius: 15px;
+    border: #ddd solid 1px;
+    background: #eee;
+    width: 90%;
+    margin: 0 auto 25px auto;
+    display: flex;
+    position: relative;
+    color: white;
+
+    & > .gradient {
+        width: 6%;
+    }
+
+    & > .area-part {
+        width: 47%;
+        padding: 20px;
+        box-sizing: border-box;
+
+        > header {
+            display: flex;
+            align-items: center;
+
+            & svg {
+                margin-right: 10px;
+            }
+
+            > p {
+                margin: 0;
+                font-size: 30px;
+                font-weight: bold;
+                text-decoration: underline;
+            }
+        }
+    }
+
+    & > .action {
+        border-radius: 15px 0 0 15px;
+    }
+
+    & > .reaction {
+        border-radius: 0 15px 15px 0;
+    }
+
+    & .button {
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        border: #ddd solid 1px;
+        border-radius: 100%;
+        background: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        right: 15px;
+        transition: background-color .3s ease;
+    }
+
+    & .button:hover {
+        background-color: #ddd;
+    }
+
+    & .delete {
+        color: red;
+        top: 15px;
+    }
+}
+
+.details {
+    box-sizing: border-box;
+    padding: 5px;
+    word-wrap: break-word;
+
+    & .key {
+        display: inline-block;
+        margin: 0 10px 10px 0;
+        font-size: 20px;
+        font-weight: bold;
+    }
+}

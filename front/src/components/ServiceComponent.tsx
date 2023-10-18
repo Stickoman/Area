@@ -61,7 +61,7 @@ function ServiceComponent(props: ServiceComponentProps): JSX.Element {
   }, []);
 
   return (
-    <Link to={`/${props.title}`} onClick={props.onClick} className='containerStyle' style={linkStyle}>
+    <Link to={`/services/${props.title.toLowerCase()}`} onClick={props.onClick} className='containerStyle' style={linkStyle}>
         <FontAwesomeIcon style={logoStyle} icon={props.icon}/>
         <h6 style={titleStyle}>{props.title}</h6>
     </Link>

@@ -12,6 +12,8 @@ import ServicesScreen from './screens/ServicesScreen';
 import OAuthScreen from './screens/OAuthScreen';
 import LoginScreen from './screens/LoginScreen';
 import MobileDownloadScreen from './screens/MobileDownloadScreen';
+import NotFoundScreen from './screens/NotFoundScreen';
+import ConfigurationScreen from './screens/ConfigurationScreen';
 
 const router = createBrowserRouter([
   {
@@ -19,7 +21,7 @@ const router = createBrowserRouter([
     element: <HomeScreen/>,
   },
   {
-    path: '/:service',
+    path: '/services/:service',
     element: <ServiceScreen/>,
   },
   {
@@ -44,7 +46,15 @@ const router = createBrowserRouter([
   },
   {
     path: '/client.apk',
-    element: <MobileDownloadScreen />,
+    element: <MobileDownloadScreen/>,
+  },
+  {
+    path: '/configuration',
+    element: <ConfigurationScreen/>,
+  },
+  {
+    path: '*',
+    element: <NotFoundScreen/>,
   },
 ]);
 

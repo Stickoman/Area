@@ -32,6 +32,9 @@ function NavigationBar(props: {color: string}) {
       <Link to="/services" className={'nav-link'}>
         Services
       </Link>
+      <Link to="/configuration" className={'nav-link'}>
+        Configuration
+      </Link>
       <Link to={isLoggedIn ? '/profile' : '/authentication'} className={'nav-icon'}>
         <FontAwesomeIcon icon={faUser}/>
       </Link>

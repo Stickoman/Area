@@ -1,4 +1,4 @@
-import {Link, useNavigate, useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import React, {CSSProperties, useState} from 'react';
 import {faDiscord, faFacebook, faMicrosoft, faSpotify, faTwitter} from '@fortawesome/free-brands-svg-icons';
 import '../index.css';
@@ -58,7 +58,10 @@ function ServiceScreen() {
   const filteredServices = services.filter((service) =>
     service.title.toLowerCase().includes(filter),
   );
-  const { service } = useParams();
+
+  let { service } = useParams();
+
+  service = service[0].toUpperCase() + service.slice(1)
 
   const selectedService = filteredServices.find(serviceApp => serviceApp.serviceApp === service);
 
@@ -74,7 +77,7 @@ function ServiceScreen() {
         {filteredServices.map((serviceApp, index) => (
           serviceApp.serviceApp === service &&
                 <ServiceComponent
-                  key={index}
+                  key={serviceApp.title + index}
                   onClick={undefined}
                   title={serviceApp.title}
                   color={serviceApp.color}

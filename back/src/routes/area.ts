@@ -53,6 +53,22 @@ router.get('/api/areas/:id', [authenticateMiddleware], async (req: Authenticated
   }
 });
 
+router.delete('/api/areas/:id', [authenticateMiddleware], async (req: AuthenticatedRequest, res: Response) => {
+  const id = req.params.id;
+
+  try {
+    const area: IArea = await Area.findById(id).exec();
+
+    if (area) {
+      await Area.deleteOne({_id: id}).exec();
+
+      res.sendStatus(200);
+    } else res.sendStatus(404);
+  } catch (error) {
+    res.status(500).send({error});
+  }
+});
+
 router.post('/api/areas', [authenticateMiddleware], async (req: AuthenticatedRequest, res: Response) => {
   if (req.body?.actionType && req.body?.actionData && req.body?.reactionType && req.body?.reactionData) {
     const {actionType, actionData, reactionType, reactionData} = req.body;
