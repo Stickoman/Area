@@ -1,7 +1,6 @@
 import {ReactionType} from '../../common/reaction.interface';
 import {DiscordWebhookReaction, IDiscordWebhookData} from '../../model/reaction/discordWebhookReaction';
-import {ActionType} from '../../common/action.interface';
-import {ITimerData, TimerAction} from '../../model/action/timerAction';
+import {ITimerData} from '../../model/action/timerAction';
 
 type ActionFactory = (userId: string, data: object) => Promise<string>;
 
