@@ -23,7 +23,7 @@ interface IServiceData {
 
 const servicesData = new Map<string, IServiceData>();
 
-servicesData.set('timer', {icon: faClock, color: '#957474'});
+servicesData.set('timer', {icon: faClock, color: '#000000'});
 servicesData.set('discord-webhook', {icon: faDiscord, color: '#7289da'});
 
 const formatText = (value: string) => value
