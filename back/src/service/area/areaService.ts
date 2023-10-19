@@ -13,8 +13,8 @@ interface AreaConfiguration {
 
 async function saveArea(userId: string, config: AreaConfiguration) {
   const {actionType, reactionType} = config;
-  const actionId = await createAction(userId, actionType, config.actionData);
   const reactionId = await createReaction(userId, reactionType, config.reactionData);
+  const actionId = await createAction(userId, actionType, config.actionData);
 
   await new Area({userId, actionType, actionId, reactionType, reactionId}).save();
 }
