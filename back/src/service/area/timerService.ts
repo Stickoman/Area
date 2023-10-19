@@ -28,7 +28,7 @@ async function refreshTimers(): Promise<number> {
     } else {
       const area: IArea = await Area.findOne({actionType: 'timer', actionId: timer._id, userId: user._id}).exec();
 
-      scheduleTimer(area.reactionId, user, timer);
+      scheduleTimer(area.actionId, user, timer);
       count++;
     }
   }
@@ -39,7 +39,8 @@ function scheduleTimer(actionId: string, user: IUser, data: ITimerData) {
   if (!data.each) return;
 
   const job = scheduleJob(data.each, async () => {
-    await callReaction(actionId);
+    await callReaction(actionId)
+      .catch(reason => console.error(reason));
   });
 
   jobs.push(job);

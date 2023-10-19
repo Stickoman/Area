@@ -40,7 +40,7 @@ async function retrieveReactionData(id: string, type: ReactionType): Promise<obj
 
 async function callReaction(actionId: string) {
   const area: IArea = await Area.findOne({actionId}).exec();
-  if (area === null) return reject('Orphan action');
+  if (area === null) return reject(`Orphan action #${actionId}`);
   const {reactionId, reactionType} = area;
   const reactionData: object = await retrieveReactionData(reactionId, reactionType);
   const user: IUser = await User.findById(area.userId).exec();
