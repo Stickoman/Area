@@ -1,7 +1,6 @@
 import {IUser, User} from '../../model/user';
 import {ITimerData, TimerAction} from '../../model/action/timerAction';
 import {cancelJob, Job, scheduleJob} from 'node-schedule';
-import {sendWebhook} from '../discord/webhookService';
 import {Area, IArea} from '../../model/area';
 import {ObjectId} from 'mongodb';
 import {callReaction} from './reactionService';
