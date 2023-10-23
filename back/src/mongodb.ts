@@ -1,4 +1,5 @@
 import mongoose, {ConnectOptions} from 'mongoose';
+import {refreshActions} from './service/area/actionService';
 
 let connected = false;
 
@@ -11,6 +12,7 @@ async function connect() {
       useUnifiedTopology: true,
     } as ConnectOptions);
 
+    await refreshActions();
     connected = true;
   } catch (error) {
     connected = false;

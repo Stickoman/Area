@@ -111,4 +111,4 @@ async function retrieveAssociatedGoogle(googleId: string): Promise<IUser> {
 }
 
 export type {Credentials};
-export {isString, register, login, retrieveAssociatedTwitterUser, retrieveAssociatedGithub, retrieveAssociatedDiscord, retrieveAssociatedGoogle, hashPassword};
+export {isString, register, login, retrieveAssociatedTwitterUser, retrieveAssociatedGithub, retrieveAssociatedDiscord, retrieveAssociatedGoogle, hashPassword, reject};

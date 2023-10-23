@@ -1,5 +1,4 @@
 import React, {CSSProperties, useEffect, useState} from 'react';
-import Cookies from 'js-cookie';
 import NavigationBar from '../components/NavBarComponent';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
@@ -71,7 +70,7 @@ function ProfileContent(props: ProfileContentProperties): React.JSX.Element {
 
 function ProfileScreen(): React.JSX.Element {
   const titleStyle: CSSProperties = {
-    marginTop: 15,
+    margin: '25px 0',
     textAlign: 'center',
     fontSize: 35,
     fontWeight: 'bold',

@@ -1,8 +1,6 @@
 import React, {CSSProperties} from 'react';
 import NavigationBar, {checkIfUserIsLoggedIn} from '../components/NavBarComponent';
 import '../index.css';
-import LoginComponent from '../components/LoginComponent';
-import RegisterComponent from '../components/RegisterComponent';
 import {useNavigate} from 'react-router-dom';
 
 function HomeScreen() {

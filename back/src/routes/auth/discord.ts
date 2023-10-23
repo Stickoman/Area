@@ -1,9 +1,7 @@
 import {Router, Response, Request} from 'express';
 import {isString, retrieveAssociatedDiscord} from '../../service/authService';
 import {DiscordResponse, registerDiscordAccount, requestAccessToken} from '../../service/discordService';
-import {IUser, User} from '../../model/user';
-import {model} from 'mongoose';
-import {ITwitterAuthentication} from '../../model/twitterAuth';
+import {User} from '../../model/user';
 import {IDiscordAuthentication} from '../../model/discordAuth';
 import {AuthenticatedRequest, authenticateMiddleware, generateAccessToken} from '../../middleware/auth';
 import {initOAuthFlow} from '../../service/oauthService';

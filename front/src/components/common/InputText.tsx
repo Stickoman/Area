@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {CSSProperties, useState} from 'react';
 
 type InputTextType = 'none' | 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search';
 
@@ -13,14 +13,33 @@ function InputText(props: InputTextProperties): React.JSX.Element {
   const {type, value, disabled, callback} = props;
   const [currentValue, setCurrentValue] = useState(value);
 
-  return (
-    <div>
-      <input className={"InputText"} inputMode={type} value={currentValue} disabled={disabled} onChange={event => {
-        const newValue = event.currentTarget.value;
+  const wrapperStyle: CSSProperties = {
+    width: '100%',
+  }
+  const inputStyle: CSSProperties = {
+    border: '1px solid #ccc',
+    borderRadius: 5,
+    padding: 8,
+    fontSize: 16,
+    marginBottom: 10,
+    boxSizing: 'border-box',
+    width: '100%',
+  };
 
-        setCurrentValue(newValue);
-        callback(newValue);
-      }}/>
+  function updateValue(event: React.ChangeEvent<HTMLInputElement>) {
+    const newValue = event.currentTarget.value;
+
+    setCurrentValue(newValue);
+    callback(newValue);
+  }
+
+  return (
+    <div style={wrapperStyle}>
+      <input style={inputStyle}
+             inputMode={type}
+             value={currentValue}
+             disabled={disabled}
+             onChange={event => updateValue(event)}/>
     </div>
   )
 }
