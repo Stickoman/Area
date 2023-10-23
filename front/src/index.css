@@ -110,27 +110,6 @@ body {
   }
 }
 
-.toggleContainer {
-  text-align: center;
-}
-
-.toggleText {
-  font-size: 1rem;
-  color: #333;
-}
-
-.toggleLink {
-  cursor: pointer;
-  color: #007bff;
-  font-weight: bold;
-  margin-left: 5px;
-  display: inline-block;
-}
-
-.toggleLink:hover {
-  text-decoration: underline;
-}
-
 .buttonContainerStyle {
   max-width: 500px;
   margin-top: 50px;

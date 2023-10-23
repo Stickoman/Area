@@ -2,19 +2,23 @@ import React, {useState} from 'react';
 import NavigationBar from '../components/NavBarComponent';
 import LoginComponent, {LoginFormData} from '../components/LoginComponent';
 import RegisterComponent from '../components/RegisterComponent';
-import GoogleAuthComponent from '../components/GoogleAuthComponent';
-import TwitterAuthComponent from '../components/TwitterAuthButton';
-import FacebookAuthComponent from '../components/FacebookAuthComponent';
-import GithubAuthComponent from '../components/GithubAuthComponent';
-import MetaAuthComponent from '../components/MetaAuthComponent';
-import MicrosoftAuthComponent from '../components/MicrosoftAuthComponent';
-import InstagramAuthComponent from '../components/InstagramAuthComponent';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import {useNavigate} from 'react-router-dom';
-import DiscordAuthComponent from '../components/DiscordAuthComponent';
+import {
+  faGoogle,
+  faTwitter,
+  faDiscord,
+  faGithub,
+  faFacebook,
+  faMeta,
+  faInstagram,
+  faMicrosoft,
+} from '@fortawesome/free-brands-svg-icons';
+import SocialButton from '../components/common/SocialButton';
+import './AuthenticationScreen.css';
 
-function AuthenticationScreen() {
+function AuthenticationContainer(): React.JSX.Element {
   const [login, setLogin] = useState(true);
   const navigate = useNavigate();
 
@@ -30,29 +34,56 @@ function AuthenticationScreen() {
     }
   }
 
+  function renderSwitchButton(): React.JSX.Element {
+    const hintText: string = login ? 'Don\'t have an account?' : 'Already have an account?';
+    const buttonText: string = login ? 'Login' : 'Signup';
+
+    return (
+      <p className={'toggleText'}>{hintText}
+        <span className={'toggleLink'} onClick={() => setLogin(!login)}>{buttonText}</span>
+      </p>
+    );
+  }
+
+  return (
+    <div>
+      {login ? (<LoginComponent callback={tryLogin}/>) : (<RegisterComponent/>)}
+      <div className="toggleContainer">
+        {renderSwitchButton()}
+      </div>
+    </div>
+  );
+}
+
+function AuthenticationScreen(): React.JSX.Element {
   return (
     <div>
       <NavigationBar color={'#000'}/>
-      {login ? (<LoginComponent callback={tryLogin}/>) : (<RegisterComponent/>)}
-      <div className="toggleContainer">
-        {login ? (
-          <p className="toggleText">Don't have an account? <span className="toggleLink"
-                                                                 onClick={() => setLogin(false)}>Signup</span></p>
-        ) : (
-          <p className="toggleText">Already have an account? <span className="toggleLink"
-                                                                   onClick={() => setLogin(true)}>Login</span></p>
-        )}
-      </div>
+      <AuthenticationContainer/>
 
-      <GoogleAuthComponent/>
-      <TwitterAuthComponent text={'Continue with Twitter'}
-                            onClick={() => window.location.href = 'http://localhost:8080/api/auth/twitter'}/>
-      <DiscordAuthComponent/>
-      <GithubAuthComponent/>
-      <FacebookAuthComponent/>
-      <MetaAuthComponent/>
-      <InstagramAuthComponent/>
-      <MicrosoftAuthComponent/>
+      <div className={'socials-container'}>
+        <div className={'column'}>
+          <SocialButton text={'Continue with Google'} color={'#db4a39'} border={true} icon={faGoogle}
+                        redirectPath={'/api/auth/google'}/>
+          <SocialButton text={'Continue with Twitter'} color={'#1da1f2'} border={false} icon={faTwitter}
+                        redirectPath={'/api/auth/twitter'}/>
+          <SocialButton text={'Continue with Discord'} color={'#7289da'} border={false} icon={faDiscord}
+                        redirectPath={'/api/auth/discord'}/>
+          <SocialButton text={'Continue with Github'} color={'#333333'} border={false} icon={faGithub}
+                        redirectPath={'/api/auth/github'}/>
+        </div>
+        <div className={'column'}>
+          <SocialButton text={'Continue with Facebook'} color={'#1877f2'} border={false} icon={faFacebook}
+                        redirectPath={'/api/auth/facebook'}/>
+          <SocialButton text={'Continue with Meta'} color={'#1877f2'} border={false} icon={faMeta}
+                        redirectPath={'/api/auth/meta'}/>
+          <SocialButton text={'Continue with Instagram'}
+                        color={'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)'}
+                        border={false} icon={faInstagram} redirectPath={'/api/auth/instagram'}/>
+          <SocialButton text={'Continue with Microsoft'} color={'#ea4300'} border={false} icon={faMicrosoft}
+                        redirectPath={'/api/auth/microsoft'}/>
+        </div>
+      </div>
     </div>
   );
 }
