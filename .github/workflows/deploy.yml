@@ -18,7 +18,7 @@ jobs:
         chmod 600 ssh_key_rsa
         eval "$(ssh-agent)" && ssh-add ssh_key_rsa
 
-        rm -f area.tar.gz
+        touch area.tar.gz
         tar --exclude='node_modules' --exclude='area.tar.gz' -czf area.tar.gz ../B-DEV-500-LYN-5-1-area-timothe.medico
         scp -o StrictHostKeyChecking=no area.tar.gz root@area.baragouin.fr:/root/dev
         ssh -o StrictHostKeyChecking=no root@area.baragouin.fr 'cd /root/dev && tar -xzf area.tar.gz && cd B-DEV-500-LYN-5-1-area-timothe && docker-compose up -d --build'
