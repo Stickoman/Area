@@ -1,6 +1,7 @@
 .navigation-container {
     padding: 10px 20px;
     display: flex;
+    box-sizing: border-box;
     overflow: scroll;
     justify-content: space-between;
     align-items: center;
@@ -38,7 +39,7 @@
 }
 
 .mobile {
-    width: calc(100% - 40px);
+    width: 100%;
     display: none;
     justify-content: space-between;
     align-items: center;

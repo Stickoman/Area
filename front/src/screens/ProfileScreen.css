@@ -1,0 +1,15 @@
+.profile-container {
+    width: 35%;
+}
+
+@media (max-width: 900px) {
+    .profile-container {
+        width: 80%;
+    }
+}
+
+@media (max-width: 550px) {
+    .profile-container {
+        width: 90%;
+    }
+}

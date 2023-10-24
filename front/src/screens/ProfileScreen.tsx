@@ -11,6 +11,7 @@ import {
   disassociateGithub, disassociateGoogle,
 } from '../common/auth';
 import {faDiscord, faGithub, faGoogle, faTwitter} from '@fortawesome/free-brands-svg-icons';
+import './ProfileScreen.css';
 
 interface IProfile {
   email: string;
@@ -77,8 +78,7 @@ function ProfileScreen(): React.JSX.Element {
   };
   const profileContainerStyle: CSSProperties = {
     margin: 'auto',
-    width: '35%',
-    height: '70%',
+    minHeight: '70%',
   };
 
   const [profile, setProfile] = useState(null as IProfile);
@@ -101,9 +101,9 @@ function ProfileScreen(): React.JSX.Element {
       <NavigationBar color={'purple'}/>
 
       <div>
-        <h6 style={titleStyle}>Profile</h6>
+        <h6 style={titleStyle}>My Profile</h6>
 
-        <div style={profileContainerStyle}>
+        <div style={profileContainerStyle} className={'profile-container'}>
           <ProfileContent profile={profile}/>
         </div>
       </div>
