@@ -1,5 +1,5 @@
 import React from 'react';
-import NavigationBar from '../components/NavBarComponent';
+import NavigationBar from '../components/common/NavigationBar';
 import AreasContainer from '../components/configuration/AreasContainer';
 
 function ConfigurationScreen(): React.JSX.Element {

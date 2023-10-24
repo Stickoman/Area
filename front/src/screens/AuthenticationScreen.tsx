@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import NavigationBar from '../components/NavBarComponent';
+import NavigationBar from '../components/common/NavigationBar';
 import LoginComponent, {LoginFormData} from '../components/LoginComponent';
 import RegisterComponent from '../components/RegisterComponent';
 import axios from 'axios';

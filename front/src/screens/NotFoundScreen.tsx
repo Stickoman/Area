@@ -2,7 +2,7 @@ import React from 'react';
 import {useNavigate} from 'react-router-dom';
 
 import './NotFoundScreen.css';
-import NavigationBar from '../components/NavBarComponent';
+import NavigationBar from '../components/common/NavigationBar';
 
 function NotFoundScreen(): React.JSX.Element {
   const navigate = useNavigate();

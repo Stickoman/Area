@@ -1,7 +1,7 @@
 import React, {CSSProperties, useState} from 'react';
 import { faDiscord, faMicrosoft, faSpotify, faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons';
 import ServiceComponent from '../components/ServiceComponent';
-import NavigationBar from '../components/NavBarComponent';
+import NavigationBar from '../components/common/NavigationBar';
 import '../index.css';
 function ServicesScreen() {
   const [filter, setFilter] = useState('');

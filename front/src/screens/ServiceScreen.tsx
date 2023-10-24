@@ -6,7 +6,7 @@ import '../index.css';
 import ServiceComponent from '../components/ServiceComponent';
 import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import NavigationBar from '../components/NavBarComponent';
+import NavigationBar from '../components/common/NavigationBar';
 
 function ServiceScreen() {
   const navigate = useNavigate();

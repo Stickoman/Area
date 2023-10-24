@@ -1,5 +1,5 @@
 import React, {CSSProperties, useEffect} from 'react';
-import NavigationBar from '../components/NavBarComponent';
+import NavigationBar from '../components/common/NavigationBar';
 import {useNavigate} from 'react-router-dom';
 import Cookies from 'js-cookie';
 

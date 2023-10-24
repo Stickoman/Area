@@ -1,5 +1,5 @@
 import React, {CSSProperties} from 'react';
-import NavigationBar, {checkIfUserIsLoggedIn} from '../components/NavBarComponent';
+import NavigationBar, {checkIfUserIsLoggedIn} from '../components/common/NavigationBar';
 import '../index.css';
 import {useNavigate} from 'react-router-dom';
 

@@ -1,5 +1,5 @@
 import React, {CSSProperties, useEffect, useState} from 'react';
-import NavigationBar from '../components/NavBarComponent';
+import NavigationBar from '../components/common/NavigationBar';
 import axios from 'axios';
 import StepBar from '../components/oauth/StepBar';
 import {FlowData, serviceColor} from '../common/flow';

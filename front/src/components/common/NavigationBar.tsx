@@ -1,17 +1,21 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faUser} from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie';
 import "../index.css"
 
-export function checkIfUserIsLoggedIn() {
+export function checkIfUserIsLoggedIn(): boolean {
   const token = Cookies.get('token');
+
   return !!token;
 }
 
-function NavigationBar(props: {color: string}) {
+interface INavigationBarProperties {
+  color: string;
+}
 
+function NavigationBar(props: INavigationBarProperties): React.JSX.Element {
   const isLoggedIn = checkIfUserIsLoggedIn();
 
   const navStyle = {
