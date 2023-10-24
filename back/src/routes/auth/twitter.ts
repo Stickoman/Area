@@ -29,6 +29,7 @@ router.get('/api/auth/twitter/callback', [], async (req: Request, res: Response)
   }
 
   try {
+    const FRONT_URL = process.env.FRONT_URL;
     const response: TwitterResponse = await requestAccessToken(oauth_token, oauth_verifier);
     const account: ITwitterAuthentication = await registerTwitterAccount(response);
 
@@ -39,12 +40,12 @@ router.get('/api/auth/twitter/callback', [], async (req: Request, res: Response)
         document.twitterId = account.userId;
         await document.save();
 
-        res.redirect(`http://localhost:8081/login?jwt=${generateAccessToken(user)}&name=${account.screenName}`);
+        res.redirect(`${FRONT_URL}/login?jwt=${generateAccessToken(user)}&name=${account.screenName}`);
       })
       .catch(() => {
         const id: string = initOAuthFlow('twitter', account.userId, account.screenName);
 
-        res.redirect(`http://localhost:8081/oauth?id=${id}`);
+        res.redirect(`${FRONT_URL}/oauth?id=${id}`);
       });
   } catch (error) {
     res.status(500).send('Error during Twitter callback processing');

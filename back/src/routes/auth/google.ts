@@ -10,8 +10,9 @@ const router = Router();
 
 router.get('/api/auth/google', [], async (req: Request, res: Response) => {
   try {
+    const API_URL = process.env.API_URL;
     const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-    const REDIRECT_URI = 'http://localhost:8080/api/auth/google/callback';
+    const REDIRECT_URI = `${API_URL}/auth/google/callback`;
     const SCOPE = 'profile email';
 
     res.redirect(`https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=${SCOPE}`);
@@ -31,6 +32,7 @@ router.get('/api/auth/google/callback', [], async (req: Request, res: Response) 
   }
 
   try {
+    const FRONT_URL = process.env.FRONT_URL;
     const response: GoogleResponse = await requestAccessToken(code);
     const account: IGoogleAuthentication = await registerGoogleAccount(response);
     retrieveAssociatedGoogle(account.id)
@@ -40,11 +42,11 @@ router.get('/api/auth/google/callback', [], async (req: Request, res: Response) 
         document.googleId = account.id;
         await document.save();
 
-        res.redirect(`http://localhost:8081/login?jwt=${generateAccessToken(user)}&name=${account.screenName}`);
+        res.redirect(`${FRONT_URL}/login?jwt=${generateAccessToken(user)}&name=${account.screenName}`);
       })
       .catch(() => {
         const id: string = initOAuthFlow('google', account.id, account.screenName);
-        res.redirect(`http://localhost:8081/oauth?id=${id}`);
+        res.redirect(`${FRONT_URL}/oauth?id=${id}`);
       });
   } catch (error) {
     res.status(500).send('Error during Google callback processing');

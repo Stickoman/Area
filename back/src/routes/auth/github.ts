@@ -1,8 +1,7 @@
 import {Router, Response, Request} from 'express';
 import {isString, retrieveAssociatedGithub} from '../../service/authService';
 import {GithubResponse, registerGithubAccount, requestAccessToken} from '../../service/githubService';
-import {IUser, User} from '../../model/user';
-import {model} from 'mongoose';
+import {User} from '../../model/user';
 import {IGithubAuthentication} from '../../model/githubAuth';
 import {AuthenticatedRequest, authenticateMiddleware, generateAccessToken} from '../../middleware/auth';
 import {initOAuthFlow} from '../../service/oauthService';
@@ -11,8 +10,9 @@ const router = Router();
 
 router.get('/api/auth/github', [], async (req: Request, res: Response) => {
   try {
+    const API_URL = process.env.API_URL;
     const CLIENT_ID = process.env.GITHUB_CLIENT_ID;
-    const REDIRECT_URI = 'http://localhost:8080/api/auth/github/callback';
+    const REDIRECT_URI = `${API_URL}/auth/github/callback`;
     const SCOPE = 'user';
 
     res.redirect(`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPE}`);
@@ -31,6 +31,7 @@ router.get('/api/auth/github/callback', [], async (req: Request, res: Response) 
   }
 
   try {
+    const FRONT_URL = process.env.FRONT_URL;
     const response: GithubResponse = await requestAccessToken(code);
     const account: IGithubAuthentication = await registerGithubAccount(response);
     retrieveAssociatedGithub(account.id)
@@ -40,11 +41,11 @@ router.get('/api/auth/github/callback', [], async (req: Request, res: Response) 
         document.githubId = account.id;
         await document.save();
 
-        res.redirect(`http://localhost:8081/login?jwt=${generateAccessToken(user)}&name=${account.screenName}`);
+        res.redirect(`${FRONT_URL}/login?jwt=${generateAccessToken(user)}&name=${account.screenName}`);
       })
       .catch(() => {
         const id: string = initOAuthFlow('github', account.id, account.screenName);
-        res.redirect(`http://localhost:8081/oauth?id=${id}`);
+        res.redirect(`${FRONT_URL}/oauth?id=${id}`);
       });
   } catch (error) {
     res.status(500).send('Error during Github callback processing');

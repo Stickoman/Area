@@ -27,7 +27,9 @@ function SocialButton(props: ISocialButtonProperties): React.JSX.Element {
   };
 
   function redirect() {
-    window.location.href = `http://localhost:8080${redirectPath}`;
+    const API_URL = process.env.REACT_APP_API_URL;
+
+    window.location.href = `${API_URL}${redirectPath}`;
   }
 
   return (

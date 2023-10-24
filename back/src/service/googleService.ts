@@ -8,9 +8,10 @@ interface GoogleResponse {
   scope: string;
 }
 async function requestAccessToken(code: string): Promise<GoogleResponse> {
+  const API_URL = process.env.API_URL;
   const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
   const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-  const CALLBACK_URL = 'http://localhost:8080/api/auth/google/callback';
+  const CALLBACK_URL = `${API_URL}/auth/google/callback`;
 
   const data = {
     client_id: CLIENT_ID,
@@ -46,7 +47,7 @@ async function registerGoogleAccount(response: GoogleResponse): Promise<IGoogleA
     let GoogleAuth = await GoogleAuthentication.findOne({id}).exec();
 
     if (GoogleAuth === null) {
-        GoogleAuth = await new GoogleAuthentication({
+      GoogleAuth = await new GoogleAuthentication({
         token_type: response.token_type,
         access_token: response.access_token,
         scope: response.scope,

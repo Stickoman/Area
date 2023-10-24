@@ -1,7 +1,6 @@
 import axios from 'axios';
 import qs from 'querystring';
 import {IGithubAuthentication, GithubAuthentication} from '../model/githubAuth';
-import {TwitterResponse} from './twitterService';
 
 interface GithubResponse {
   token_type: string;
@@ -10,9 +9,10 @@ interface GithubResponse {
 }
 
 async function requestAccessToken(code: string): Promise<GithubResponse> {
+  const API_URL = process.env.API_URL;
   const CLIENT_ID = process.env.GITHUB_CLIENT_ID;
   const CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
-  const CALLBACK_URL = 'http://localhost:8080/api/auth/github/callback';
+  const CALLBACK_URL = `${API_URL}/auth/github/callback`;
 
   const data = {
     client_id: CLIENT_ID,
@@ -45,7 +45,7 @@ async function registerGithubAccount(response: GithubResponse): Promise<IGithubA
     let githubAuth = await GithubAuthentication.findOne({id}).exec();
 
     if (githubAuth === null) {
-        githubAuth = await new GithubAuthentication({
+      githubAuth = await new GithubAuthentication({
         token_type: response.token_type,
         access_token: response.access_token,
         scope: response.scope,

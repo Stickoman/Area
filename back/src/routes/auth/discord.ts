@@ -10,10 +10,12 @@ const router = Router();
 
 router.get('/api/auth/discord', [], async (req: Request, res: Response) => {
   try {
+    const API_URL = process.env.API_URL;
     const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
-    const REDIRECT_URI = 'http://localhost:8080/api/auth/discord/callback';
+    const REDIRECT_URI = `${API_URL}/auth/discord/callback`;
     const SCOPE = 'identify';
 
+    console.log(REDIRECT_URI);
     res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=${SCOPE}`);
   } catch (error) {
     console.warn('DISCORD OAUTH', error);
@@ -30,6 +32,7 @@ router.get('/api/auth/discord/callback', [], async (req: Request, res: Response)
   }
 
   try {
+    const FRONT_URL = process.env.FRONT_URL;
     const response: DiscordResponse = await requestAccessToken(code);
     const account: IDiscordAuthentication = await registerDiscordAccount(response);
     retrieveAssociatedDiscord(account.id)
@@ -39,11 +42,11 @@ router.get('/api/auth/discord/callback', [], async (req: Request, res: Response)
         document.discordId = account.id;
         await document.save();
 
-        res.redirect(`http://localhost:8081/login?jwt=${generateAccessToken(user)}&name=${account.screenName}`);
+        res.redirect(`${FRONT_URL}/login?jwt=${generateAccessToken(user)}&name=${account.screenName}`);
       })
       .catch(() => {
         const id: string = initOAuthFlow('discord', account.id, account.screenName);
-        res.redirect(`http://localhost:8081/oauth?id=${id}`);
+        res.redirect(`${FRONT_URL}/oauth?id=${id}`);
       });
   } catch (error) {
     res.status(500).send('Error during Discord callback processing');

@@ -2,7 +2,7 @@ import {IUser, User} from '../model/user';
 
 async function updateUserProfile(userId: string, profile: IUser) {
   try {
-    let user = await User.findById(userId).exec();
+    const user = await User.findById(userId).exec();
 
     user.email = profile.email;
     user.firstName = profile.firstName;

@@ -18,8 +18,6 @@ interface TwitterAPICall {
   data: Record<string, string | number | boolean>;
 }
 
-const CALLBACK_URL = 'http://localhost:8080/api/auth/twitter/callback';
-
 async function callTwitterAPI(call: TwitterAPICall, access_token: string) {
   const authOptions: OAuthOptions = {
     api_key: process.env.TWITTER_API_KEY || '',
@@ -39,6 +37,8 @@ async function callTwitterAPI(call: TwitterAPICall, access_token: string) {
 }
 
 async function requestToken(): Promise<string> {
+  const API_URL = process.env.API_URL;
+  const CALLBACK_URL = `${API_URL}/auth/twitter/callback`;
   const url = 'https://api.twitter.com/oauth/request_token';
 
   return callTwitterAPI({

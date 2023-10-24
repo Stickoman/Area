@@ -9,9 +9,10 @@ interface DiscordResponse {
 }
 
 async function requestAccessToken(code: string): Promise<DiscordResponse> {
+  const API_URL = process.env.API_URL;
   const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
   const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
-  const CALLBACK_URL = 'http://localhost:8080/api/auth/discord/callback';
+  const CALLBACK_URL = `${API_URL}/auth/discord/callback`;
 
   const data = {
     client_id: CLIENT_ID,
@@ -41,7 +42,7 @@ async function registerDiscordAccount(response: DiscordResponse): Promise<IDisco
     let discordAuth = await DiscordAuthentication.findOne({id}).exec();
 
     if (discordAuth === null) {
-        discordAuth = await new DiscordAuthentication({
+      discordAuth = await new DiscordAuthentication({
         token_type: response.token_type,
         access_token: response.access_token,
         expires_in: response.expires_in,

@@ -10,6 +10,7 @@ declare let window: any;
 const startApp = () => {
   const root = ReactDOM.createRoot(document.getElementById('root'));
 
+  console.log(process.env);
   configureAxios();
   root.render(React.createElement(App));
   serviceWorker.register();

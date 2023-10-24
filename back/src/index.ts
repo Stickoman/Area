@@ -6,8 +6,10 @@ import mongoose from 'mongoose';
 const PORT = 8080;
 
 APP.listen(PORT, () => {
-  console.log('Starting Express Application...');
-  dotenv.config();
+  const env = APP.get('env');
+
+  console.log(`Starting Express Application (${env} mode)...`);
+  dotenv.config({path: (env === 'production' ? '.env.production' : '.env')});
 
   connect()
     .then(() => console.log(`Express is listening at http://localhost:${PORT}`))
