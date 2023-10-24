@@ -1,7 +1,7 @@
 import React, {CSSProperties} from 'react';
 import NavigationBar, {checkIfUserIsLoggedIn} from '../components/common/NavigationBar';
-import '../index.css';
 import {useNavigate} from 'react-router-dom';
+import '../index.css';
 
 function HomeScreen() {
   const isLoggedIn = checkIfUserIsLoggedIn();

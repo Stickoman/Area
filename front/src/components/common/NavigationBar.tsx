@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faUser} from '@fortawesome/free-solid-svg-icons';
+import {faUser, faBars, faXmark} from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie';
-import "../index.css"
+import './NavigationBar.css';
 
 export function checkIfUserIsLoggedIn(): boolean {
   const token = Cookies.get('token');
@@ -17,31 +17,28 @@ interface INavigationBarProperties {
 
 function NavigationBar(props: INavigationBarProperties): React.JSX.Element {
   const isLoggedIn = checkIfUserIsLoggedIn();
+  const [menuDropDown, setMenuDropDown] = useState(false);
 
-  const navStyle = {
-    background: props.color,
-    padding: '10px 20px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    color: '#fff',
-    boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-    height: '70px',
-  };
-    return (
-    <nav style={navStyle}>
-      <Link to="/" className={'nav-link'}>
-        Home
-      </Link>
-      <Link to="/services" className={'nav-link'}>
-        Services
-      </Link>
-      <Link to="/configuration" className={'nav-link'}>
-        Configuration
-      </Link>
-      <Link to={isLoggedIn ? '/profile' : '/authentication'} className={'nav-icon'}>
-        <FontAwesomeIcon icon={faUser}/>
-      </Link>
+  return (
+    <nav className={'navigation-container'} style={{backgroundColor: props.color}}>
+      <div className={'mobile'}>
+        <button onClick={() => setMenuDropDown(!menuDropDown)}>
+          <FontAwesomeIcon icon={menuDropDown ? faXmark : faBars}/>
+        </button>
+        <h1>AREA</h1>
+      </div>
+      <div className={'links'} style={{top: (menuDropDown ? '0' : '-1000px')}}>
+        <Link to="/" className={'nav-link'}>Home</Link>
+        <Link to="/services" className={'nav-link'}>Services</Link>
+        <Link to="/configuration" className={'nav-link'}>Configuration</Link>
+        <Link to={isLoggedIn ? '/profile' : '/authentication'} className={'nav-icon'}>
+          <FontAwesomeIcon icon={faUser}/>
+        </Link>
+      </div>
+
+      <div className={'menu'}>
+
+      </div>
     </nav>
   );
 }
