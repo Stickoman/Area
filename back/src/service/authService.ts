@@ -86,6 +86,13 @@ async function retrieveAssociatedTwitterUser(twitterId: string): Promise<IUser> 
     return reject('Unable to find a user associated with this Twitter account');
   return user as IUser;
 }
+async function retrieveAssociatedFacebookUser(facebookId: string): Promise<IUser> {
+  const user = await User.findOne({facebookId: facebookId}).exec();
+
+  if (user === null)
+    return reject('Unable to find a user associated with this Facebook account');
+  return user as IUser;
+}
 async function retrieveAssociatedDiscord(discordId: string): Promise<IUser> {
   const user = await User.findOne({discordId: discordId}).exec();
 
@@ -111,4 +118,4 @@ async function retrieveAssociatedGoogle(googleId: string): Promise<IUser> {
 }
 
 export type {Credentials};
-export {isString, register, login, retrieveAssociatedTwitterUser, retrieveAssociatedGithub, retrieveAssociatedDiscord, retrieveAssociatedGoogle, hashPassword, reject};
+export {isString, register, login, retrieveAssociatedTwitterUser, retrieveAssociatedFacebookUser, retrieveAssociatedGithub, retrieveAssociatedDiscord, retrieveAssociatedGoogle, hashPassword, reject};

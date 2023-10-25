@@ -7,6 +7,7 @@ interface IUser {
   email: string;
   password: string;
   twitterId?: string,
+  facebookId?: string,
   discordId?: string,
   githubId?: string,
   googleId?: string,
@@ -30,6 +31,10 @@ const schema = new Schema<IUser>({
     required: true,
   },
   twitterId: {
+    type: String,
+    required: false,
+  },
+  facebookId: {
     type: String,
     required: false,
   },
