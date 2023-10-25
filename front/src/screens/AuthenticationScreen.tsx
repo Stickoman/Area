@@ -77,9 +77,9 @@ function AuthenticationScreen(): React.JSX.Element {
                         redirectPath={'/api/auth/facebook'}/>
           <SocialButton text={'Continue with Meta'} color={'#1877f2'} border={false} icon={faMeta}
                         redirectPath={'/api/auth/meta'}/>
-          <SocialButton text={'Continue with Instagram'}
+          <SocialButton text={'Continue with Reddit'}
                         color={'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)'}
-                        border={false} icon={faInstagram} redirectPath={'/api/auth/instagram'}/>
+                        border={false} icon={faInstagram} redirectPath={'/api/auth/reddit'}/>
           <SocialButton text={'Continue with Microsoft'} color={'#ea4300'} border={false} icon={faMicrosoft}
                         redirectPath={'/api/auth/microsoft'}/>
         </div>
