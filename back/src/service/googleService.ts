@@ -36,7 +36,6 @@ async function requestAccessToken(code: string): Promise<GoogleResponse> {
 
 async function registerGoogleAccount(response: GoogleResponse): Promise<IGoogleAuthentication> {
   try {
-
     const idResponse = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
       headers: {
         'Authorization': `${response.token_type} ${response.access_token}`,
