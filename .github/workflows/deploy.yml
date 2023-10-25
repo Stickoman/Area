@@ -21,5 +21,5 @@ jobs:
         touch area.tar.gz
         tar --exclude='node_modules' --exclude='area.tar.gz' -czf area.tar.gz ../B-DEV-500-LYN-5-1-area-timothe.medico
         scp -o StrictHostKeyChecking=no area.tar.gz root@area.baragouin.fr:/root/dev
-        ssh -o StrictHostKeyChecking=no root@area.baragouin.fr 'cd /root/dev && tar -xzf area.tar.gz && ls && cd area && docker-compose up -d --no-cache --build'
+        ssh -o StrictHostKeyChecking=no root@area.baragouin.fr 'cd /root/dev && tar -xzf area.tar.gz && ls && cd area && docker-compose up -d --force-recreate --build'
 
