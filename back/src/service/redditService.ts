@@ -14,26 +14,23 @@ interface RedditResponse {
 async function requestAccessToken(code: string): Promise<RedditResponse> {
     const redirectUri = 'http://localhost:8080/api/auth/reddit/callback';
     try {
-        const tokenResponse = await axios.post(
-          'https://www.reddit.com/api/v1/access_token',
-          `grant_type=authorization_code&code=${code}&redirect_uri=${redirectUri}`,
-          {
+        const tokenResponse = await axios.post('https://www.reddit.com/api/v1/access_token', `grant_type=authorization_code&code=${code}&redirect_uri=${redirectUri}`,
+        {
             auth: {
-              username: process.env.REDDIT_CLIENT_ID,
-              password: process.env.REDDIT_CLIENT_SECRET,
+                username: process.env.REDDIT_CLIENT_ID,
+                password: process.env.REDDIT_CLIENT_SECRET,
             },
             headers: {
-              'User-Agent': 'AREA/1.0',
+                'User-Agent': 'AREA/1.0',
             },
-          }
-        );
+        });
         return tokenResponse.data;
-      } catch (error) {
+    } catch (error) {
         throw new Error('Error retrieving Reddit access token:' + error);
-      }
+    }
 }
 
-async function registerRedditAccount(response: RedditResponse) {
+async function registerRedditAccount(response: RedditResponse): Promise<IRedditAuthentication>  {
     try {
         const idResponse = await axios.get('https://oauth.reddit.com/api/v1/me', {
             headers: {
@@ -55,12 +52,11 @@ async function registerRedditAccount(response: RedditResponse) {
             screenName: screenName,
           }).save();
         }
-        return RedditAuth;
-      } catch (error) {
+    return RedditAuth;
+    } catch (error) {
         throw new Error('Error registering Reddit account: ' + error);
-      }
+    }
 }
-
 
 export {requestAccessToken, registerRedditAccount};
 export type {RedditResponse};
