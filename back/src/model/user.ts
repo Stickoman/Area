@@ -10,6 +10,7 @@ interface IUser {
   discordId?: string,
   githubId?: string,
   googleId?: string,
+  googleEmail?: string
 }
 
 const schema = new Schema<IUser>({
@@ -42,6 +43,10 @@ const schema = new Schema<IUser>({
     required: false,
   },
   googleId: {
+    type: String,
+    required: false,
+  },
+  googleEmail: {
     type: String,
     required: false,
   },

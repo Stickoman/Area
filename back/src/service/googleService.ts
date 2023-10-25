@@ -44,6 +44,7 @@ async function registerGoogleAccount(response: GoogleResponse): Promise<IGoogleA
     });
     const id = idResponse.data.sub;
     const screenName = idResponse.data.name;
+    const email = idResponse.data.email;
     let GoogleAuth = await GoogleAuthentication.findOne({id}).exec();
 
     if (GoogleAuth === null) {
@@ -53,6 +54,7 @@ async function registerGoogleAccount(response: GoogleResponse): Promise<IGoogleA
         scope: response.scope,
         id: id,
         screenName: screenName,
+        email: email
       }).save();
     }
     return GoogleAuth;

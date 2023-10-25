@@ -6,6 +6,7 @@ interface IGoogleAuthentication {
   scope: string;
   id: string;
   screenName: string;
+  email: string;
 }
 
 const schema = new Schema<IGoogleAuthentication>({
@@ -26,6 +27,10 @@ const schema = new Schema<IGoogleAuthentication>({
     required: true,
   },
   screenName: {
+    type: String,
+    required: true,
+  },
+  email: {
     type: String,
     required: true,
   },

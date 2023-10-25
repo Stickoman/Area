@@ -31,6 +31,7 @@ function AuthenticationContainer(): React.JSX.Element {
       navigate('/profile');
     } catch (error) {
       console.error('Error logging in:', error);
+      alert('Une erreur s\'est produite lors de la connexion. Veuillez réessayer.');
     }
   }
 

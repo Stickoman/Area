@@ -21,6 +21,7 @@ interface IProfile {
   discordId?: string;
   githubId?: string;
   googleId?: string;
+  googleEmail?: string
 }
 
 interface ProfileContentProperties {
