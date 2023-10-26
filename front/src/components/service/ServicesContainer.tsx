@@ -1,29 +1,18 @@
 import React from 'react';
-import {IService, SERVICE_ITEMS} from '../../common/service';
-
-import './ServiceContainer.css'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {SERVICE_ITEMS} from '../../common/service';
+import ServiceCard from './ServiceCard';
 import {useNavigate} from 'react-router-dom';
-
-interface IServicesCardProperties {
-  service: IService;
-}
-
-function ServiceCard(props: IServicesCardProperties): React.JSX.Element {
-  const {service} = props;
-  const navigate = useNavigate();
-
-  return (
-    <div onClick={() => navigate(`/services/${service.name}`)} className={'service-card'} style={{background: service.color}}>
-      <FontAwesomeIcon icon={service.icon} size={'3x'}/>
-      <p>{service.name[0].toUpperCase() + service.name.slice(1)}</p>
-    </div>
-  );
-}
+import './ServiceContainer.css';
 
 function ServicesContainer(): React.JSX.Element {
+  const navigate = useNavigate();
   const cards: React.JSX.Element[] = Array.from(SERVICE_ITEMS.values())
-    .map(service => <ServiceCard key={service.name} service={service}/>);
+    .map(service => <ServiceCard key={service.name}
+                                 name={service.name}
+                                 color={service.color}
+                                 icon={service.icon}
+                                 onClick={() => navigate(`/services/${service.name}`)}/>,
+    );
 
   return (
     <div className={'service-container'}>

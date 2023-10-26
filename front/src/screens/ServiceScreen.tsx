@@ -1,37 +1,17 @@
 import {useNavigate, useParams} from 'react-router-dom';
 import React, {CSSProperties, useState} from 'react';
-import {faDiscord, faFacebook, faMicrosoft, faSpotify, faTwitter} from '@fortawesome/free-brands-svg-icons';
 import '../index.css';
 
-import ServiceComponent from '../components/ServiceComponent';
 import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import NavigationBar from '../components/common/NavigationBar';
+import {SERVICE_ITEMS, ServiceType} from '../common/service';
+import {capitalize} from '../common/utils';
+import ServiceCard from '../components/service/ServiceCard';
 
-function ServiceScreen() {
+function ServiceScreen(): React.JSX.Element {
   const navigate = useNavigate();
   const [filter, setFilter] = useState('');
-  const services = [
-    {title: 'Send a ping', color: '#7289da', icon: faDiscord, serviceApp: 'Discord'},
-    {title: 'Send friend request', color: '#7289da', icon: faDiscord, serviceApp: 'Discord'},
-    {title: 'Create a group', color: '#7289da', icon: faDiscord, serviceApp: 'Discord'},
-
-    {title: 'Create a playlist', color: '#1db954', icon: faSpotify, serviceApp: 'Spotify'},
-    {title: 'Lorem Ipsum', color: '#1db954', icon: faSpotify, serviceApp: 'Spotify'},
-    {title: 'Add a song', color: '#1db954', icon: faSpotify, serviceApp: 'Spotify'},
-
-    {title: 'Send an email', color: '#ea4300', icon: faMicrosoft, serviceApp: 'Outlook 365'},
-    {title: 'Get last 5 emails', color: '#ea4300', icon: faMicrosoft, serviceApp: 'Outlook 365'},
-    {title: 'CC all your contacts', color: '#ea4300', icon: faMicrosoft, serviceApp: 'Outlook 365'},
-
-    { title: 'Twitter Service 1', color: '#1da1f2', icon: faTwitter, serviceApp: 'Twitter' },
-    { title: 'Twitter Service 2', color: '#1da1f2', icon: faTwitter, serviceApp: 'Twitter' },
-    { title: 'Twitter Service 3', color: '#1da1f2', icon: faTwitter, serviceApp: 'Twitter' },
-
-    { title: 'Facebook Service 1', color: '#1877f2', icon: faFacebook, serviceApp: 'Facebook' },
-    { title: 'Facebook Service 2', color: '#1877f2', icon: faFacebook, serviceApp: 'Facebook' },
-    { title: 'Facebook Service 3', color: '#1877f2', icon: faFacebook, serviceApp: 'Facebook' },
-  ];
 
   const titleStyle: CSSProperties = {
     margin: 10,
@@ -55,36 +35,30 @@ function ServiceScreen() {
     fontSize: '1.5em',
   };
 
-  const filteredServices = services.filter((service) =>
-    service.title.toLowerCase().includes(filter),
-  );
-
-  let { service } = useParams();
-
-  service = service[0].toUpperCase() + service.slice(1)
-
-  const selectedService = filteredServices.find(serviceApp => serviceApp.serviceApp === service);
+  const {service} = useParams();
+  const type: ServiceType = service as ServiceType;
+  const selectedService = SERVICE_ITEMS.get(type);
+  const filteredItems = selectedService.actions
+    .filter(item => item.name.includes(filter.toLowerCase().trim()));
 
   return (
     <div>
-      {selectedService && <NavigationBar color={selectedService.color} />}
+      {selectedService && <NavigationBar color={selectedService.color}/>}
       <button onClick={() => navigate('/services')} style={backButtonStyle} className={'buttonStyle'}>
-        <FontAwesomeIcon icon={faArrowLeft} style={backIconStyle} />
+        <FontAwesomeIcon icon={faArrowLeft} style={backIconStyle}/>
         <span>Back</span>
       </button>
-      <h1 style={titleStyle}>{service}</h1>
+
+      <h1 style={titleStyle}>{capitalize(service)}</h1>
       <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
-        {filteredServices.map((serviceApp, index) => (
-          serviceApp.serviceApp === service &&
-                <ServiceComponent
-                  key={serviceApp.title + index}
-                  onClick={undefined}
-                  title={serviceApp.title}
-                  color={serviceApp.color}
-                  icon={serviceApp.icon}
-                />
+        {filteredItems.map(element => (
+          <ServiceCard key={`${service}:${element.name}`}
+                       name={element.description}
+                       color={selectedService.color}
+                       icon={selectedService.icon}
+                       onClick={undefined}/>
         ))}
-    </div>
+      </div>
     </div>
   );
 }
