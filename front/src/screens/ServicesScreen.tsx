@@ -1,17 +1,10 @@
 import React, {CSSProperties, useState} from 'react';
-import { faDiscord, faMicrosoft, faSpotify, faTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons';
-import ServiceComponent from '../components/ServiceComponent';
 import NavigationBar from '../components/common/NavigationBar';
 import '../index.css';
-function ServicesScreen() {
+import ServicesContainer from '../components/service/ServicesContainer';
+
+function ServicesScreen(): React.JSX.Element {
   const [filter, setFilter] = useState('');
-  const services = [
-    { title: 'Discord', color: '#7289da', icon: faDiscord },
-    { title: 'Spotify', color: '#1db954', icon: faSpotify },
-    { title: 'Outlook 365', color: '#ea4300', icon: faMicrosoft },
-    { title: 'Twitter', color: '#1da1f2', icon: faTwitter },
-    { title: 'Facebook', color: '#1877f2', icon: faFacebook },
-  ];
 
   const containerStyle: CSSProperties = {
     textAlign: 'center',
@@ -30,13 +23,6 @@ function ServicesScreen() {
     color: '#333',
   };
 
-  const servicesContainerStyle: CSSProperties = {
-    padding: '16px',
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-  };
-
   return (
     <div style={containerStyle}>
       <NavigationBar color={'#000'}/>
@@ -49,19 +35,7 @@ function ServicesScreen() {
         className={'inputStyle'}
         style={searchStyle}
       />
-      <div style={servicesContainerStyle}>
-        {services
-          .filter((service) => service.title.toLowerCase().includes(filter))
-          .map((service, index) => (
-            <ServiceComponent
-              key={index}
-              onClick={undefined}
-              title={service.title}
-              color={service.color}
-              icon={service.icon}
-            />
-          ))}
-      </div>
+      <ServicesContainer/>
     </div>
   );
 }
