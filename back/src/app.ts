@@ -1,9 +1,13 @@
-import {connect, isConnected} from './mongodb';
+import {isConnected} from './mongodb';
 import express, {json} from 'express';
+import cors from 'cors';
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+
+import { swagger } from './swagger';
 
 import {areasRouter} from './routes/area';
 import {basicAuthRouter} from './routes/auth/basic';
-import cors from 'cors';
 import {discordAuthRouter} from './routes/auth/discord';
 import {facebookAuthRouter} from './routes/auth/facebook';
 import {githubAuthRouter} from './routes/auth/github';
@@ -16,6 +20,7 @@ import {servicesRouter} from './routes/services';
 import {twitterAuthRouter} from './routes/auth/twitter';
 
 const APP = express();
+const SWAGGER_SPECS = swaggerJsdoc(swagger);
 
 APP.get('/api/ping', (_req, res) => {
   res.status(200)
@@ -27,10 +32,12 @@ APP.get('/api/status', (_req, res) => {
 });
 
 APP.get('/api/mobile', (req, res) => {
-  const file = `/usr/src/app/shared/client.apk`;
+  const file = '/usr/src/app/shared/client.apk';
 
   res.download(file);
 });
+
+APP.use('/api/docs', swaggerUi.serve, swaggerUi.setup(SWAGGER_SPECS));
 
 APP.use(cors());
 APP.use(json());
