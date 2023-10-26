@@ -1,9 +1,10 @@
-import {Router, Response, Request} from 'express';
-import {isString, retrieveAssociatedGithub} from '../../service/authService';
-import {GithubResponse, registerGithubAccount, requestAccessToken} from '../../service/githubService';
-import {User} from '../../model/user';
-import {IGithubAuthentication} from '../../model/githubAuth';
 import {AuthenticatedRequest, authenticateMiddleware, generateAccessToken} from '../../middleware/auth';
+import {GithubResponse, registerGithubAccount, requestAccessToken} from '../../service/githubService';
+import {Request, Response, Router} from 'express';
+import {isString, retrieveAssociatedGithub} from '../../service/authService';
+
+import {IGithubAuthentication} from '../../model/githubAuth';
+import {User} from '../../model/user';
 import {initOAuthFlow} from '../../service/oauthService';
 
 const router = Router();

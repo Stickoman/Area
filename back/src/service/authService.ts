@@ -1,6 +1,7 @@
-import {retrieveUser, saveUser} from '../repository/userRepository';
-import {genSalt, hash, compare} from 'bcrypt';
 import {IUser, User} from '../model/user';
+import {compare, genSalt, hash} from 'bcrypt';
+import {retrieveUser, saveUser} from '../repository/userRepository';
+
 import {generateAccessToken} from '../middleware/auth';
 
 const EMAIL_REGEX: RegExp = /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/;
@@ -124,5 +125,13 @@ async function retrieveAssociatedGoogle(googleId: string): Promise<IUser> {
   return user as IUser;
 }
 
+async function retrieveAssociatedMicrosoft(microsoftId: string): Promise<IUser> {
+  const user = await User.findOne({microsoftId: microsoftId}).exec();
+
+  if (user === null)
+    return reject('Unable to find a user associated with this Microsoft account');
+  return user as IUser;
+}
+
 export type {Credentials};
-export {isString, register, login, retrieveAssociatedTwitterUser, retrieveAssociatedFacebookUser, retrieveAssociatedRedditUser, retrieveAssociatedGithub, retrieveAssociatedDiscord, retrieveAssociatedGoogle, hashPassword, reject};
+export {isString, register, login, retrieveAssociatedTwitterUser, retrieveAssociatedFacebookUser, retrieveAssociatedRedditUser, retrieveAssociatedGithub, retrieveAssociatedDiscord, retrieveAssociatedGoogle, retrieveAssociatedMicrosoft, hashPassword, reject};

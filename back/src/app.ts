@@ -1,17 +1,19 @@
-import express, {json} from 'express';
 import {connect, isConnected} from './mongodb';
-import cors from 'cors';
+import express, {json} from 'express';
+
 import {areasRouter} from './routes/area';
 import {basicAuthRouter} from './routes/auth/basic';
-import {profileRouter} from './routes/profile';
-import {servicesRouter} from './routes/services';
-import {twitterAuthRouter} from './routes/auth/twitter';
-import {facebookAuthRouter} from './routes/auth/facebook';
-import {redditAuthRouter} from './routes/auth/reddit';
+import cors from 'cors';
 import {discordAuthRouter} from './routes/auth/discord';
+import {facebookAuthRouter} from './routes/auth/facebook';
 import {githubAuthRouter} from './routes/auth/github';
 import {googleAuthRouter} from './routes/auth/google';
+import {microsoftAuthRouter} from './routes/auth/microsoft';
 import {oauthRouter} from './routes/auth/oauth';
+import {profileRouter} from './routes/profile';
+import {redditAuthRouter} from './routes/auth/reddit';
+import {servicesRouter} from './routes/services';
+import {twitterAuthRouter} from './routes/auth/twitter';
 
 const APP = express();
 
@@ -39,6 +41,7 @@ APP.use(facebookAuthRouter);
 APP.use(redditAuthRouter);
 APP.use(discordAuthRouter);
 APP.use(githubAuthRouter);
+APP.use(microsoftAuthRouter);
 APP.use(googleAuthRouter);
 APP.use(profileRouter);
 APP.use(servicesRouter);
