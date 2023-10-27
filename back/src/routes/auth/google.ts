@@ -8,6 +8,19 @@ import {initOAuthFlow} from '../../service/oauthService';
 
 const router = Router();
 
+/**
+ * @swagger
+ * /api/auth/google:
+ *   get:
+ *     summary: Initiate Google OAuth2 process.
+ *     tags:
+ *       - OAuth
+ *     responses:
+ *       302:
+ *         description: Redirects to Google OAuth2 page.
+ *       500:
+ *         description: Error initiating Google authentication.
+ */
 router.get('/api/auth/google', [], async (req: Request, res: Response) => {
   try {
     const API_URL = process.env.API_URL;
@@ -22,7 +35,28 @@ router.get('/api/auth/google', [], async (req: Request, res: Response) => {
   }
 });
 
-
+/**
+ * @swagger
+ * /api/auth/google/callback:
+ *   get:
+ *     summary: Handle Google OAuth2 callback.
+ *     tags:
+ *       - OAuth
+ *     parameters:
+ *       - in: query
+ *         name: code
+ *         required: true
+ *         description: Authorization code returned by Google.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       302:
+ *         description: Redirects to the application
+ *       400:
+ *         description: Unable to parse authorization code.
+ *       500:
+ *         description: Error during Google callback processing.
+ */
 router.get('/api/auth/google/callback', [], async (req: Request, res: Response) => {
   const code = req.query.code as string | undefined;
 
@@ -54,7 +88,22 @@ router.get('/api/auth/google/callback', [], async (req: Request, res: Response) 
   }
 });
 
-router.post('/api/auth/Google/disassociate', authenticateMiddleware, async (req: AuthenticatedRequest, res: Response) => {
+/**
+ * @swagger
+ * /api/auth/google/disassociate:
+ *   post:
+ *     security:
+ *       - Bearer: []
+ *     summary: Disassociate the authenticated user's account from Google.
+ *     tags:
+ *       - OAuth
+ *     responses:
+ *       200:
+ *         description: Successfully disassociated Google from the user's account.
+ *       401:
+ *         description: Unauthorized or user not found.
+ */
+router.post('/api/auth/google/disassociate', authenticateMiddleware, async (req: AuthenticatedRequest, res: Response) => {
   const document = await User.findOne({_id: req.user._id}).exec();
 
   if (document !== null) {
