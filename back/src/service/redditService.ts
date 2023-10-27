@@ -1,6 +1,4 @@
 import axios from 'axios';
-import qs from 'querystring';
-import {isString} from './authService';
 import {IRedditAuthentication, RedditAuthentication} from '../model/redditAuth';
 
 interface RedditResponse {
@@ -12,7 +10,8 @@ interface RedditResponse {
 }
 
 async function requestAccessToken(code: string): Promise<RedditResponse> {
-    const redirectUri = 'http://localhost:8080/api/auth/reddit/callback';
+    const API_URL = process.env.API_URL;
+    const redirectUri = `${API_URL}/auth/reddit/callback`;
     try {
         const tokenResponse = await axios.post('https://www.reddit.com/api/v1/access_token', `grant_type=authorization_code&code=${code}&redirect_uri=${redirectUri}`,
         {

@@ -1,6 +1,4 @@
 import axios from 'axios';
-import qs from 'querystring';
-import {isString} from './authService';
 import {IFacebookAuthentication, FacebookAuthentication} from '../model/facebookAuth';
 
 interface FacebookResponse {
@@ -10,7 +8,8 @@ interface FacebookResponse {
 }
 
 async function requestAccessToken(code: string): Promise<FacebookResponse> {
-    const redirectUri = 'http://localhost:8080/api/auth/facebook/callback';
+    const API_URL = process.env.API_URL;
+    const redirectUri = `${API_URL}/auth/facebook/callback`;
     const tokenParams = {
         client_id: process.env.FACEBOOK_CLIENT_ID,
         client_secret: process.env.FACEBOOK_CLIENT_SECRET,

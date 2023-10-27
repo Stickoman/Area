@@ -10,9 +10,10 @@ interface MicrosoftResponse {
 }
 
 async function requestAccessToken(code: string): Promise<MicrosoftResponse> {
+  const API_URL = process.env.API_URL;
   const CLIENT_ID = '8562c76e-ef8d-4f37-93aa-f02b7311bc26';
   const CLIENT_SECRET = 'C-A8Q~0mNHVpj5XmYaixBeaQXE2RflmJB9EdwaAD';
-  const CALLBACK_URL = 'http://localhost:8080/api/auth/microsoft/callback';
+  const CALLBACK_URL = `${API_URL}/auth/microsoft/callback`;
 
   const data = {
     client_id: CLIENT_ID,
@@ -34,7 +35,6 @@ async function requestAccessToken(code: string): Promise<MicrosoftResponse> {
 
 async function registerMicrosoftAccount(response: MicrosoftResponse): Promise<IMicrosoftAuthentication> {
   try {
-    console.log('response', response.access_token);
     const idResponse = await axios.get('https://graph.microsoft.com/v1.0/me', {
       headers: {
         'Authorization': `Bearer ${response.access_token}`,
