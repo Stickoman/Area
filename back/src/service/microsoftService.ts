@@ -11,8 +11,8 @@ interface MicrosoftResponse {
 
 async function requestAccessToken(code: string): Promise<MicrosoftResponse> {
   const API_URL = process.env.API_URL;
-  const CLIENT_ID = '8562c76e-ef8d-4f37-93aa-f02b7311bc26';
-  const CLIENT_SECRET = 'C-A8Q~0mNHVpj5XmYaixBeaQXE2RflmJB9EdwaAD';
+  const CLIENT_ID = process.env.MICROSOFT_CLIENT_ID;
+  const CLIENT_SECRET = process.env.MICROSOFT_CLIENT_SECRET;
   const CALLBACK_URL = `${API_URL}/auth/microsoft/callback`;
 
   const data = {
