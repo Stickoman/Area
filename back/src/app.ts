@@ -1,11 +1,7 @@
-import {isConnected} from './mongodb';
 import express, {json} from 'express';
 import cors from 'cors';
-import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
 
-import { swagger } from './swagger';
-
+import {globalRouter} from './routes/global';
 import {areasRouter} from './routes/area';
 import {basicAuthRouter} from './routes/auth/basic';
 import {discordAuthRouter} from './routes/auth/discord';
@@ -20,27 +16,10 @@ import {servicesRouter} from './routes/services';
 import {twitterAuthRouter} from './routes/auth/twitter';
 
 const APP = express();
-const SWAGGER_SPECS = swaggerJsdoc(swagger);
-
-APP.get('/api/ping', (_req, res) => {
-  res.status(200)
-    .send('Pong');
-});
-
-APP.get('/api/status', (_req, res) => {
-  res.sendStatus(isConnected() ? 200 : 500);
-});
-
-APP.get('/api/mobile', (req, res) => {
-  const file = '/usr/src/app/shared/client.apk';
-
-  res.download(file);
-});
-
-APP.use('/api/docs', swaggerUi.serve, swaggerUi.setup(SWAGGER_SPECS));
 
 APP.use(cors());
 APP.use(json());
+APP.use(globalRouter);
 APP.use(areasRouter);
 APP.use(basicAuthRouter);
 APP.use(twitterAuthRouter);

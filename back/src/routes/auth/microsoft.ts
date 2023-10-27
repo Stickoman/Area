@@ -1,18 +1,29 @@
 import {AuthenticatedRequest, authenticateMiddleware, generateAccessToken} from '../../middleware/auth';
-import {IUser, User} from '../../model/user';
+import {User} from '../../model/user';
 import {MicrosoftResponse, registerMicrosoftAccount, requestAccessToken} from '../../service/microsoftService';
 import {Request, Response, Router} from 'express';
 import {isString, retrieveAssociatedMicrosoft} from '../../service/authService';
 
 import {IMicrosoftAuthentication} from '../../model/microsoftAuth';
 import {initOAuthFlow} from '../../service/oauthService';
-import {model} from 'mongoose';
 
 const router = Router();
 
+/**
+ * @swagger
+ * /api/auth/microsoft:
+ *   get:
+ *     summary: Initiate Microsoft OAuth2 process.
+ *     tags:
+ *       - OAuth
+ *     responses:
+ *       302:
+ *         description: Redirects to Microsoft OAuth2 page.
+ *       500:
+ *         description: Error initiating Microsoft authentication.
+ */
 router.get('/api/auth/microsoft', [], async (req: Request, res: Response) => {
   try {
-    //const CLIENT_ID = process.env.GITHUB_CLIENT_ID;
     const REDIRECT_URI = 'http://localhost:8080/api/auth/microsoft/callback';
     const CLIENT_ID = '8562c76e-ef8d-4f37-93aa-f02b7311bc26';
     const SCOPE = 'openid User.Read Mail.Read';
@@ -24,6 +35,28 @@ router.get('/api/auth/microsoft', [], async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/auth/microsoft/callback:
+ *   get:
+ *     summary: Handle Microsoft OAuth2 callback.
+ *     tags:
+ *       - OAuth
+ *     parameters:
+ *       - in: query
+ *         name: code
+ *         required: true
+ *         description: Authorization code returned by Microsoft.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       302:
+ *         description: Redirects to the application
+ *       400:
+ *         description: Unable to parse authorization code.
+ *       500:
+ *         description: Error during Microsoft callback processing.
+ */
 router.get('/api/auth/microsoft/callback', [], async (req: Request, res: Response) => {
   const code = req.query.code as string | undefined;
   if (!isString(code)) {
@@ -53,6 +86,21 @@ router.get('/api/auth/microsoft/callback', [], async (req: Request, res: Respons
   }
 });
 
+/**
+ * @swagger
+ * /api/auth/microsoft/disassociate:
+ *   post:
+ *     security:
+ *       - Bearer: []
+ *     summary: Disassociate the authenticated user's account from Microsoft.
+ *     tags:
+ *       - OAuth
+ *     responses:
+ *       200:
+ *         description: Successfully disassociated Microsoft from the user's account.
+ *       401:
+ *         description: Unauthorized or user not found.
+ */
 router.post('/api/auth/microsoft/disassociate', authenticateMiddleware, async (req: AuthenticatedRequest, res: Response) => {
   const document = await User.findOne({_id: req.user._id}).exec();
 

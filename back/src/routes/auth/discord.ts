@@ -8,6 +8,19 @@ import {initOAuthFlow} from '../../service/oauthService';
 
 const router = Router();
 
+/**
+ * @swagger
+ * /api/auth/discord:
+ *   get:
+ *     summary: Initiate Discord OAuth2 process.
+ *     tags:
+ *       - OAuth
+ *     responses:
+ *       302:
+ *         description: Redirects to Discord OAuth2 page.
+ *       500:
+ *         description: Error initiating Discord authentication.
+ */
 router.get('/api/auth/discord', [], async (req: Request, res: Response) => {
   try {
     const API_URL = process.env.API_URL;
@@ -23,6 +36,28 @@ router.get('/api/auth/discord', [], async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/auth/discord/callback:
+ *   get:
+ *     summary: Handle Discord OAuth2 callback.
+ *     tags:
+ *       - OAuth
+ *     parameters:
+ *       - in: query
+ *         name: code
+ *         required: true
+ *         description: Authorization code returned by Discord.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       302:
+ *         description: Redirects to the application
+ *       400:
+ *         description: Unable to parse authorization code.
+ *       500:
+ *         description: Error during Discord callback processing.
+ */
 router.get('/api/auth/discord/callback', [], async (req: Request, res: Response) => {
   const code = req.query.code as string | undefined;
 
@@ -54,6 +89,21 @@ router.get('/api/auth/discord/callback', [], async (req: Request, res: Response)
   }
 });
 
+/**
+ * @swagger
+ * /api/auth/discord/disassociate:
+ *   post:
+ *     security:
+ *       - Bearer: []
+ *     summary: Disassociate the authenticated user's account from Discord.
+ *     tags:
+ *       - OAuth
+ *     responses:
+ *       200:
+ *         description: Successfully disassociated Discord from the user's account.
+ *       401:
+ *         description: Unauthorized or user not found.
+ */
 router.post('/api/auth/discord/disassociate', authenticateMiddleware, async (req: AuthenticatedRequest, res: Response) => {
   const document = await User.findOne({_id: req.user._id}).exec();
 
