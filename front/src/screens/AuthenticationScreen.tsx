@@ -11,8 +11,7 @@ import {
   faDiscord,
   faGithub,
   faFacebook,
-  faMeta,
-  faInstagram,
+  faReddit,
   faMicrosoft,
 } from '@fortawesome/free-brands-svg-icons';
 import SocialButton from '../components/common/SocialButton';
@@ -36,7 +35,7 @@ function AuthenticationContainer(): React.JSX.Element {
 
   function renderSwitchButton(): React.JSX.Element {
     const hintText: string = login ? 'Don\'t have an account?' : 'Already have an account?';
-    const buttonText: string = login ? 'Login' : 'Signup';
+    const buttonText: string = login ? 'Signup' : 'Login';
 
     return (
       <p className={'toggleText'}>{hintText}
@@ -73,13 +72,10 @@ function AuthenticationScreen(): React.JSX.Element {
                         redirectPath={'/api/auth/github'}/>
         </div>
         <div className={'column'}>
+          <SocialButton text={'Continue with Reddit'} color={'#FF5536FF'} border={false} icon={faReddit}
+                        redirectPath={'/api/auth/reddit'}/>
           <SocialButton text={'Continue with Facebook'} color={'#1877f2'} border={false} icon={faFacebook}
                         redirectPath={'/api/auth/facebook'}/>
-          <SocialButton text={'Continue with Meta'} color={'#1877f2'} border={false} icon={faMeta}
-                        redirectPath={'/api/auth/meta'}/>
-          <SocialButton text={'Continue with Reddit'}
-                        color={'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)'}
-                        border={false} icon={faInstagram} redirectPath={'/api/auth/reddit'}/>
           <SocialButton text={'Continue with Microsoft'} color={'#ea4300'} border={false} icon={faMicrosoft}
                         redirectPath={'/api/auth/microsoft'}/>
         </div>
