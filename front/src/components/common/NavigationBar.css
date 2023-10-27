@@ -2,7 +2,7 @@
     padding: 10px 20px;
     display: flex;
     box-sizing: border-box;
-    overflow: scroll;
+    overflow: hidden;
     justify-content: space-between;
     align-items: center;
     color: #fff;
