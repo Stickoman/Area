@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import NavigationBar from '../components/common/NavigationBar';
-import LoginComponent, {LoginFormData} from '../components/LoginComponent';
-import RegisterComponent from '../components/RegisterComponent';
+import NavigationBar from '../../components/common/NavigationBar';
+import LoginComponent, {LoginFormData} from '../../components/LoginComponent';
+import RegisterComponent from '../../components/RegisterComponent';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import {useNavigate} from 'react-router-dom';
@@ -14,7 +14,7 @@ import {
   faReddit,
   faMicrosoft,
 } from '@fortawesome/free-brands-svg-icons';
-import SocialButton from '../components/common/SocialButton';
+import SocialButton from '../../components/common/SocialButton';
 import './AuthenticationScreen.css';
 
 function AuthenticationContainer(): React.JSX.Element {

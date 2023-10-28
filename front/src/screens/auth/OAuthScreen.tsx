@@ -1,11 +1,11 @@
 import React, {CSSProperties, useEffect, useState} from 'react';
-import NavigationBar from '../components/common/NavigationBar';
+import NavigationBar from '../../components/common/NavigationBar';
 import axios from 'axios';
-import StepBar from '../components/oauth/StepBar';
-import {FlowData, serviceColor} from '../common/flow';
-import Callback from '../components/oauth/Callback';
-import Connection from '../components/oauth/Connection';
-import Finish from '../components/oauth/Finish';
+import StepBar from '../../components/oauth/StepBar';
+import {FlowData, serviceColor} from '../../common/flow';
+import Callback from '../../components/oauth/Callback';
+import Connection from '../../components/oauth/Connection';
+import Finish from '../../components/oauth/Finish';
 
 function OAuthScreen(): React.JSX.Element {
   const wrapperStyle: CSSProperties = {
