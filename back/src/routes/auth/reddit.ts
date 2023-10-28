@@ -75,4 +75,15 @@ router.get('/api/auth/reddit/callback', [], async (req: Request, res: Response) 
   }
 });
 
+router.post('/api/auth/reddit/disassociate', authenticateMiddleware, async (req: AuthenticatedRequest, res: Response) => {
+    const document = await User.findOne({_id: req.user._id}).exec();
+  
+    if (document !== null) {
+      document.redditId = '';
+      await document.save();
+    } else {
+      res.sendStatus(401);
+    }
+  });
+
 export {router as redditAuthRouter};
