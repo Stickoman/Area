@@ -24,7 +24,7 @@ interface IServiceData {
 const servicesData = new Map<string, IServiceData>();
 
 servicesData.set('timer', {icon: faClock, color: '#000000'});
-servicesData.set('discord-webhook', {icon: faDiscord, color: '#7289da'});
+servicesData.set('discord', {icon: faDiscord, color: '#7289da'});
 
 const formatText = (value: string) => value
   .split('-')
@@ -57,8 +57,8 @@ function AreaDetails(props: IAreaDetailsProperties): React.JSX.Element {
 
 function AreaCard(props: IAreaCardProperties): React.JSX.Element {
   const area: IArea = props.area;
-  const actionService: IServiceData = servicesData.get(area.actionType);
-  const reactionService: IServiceData = servicesData.get(area.reactionType);
+  const actionService: IServiceData = servicesData.get(area.actionType.split(':')[0]);
+  const reactionService: IServiceData = servicesData.get(area.reactionType.split(':')[0]);
   const [areaDetails, setDetails] = useState(null as IAreaDetails);
 
   useEffect(() => {
@@ -66,6 +66,14 @@ function AreaCard(props: IAreaCardProperties): React.JSX.Element {
       .then(details => setDetails(details))
       .catch(() => console.warn('Unable to load details'));
   }, [area]);
+
+  if (!actionService || !reactionService) {
+    return (
+      <div>
+        <p>Unable to parse action {area.actionType} / {area.reactionType}</p>
+      </div>
+    )
+  }
 
   return (
     <div className={'card-container'}>

@@ -1,5 +1,5 @@
 
-type ReactionType = 'discord-webhook';
+type ReactionType = 'discord:send_webhook';
 
 interface Reaction {
   discordWebhookId?: string;

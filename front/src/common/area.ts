@@ -53,5 +53,14 @@ async function deleteArea(id: string): Promise<void> {
     });
 }
 
+async function createArea(actionType: string, actionData: object, reactionType: string, reactionData: object): Promise<void> {
+  return axios.post(`/api/areas`, {actionType, actionData, reactionType, reactionData}, {headers: getAuthorizedHeader()})
+    .then(() => Promise.resolve())
+    .catch(reason => {
+      console.error(reason);
+      return Promise.reject(new Error('Unable to create AREA'));
+    });
+}
+
 export type {IArea, IAreaDetails};
-export {loadAreas, retrieveAreaDetails, deleteArea};
+export {loadAreas, retrieveAreaDetails, deleteArea, createArea};

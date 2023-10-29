@@ -6,7 +6,7 @@ type ActionFactory = (userId: string, data: object) => Promise<string>;
 
 const actionAssociations = new Map<ActionType, ActionFactory>();
 
-actionAssociations.set('timer', createTimerAction);
+actionAssociations.set('timer:scheduled_task', createTimerAction);
 
 async function refreshActions() {
   let count: number = 0;
@@ -27,7 +27,7 @@ async function retrieveActionData(id: string, type: ActionType): Promise<object>
   let data: object = {};
 
   switch (type) {
-  case 'timer':
+  case 'timer:scheduled_task':
     data = (await TimerAction.findById(id).exec()) as ITimerData;
     break;
   }

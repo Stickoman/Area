@@ -1,0 +1,52 @@
+.area-wrapper {
+    margin: 40px auto 0 auto;
+    width: 80%;
+
+    > button {
+        width: 50%;
+        margin: 20px 25% 0 25%;
+        color: white;
+        border: none;
+        background-color: limegreen;
+    }
+}
+
+.area-container {
+    width: 100%;
+    display: flex;
+    border-radius: 15px;
+    overflow: hidden;
+    color: white;
+
+    .area-action, .area-reaction {
+        box-sizing: border-box;
+        width: 50%;
+        padding: 15px;
+    }
+
+    .area-fields {
+        margin-top: 20px;
+
+        > div {
+            margin-top: 10px;
+
+            & input {
+                margin-top: 5px;
+            }
+        }
+    }
+
+    > div > header {
+        display: flex;
+        align-items: center;
+
+        > svg {
+            margin-right: 10px;
+        }
+
+        > h3 {
+            margin: 0;
+        }
+    }
+
+}
