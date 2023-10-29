@@ -23,12 +23,16 @@ function AuthenticationContainer(): React.JSX.Element {
 
   async function tryLogin(data: LoginFormData) {
     try {
+      const queryParameters = new URLSearchParams(window.location.search);
       const response = await axios.post('/api/auth/login', data);
       const token = response.data.token;
 
       Cookies.set('token', token);
-      navigate('/profile');
-    } catch (error) {
+      if (queryParameters.has('callback'))
+        window.location.href = queryParameters.get('callback');
+      else
+        navigate('/profile');
+      } catch (error) {
       console.error('Error logging in:', error);
     }
   }
