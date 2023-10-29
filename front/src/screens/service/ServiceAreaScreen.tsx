@@ -1,6 +1,8 @@
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import NavigationBar from '../../components/common/NavigationBar';
+import ServiceAreaCreation from '../../components/service/ServiceAreaCreation';
+import {ServiceType} from '../../common/service';
 
 function ServiceAreaScreen(): React.JSX.Element {
   const queryParameters = new URLSearchParams(window.location.search);
@@ -17,12 +19,12 @@ function ServiceAreaScreen(): React.JSX.Element {
     <div>
       <NavigationBar color={'#000'}/>
 
-      <h1>Setup new AREA</h1>
+      <h1 style={{textAlign: 'center', marginTop: '40px'}}>Setup New AREA</h1>
 
-      <p>{actionService}</p>
-      <p>{actionTask}</p>
-      <p>{reactionService}</p>
-      <p>{reactionTask}</p>
+      <ServiceAreaCreation actionService={actionService as ServiceType}
+                           actionTask={actionTask}
+                           reactionService={reactionService as ServiceType}
+                           reactionTask={reactionTask}/>
     </div>
   );
 }

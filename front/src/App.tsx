@@ -23,26 +23,6 @@ const router = createBrowserRouter([
     element: <HomeScreen/>,
   },
   {
-    path: '/services',
-    element: <ServicesScreen mode={'actions'}/>,
-  },
-  {
-    path: '/services/area',
-    element: <ServiceAreaScreen/>,
-  },
-  {
-    path: '/services/:service',
-    element: <ServiceActionsScreen/>,
-  },
-  {
-    path: '/services/:service/reactions',
-    element: <ServicesScreen mode={'reactions'}/>,
-  },
-  {
-    path: '/services/:actionService/reactions/:reactionService',
-    element: <ServiceReactionsScreen/>,
-  },
-  {
     path: '/profile',
     element: <ProfileScreen/>,
   },
@@ -65,6 +45,26 @@ const router = createBrowserRouter([
   {
     path: '/configuration',
     element: <ConfigurationScreen/>,
+  },
+  {
+    path: '/services',
+    element: <ServicesScreen mode={'actions'}/>,
+  },
+  {
+    path: '/services/area',
+    element: <ServiceAreaScreen/>,
+  },
+  {
+    path: '/services/:service',
+    element: <ServiceActionsScreen/>,
+  },
+  {
+    path: '/services/:service/reactions',
+    element: <ServicesScreen mode={'reactions'}/>,
+  },
+  {
+    path: '/services/:actionService/reactions/:reactionService',
+    element: <ServiceReactionsScreen/>,
   },
   {
     path: '*',
