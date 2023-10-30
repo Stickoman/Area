@@ -8,9 +8,17 @@ import {
   disassociateDiscord, disassociateTwitter,
   getAuthorizedHeader,
   logout,
-  disassociateGithub, disassociateGoogle, disassociateReddit, disassociateMicrosoft,
+  disassociateGithub, disassociateGoogle, disassociateReddit, disassociateMicrosoft, disassociateFacebook,
 } from '../common/auth';
-import {faDiscord, faGithub, faGoogle, faTwitter, faReddit, faMicrosoft} from '@fortawesome/free-brands-svg-icons';
+import {
+  faDiscord,
+  faGithub,
+  faGoogle,
+  faTwitter,
+  faReddit,
+  faMicrosoft,
+  faFacebook,
+} from '@fortawesome/free-brands-svg-icons';
 import './ProfileScreen.css';
 
 interface IProfile {
@@ -23,6 +31,7 @@ interface IProfile {
   googleId?: string;
   redditId?: string;
   microsoftId?: string;
+  facebookId?: string;
 }
 
 interface ProfileContentProperties {
@@ -68,6 +77,10 @@ function ProfileContent(props: ProfileContentProperties): React.JSX.Element {
         profile.microsoftId && (
           <DisassociateComponent name={'Microsoft'} handleClick={disassociateMicrosoft} icon={faMicrosoft}
                                  style={'microsoftButtonStyle'}/>)
+      }{
+        profile.facebookId && (
+          <DisassociateComponent name={'Facebook'} handleClick={disassociateFacebook} icon={faFacebook}
+                                 style={'facebookButtonStyle'}/>)
       }
         <button type="submit" onClick={() => logout(navigate)} className="buttonStyle" style={{
           marginTop: '10px',

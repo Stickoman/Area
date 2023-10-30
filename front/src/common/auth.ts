@@ -48,7 +48,13 @@ function disassociateReddit() {
 function disassociateMicrosoft() {
   axios.post('/api/auth/microsoft/disassociate', {}, {headers: getAuthorizedHeader()})
     .then(() => window.location.reload())
-    .catch(reason => console.warn('Unable to disassociate Reddit: ', reason));
+    .catch(reason => console.warn('Unable to disassociate Microsoft: ', reason));
 }
 
-export {logout, disassociateTwitter, disassociateDiscord, getAuthorizedHeader, disassociateGoogle, disassociateGithub, disassociateReddit, disassociateMicrosoft};
+function disassociateFacebook() {
+  axios.post('/api/auth/facebook/disassociate', {}, {headers: getAuthorizedHeader()})
+    .then(() => window.location.reload())
+    .catch(reason => console.warn('Unable to disassociate Facebook: ', reason));
+}
+
+export {logout, disassociateTwitter, disassociateDiscord, getAuthorizedHeader, disassociateGoogle, disassociateGithub, disassociateReddit, disassociateMicrosoft, disassociateFacebook};
