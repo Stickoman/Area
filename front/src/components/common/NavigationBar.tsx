@@ -29,8 +29,8 @@ function NavigationBar(props: INavigationBarProperties): React.JSX.Element {
       </div>
       <div className={'links'} style={{top: (menuDropDown ? '0' : '-1000px')}}>
         <Link to="/" className={'nav-link'}>Home</Link>
-        <Link to="/services" className={'nav-link'}>Services</Link>
-        <Link to="/configuration" className={'nav-link'}>Configuration</Link>
+        {isLoggedIn && <Link to="/services" className={'nav-link'}>Services</Link>}
+        {isLoggedIn && <Link to="/configuration" className={'nav-link'}>Configuration</Link>}
         <Link to={isLoggedIn ? '/profile' : '/authentication'} className={'nav-icon'}>
           <FontAwesomeIcon icon={faUser}/>
         </Link>

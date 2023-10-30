@@ -1,7 +1,7 @@
 import express, {Response} from 'express';
 import {AuthenticatedRequest, authenticateMiddleware} from '../middleware/auth';
 import {isString} from '../service/authService';
-import {retrieveFeedUpdates} from '../service/rssService';
+import {retrieveFeedUpdates} from '../adapter/redditRssAdapter';
 
 const router = express.Router();
 

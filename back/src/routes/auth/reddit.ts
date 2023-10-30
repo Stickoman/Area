@@ -1,5 +1,5 @@
 import {Router, Response, Request} from 'express';
-import {generateAccessToken} from '../../middleware/auth';
+import {AuthenticatedRequest, authenticateMiddleware, generateAccessToken} from '../../middleware/auth';
 import {User} from '../../model/user';
 import {initOAuthFlow} from '../../service/oauthService';
 import {RedditResponse, registerRedditAccount, requestAccessToken} from '../../service/redditService';
@@ -74,5 +74,16 @@ router.get('/api/auth/reddit/callback', [], async (req: Request, res: Response) 
     res.status(500).send('Error during Reddit callback processing');
   }
 });
+
+router.post('/api/auth/reddit/disassociate', authenticateMiddleware, async (req: AuthenticatedRequest, res: Response) => {
+    const document = await User.findOne({_id: req.user._id}).exec();
+
+    if (document !== null) {
+      document.redditId = '';
+      await document.save();
+    } else {
+      res.sendStatus(401);
+    }
+  });
 
 export {router as redditAuthRouter};

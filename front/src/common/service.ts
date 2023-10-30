@@ -7,10 +7,10 @@ import {
   faGoogle,
   faInstagram,
   faMeta,
-  faMicrosoft,
+  faMicrosoft, faReddit,
 } from '@fortawesome/free-brands-svg-icons';
 
-type ServiceType = 'google' | 'microsoft' | 'discord' | 'github' | 'facebook' | 'meta' | 'instagram' | 'timer';
+type ServiceType = 'google' | 'microsoft' | 'discord' | 'github' | 'facebook' | 'meta' | 'instagram' | 'timer' | 'reddit';
 
 interface IServiceItem {
   name: string;
@@ -119,6 +119,16 @@ SERVICE_ITEMS.set('timer', {
   actions: [
     {name: 'scheduled_task', description: 'Setup a scheduled task', dataFields: ['each']},
     {name: 'reminder', description: 'Setup a reminder', dataFields: []},
+  ],
+  reactions: [],
+} as IService);
+
+SERVICE_ITEMS.set('reddit', {
+  name: 'reddit',
+  color: '#FF5700',
+  icon: faReddit,
+  actions: [
+    {name: 'poll_rss', description: 'Poll news from Reddit Feed', dataFields: ['url']},
   ],
   reactions: [],
 } as IService);

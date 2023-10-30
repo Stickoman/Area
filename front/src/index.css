@@ -22,6 +22,7 @@ body {
 .discordButtonStyle,
 .instagramButtonStyle,
 .githubButtonStyle,
+.redditButtonStyle,
 .buttonStyle {
   border: none;
   padding: 10px 20px;
@@ -140,8 +141,15 @@ body {
 .facebookButtonStyle:hover,
 .discordButtonStyle:hover,
 .instagramButtonStyle:hover,
+.redditButtonStyle:hover,
 .twitterButtonStyle:hover {
   background: #555;
+}
+
+.redditButtonStyle {
+  color: white;
+  background: #FF5536FF;
+  margin: auto;
 }
 
 .facebookButtonStyle {
