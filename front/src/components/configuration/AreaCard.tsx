@@ -3,9 +3,10 @@ import {deleteArea, IArea, IAreaDetails, retrieveAreaDetails} from '../../common
 
 import './AreaCard.css';
 import {faClock, faXmark} from '@fortawesome/free-solid-svg-icons';
-import {faDiscord} from '@fortawesome/free-brands-svg-icons';
+import {faDiscord, faReddit} from '@fortawesome/free-brands-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
+import {IService, SERVICE_ITEMS, ServiceType} from '../../common/service';
 
 interface IAreaCardProperties {
   area: IArea;
@@ -15,16 +16,6 @@ interface IAreaCardProperties {
 interface IAreaDetailsProperties {
   details: object;
 }
-
-interface IServiceData {
-  icon: IconProp;
-  color: string;
-}
-
-const servicesData = new Map<string, IServiceData>();
-
-servicesData.set('timer', {icon: faClock, color: '#000000'});
-servicesData.set('discord', {icon: faDiscord, color: '#7289da'});
 
 const formatText = (value: string) => value
   .split('-')
@@ -57,8 +48,8 @@ function AreaDetails(props: IAreaDetailsProperties): React.JSX.Element {
 
 function AreaCard(props: IAreaCardProperties): React.JSX.Element {
   const area: IArea = props.area;
-  const actionService: IServiceData = servicesData.get(area.actionType.split(':')[0]);
-  const reactionService: IServiceData = servicesData.get(area.reactionType.split(':')[0]);
+  const actionService: IService = SERVICE_ITEMS.get(area.actionType.split(':')[0] as ServiceType);
+  const reactionService: IService = SERVICE_ITEMS.get(area.reactionType.split(':')[0] as ServiceType);
   const [areaDetails, setDetails] = useState(null as IAreaDetails);
 
   useEffect(() => {

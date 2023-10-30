@@ -1,8 +1,13 @@
+import {ObjectId} from 'mongodb';
+import {Area, IArea} from '../model/area';
 
-type ActionType = 'timer:scheduled_task';
+type ActionType = 'timer:scheduled_task' | 'reddit:poll_rss';
 
-interface Action {
-  timerId?: string;
+async function isOrphanAction(actionType: ActionType, actionId: ObjectId, userId: string): Promise<boolean> {
+  const area: IArea = await Area.findOne({actionType, actionId, userId}).exec();
+
+  return (area === null);
 }
 
-export type {Action, ActionType};
+export {isOrphanAction};
+export type {ActionType};

@@ -38,7 +38,7 @@ async function retrieveReactionData(id: string, type: ReactionType): Promise<obj
   return data;
 }
 
-async function callReaction(actionId: string) {
+async function callReaction(actionId: string, data?: object) {
   const area: IArea = await Area.findOne({actionId}).exec();
   if (area === null) return reject(`Orphan action #${actionId}`);
   const {reactionId, reactionType} = area;
@@ -53,7 +53,10 @@ async function callReaction(actionId: string) {
   case 'discord:send_webhook':
     if (isValidDiscordWebhookData(reactionData)) {
       const fullName: string = `${user.firstName} ${user.lastName}`;
-      const text: string = reactionData.text.replace('${NAME}', fullName);
+      const text: string = reactionData.text.replace('${NAME}', fullName)
+        .replace('${RSS_TITLE}', (data as {title: string}).title)
+        .replace('${RSS_CONTENT}', (data as {content: string}).content)
+        .replace('${RSS_LINK}', (data as {link: string}).link);
 
       await sendWebhook(reactionData.webhookUrl, fullName, text);
     }

@@ -80,7 +80,7 @@ function ServiceAreaCreation(props: IServiceAreaCreationProperties): React.JSX.E
 
       <button onClick={() => {
         createArea(`${action.name}:${actionItem.name}`, mapToObject(actionData), `${reaction.name}:${reactionItem.name}`, mapToObject(reactionData))
-          .then(() => navigate('/area'))
+          .then(() => navigate('/configuration'))
           .catch(reason => console.warn(reason));
       }}
               className={'button'}>Save AREA

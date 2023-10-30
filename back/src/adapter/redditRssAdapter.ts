@@ -1,7 +1,7 @@
 import {retrieveFeedUpdate, updateFeed} from '../repository/rssRepository';
 
-let Parser = require('rss-parser');
-let parser = new Parser();
+const Parser = require('rss-parser');
+const parser = new Parser();
 
 interface RedditFeedItem {
   title: string;
@@ -45,7 +45,7 @@ function filterRedditFeed(feed: RedditFeed, afterDate: Date): RedditFeed {
 }
 
 async function retrieveFeedUpdates(userId: string, feedUrl: string): Promise<RedditFeed> {
-  let feed = await parseRedditFeed(feedUrl);
+  const feed = await parseRedditFeed(feedUrl);
 
   return retrieveFeedUpdate(userId, feedUrl)
     .then(update => {
@@ -59,4 +59,5 @@ async function retrieveFeedUpdates(userId: string, feedUrl: string): Promise<Red
     });
 }
 
+export type {RedditFeed, RedditFeedItem};
 export {retrieveFeedUpdates};
