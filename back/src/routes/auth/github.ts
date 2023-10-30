@@ -1,13 +1,27 @@
-import {Router, Response, Request} from 'express';
-import {isString, retrieveAssociatedGithub} from '../../service/authService';
-import {GithubResponse, registerGithubAccount, requestAccessToken} from '../../service/githubService';
-import {User} from '../../model/user';
-import {IGithubAuthentication} from '../../model/githubAuth';
 import {AuthenticatedRequest, authenticateMiddleware, generateAccessToken} from '../../middleware/auth';
+import {GithubResponse, registerGithubAccount, requestAccessToken} from '../../service/githubService';
+import {Request, Response, Router} from 'express';
+import {isString, retrieveAssociatedGithub} from '../../service/authService';
+
+import {IGithubAuthentication} from '../../model/githubAuth';
+import {User} from '../../model/user';
 import {initOAuthFlow} from '../../service/oauthService';
 
 const router = Router();
 
+/**
+ * @swagger
+ * /api/auth/github:
+ *   get:
+ *     summary: Initiate GitHub OAuth2 process.
+ *     tags:
+ *       - OAuth
+ *     responses:
+ *       302:
+ *         description: Redirects to GitHub OAuth2 page.
+ *       500:
+ *         description: Error initiating GitHub authentication.
+ */
 router.get('/api/auth/github', [], async (req: Request, res: Response) => {
   try {
     const API_URL = process.env.API_URL;
@@ -22,6 +36,28 @@ router.get('/api/auth/github', [], async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/auth/github/callback:
+ *   get:
+ *     summary: Handle GitHub OAuth2 callback.
+ *     tags:
+ *       - OAuth
+ *     parameters:
+ *       - in: query
+ *         name: code
+ *         required: true
+ *         description: Authorization code returned by GitHub.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       302:
+ *         description: Redirects to the application
+ *       400:
+ *         description: Unable to parse authorization code.
+ *       500:
+ *         description: Error during GitHub callback processing.
+ */
 router.get('/api/auth/github/callback', [], async (req: Request, res: Response) => {
   const code = req.query.code as string | undefined;
 
@@ -53,6 +89,21 @@ router.get('/api/auth/github/callback', [], async (req: Request, res: Response) 
   }
 });
 
+/**
+ * @swagger
+ * /api/auth/github/disassociate:
+ *   post:
+ *     security:
+ *       - Bearer: []
+ *     summary: Disassociate the authenticated user's account from GitHub.
+ *     tags:
+ *       - OAuth
+ *     responses:
+ *       200:
+ *         description: Successfully disassociated GitHub from the user's account.
+ *       401:
+ *         description: Unauthorized or user not found.
+ */
 router.post('/api/auth/github/disassociate', authenticateMiddleware, async (req: AuthenticatedRequest, res: Response) => {
   const document = await User.findOne({_id: req.user._id}).exec();
 

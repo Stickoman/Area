@@ -12,7 +12,6 @@ To do this, you must implement a software suite that functions similar to that o
 - **TypeScript**: Bringing strong typing and modern JavaScript features.
 - **Express**: Fast, unopinionated, minimalist web framework for Node.js.
 - **ESLint**: Pluggable linting utility for JavaScript and TypeScript.
-- **Prettier**: Opinionated code formatter for consistent code.
 
 ## Prerequisites
 
@@ -33,45 +32,26 @@ To do this, you must implement a software suite that functions similar to that o
     npm install
     ```
 
-3. **Running in development mode**
+3. **Available Scripts**
 
-    ```bash
-    npm run dev
-    ```
-
-   This will start the development server using `nodemon` which watches for changes in the TypeScript files.  
-  
-
-4. **Build and run in production**
-
-   First, compile the TypeScript files:
-
-    ```bash
-    npm run build
-    ```
-
-   Then, start the server:
-
-    ```bash
-    npm start
-    ```
+ - `npm start`: Build and start the application.
+ - `npm run dev`: Start the application in development mode with hot reloading using nodemon.
+ - `npm run lint`: Lint the TypeScript files in the project using ESLint.
+ - `npm run test`: Run unit tests with Jest.
+ - `npm run doc`: Generate a graph of your application's dependencies in an image format.
 
 ## Project Structure
 
 ```
 .
+|-- __tests__/           # Routes integrations tests
+|-- doc/                 # Project documentation
 |-- src/
-|   |-- app.ts           # App entry point
+    |-- app.ts           # Express server
+|   |-- index.ts         # Application entry point
 |-- .eslintrc.json       # ESLint configuration
-|-- tsconfig.json        # TypeScript compiler configuration
+|-- Dockerfile           # Server image definition
 |-- package.json         # Node.js dependencies and scripts
-|-- README.md
+|-- README.md            # :)
+|-- tsconfig.json        # TypeScript compiler configuration
 ```
-
-## Environment Variables
-
-The application uses the following environment variables:
-
-- `PORT`: Port number to run the Express server (default: `3000`)
-
----

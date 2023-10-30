@@ -8,6 +8,19 @@ import {initOAuthFlow} from '../../service/oauthService';
 
 const router = Router();
 
+/**
+ * @swagger
+ * /api/auth/twitter:
+ *   get:
+ *     summary: Initiate Twitter OAuth2 process.
+ *     tags:
+ *       - OAuth
+ *     responses:
+ *       302:
+ *         description: Redirects to Twitter OAuth2 page.
+ *       500:
+ *         description: Error initiating Twitter authentication.
+ */
 router.get('/api/auth/twitter', [], async (req: Request, res: Response) => {
   try {
     const token: string = await requestToken();
@@ -19,6 +32,28 @@ router.get('/api/auth/twitter', [], async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/auth/twitter/callback:
+ *   get:
+ *     summary: Handle Twitter OAuth2 callback.
+ *     tags:
+ *       - OAuth
+ *     parameters:
+ *       - in: query
+ *         name: code
+ *         required: true
+ *         description: Authorization code returned by Twitter.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       302:
+ *         description: Redirects to the application
+ *       400:
+ *         description: Unable to parse authorization code.
+ *       500:
+ *         description: Error during Twitter callback processing.
+ */
 router.get('/api/auth/twitter/callback', [], async (req: Request, res: Response) => {
   const oauth_token = req.query.oauth_token as string | undefined;
   const oauth_verifier = req.query.oauth_verifier as string | undefined;
@@ -52,6 +87,21 @@ router.get('/api/auth/twitter/callback', [], async (req: Request, res: Response)
   }
 });
 
+/**
+ * @swagger
+ * /api/auth/twitter/disassociate:
+ *   post:
+ *     security:
+ *       - Bearer: []
+ *     summary: Disassociate the authenticated user's account from Twitter.
+ *     tags:
+ *       - OAuth
+ *     responses:
+ *       200:
+ *         description: Successfully disassociated Twitter from the user's account.
+ *       401:
+ *         description: Unauthorized or user not found.
+ */
 router.post('/api/auth/twitter/disassociate', authenticateMiddleware, async (req: AuthenticatedRequest, res: Response) => {
   const document = await User.findOne({_id: req.user._id}).exec();
 

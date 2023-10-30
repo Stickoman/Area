@@ -62,6 +62,9 @@
     }
 
     & .delete {
+        box-sizing: border-box;
+        width: 35px;
+        height: 35px;
         color: red;
         top: 15px;
     }

@@ -1,5 +1,6 @@
 
-type ReactionType = 'discord-webhook' | 'google-email';
+type ReactionType = 'discord:send_webhook' | 'google-email';
+
 interface Reaction {
   discordWebhookId?: string;
 }

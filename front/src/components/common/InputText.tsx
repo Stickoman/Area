@@ -1,17 +1,25 @@
-import React, {CSSProperties, useState} from 'react';
+import React, {CSSProperties, useEffect, useState} from 'react';
+import {capitalize} from '../../common/utils';
 
 type InputTextType = 'none' | 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search';
 
 interface InputTextProperties {
   type: InputTextType;
   value: string;
-  disabled: boolean;
+  label?: string;
+  disabled?: boolean;
+  placeholder?: string;
   callback: (value: string) => void;
 }
 
 function InputText(props: InputTextProperties): React.JSX.Element {
-  const {type, value, disabled, callback} = props;
+  const {type, value, label, disabled, placeholder, callback} = props;
   const [currentValue, setCurrentValue] = useState(value);
+  const [inputId, setInputId] = useState('');
+
+  useEffect(() => {
+    setInputId((Math.random() + 1).toString(36));
+  }, []);
 
   const wrapperStyle: CSSProperties = {
     width: '100%',
@@ -33,13 +41,23 @@ function InputText(props: InputTextProperties): React.JSX.Element {
     callback(newValue);
   }
 
+  const inputElement = <input style={inputStyle}
+                       id={inputId}
+                       inputMode={type}
+                       value={currentValue}
+                       disabled={disabled}
+                       placeholder={placeholder}
+                       onChange={event => updateValue(event)}/>;
   return (
     <div style={wrapperStyle}>
-      <input style={inputStyle}
-             inputMode={type}
-             value={currentValue}
-             disabled={disabled}
-             onChange={event => updateValue(event)}/>
+      {label &&
+        <label>
+          {capitalize(label)}
+          {inputElement}
+        </label>
+      }
+
+      {!label && inputElement}
     </div>
   )
 }

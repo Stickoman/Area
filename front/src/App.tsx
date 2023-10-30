@@ -5,24 +5,22 @@ import {
 } from 'react-router-dom';
 
 import HomeScreen from './screens/HomeScreen';
-import ServiceScreen from './screens/ServiceScreen';
+import ServiceActionsScreen from './screens/service/ServiceActionsScreen';
 import ProfileScreen from './screens/ProfileScreen';
-import AuthenticationScreen from './screens/AuthenticationScreen';
-import ServicesScreen from './screens/ServicesScreen';
-import OAuthScreen from './screens/OAuthScreen';
-import LoginScreen from './screens/LoginScreen';
+import AuthenticationScreen from './screens/auth/AuthenticationScreen';
+import ServicesScreen from './screens/service/ServicesScreen';
+import OAuthScreen from './screens/auth/OAuthScreen';
+import LoginScreen from './screens/auth/LoginScreen';
 import MobileDownloadScreen from './screens/MobileDownloadScreen';
 import NotFoundScreen from './screens/NotFoundScreen';
 import ConfigurationScreen from './screens/ConfigurationScreen';
+import ServiceReactionsScreen from './screens/service/ServiceReactionsScreen';
+import ServiceAreaScreen from './screens/service/ServiceAreaScreen';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <HomeScreen/>,
-  },
-  {
-    path: '/services/:service',
-    element: <ServiceScreen/>,
   },
   {
     path: '/profile',
@@ -31,10 +29,6 @@ const router = createBrowserRouter([
   {
     path: '/authentication',
     element: <AuthenticationScreen/>,
-  },
-  {
-    path: '/services',
-    element: <ServicesScreen/>,
   },
   {
     path: '/oauth',
@@ -51,6 +45,26 @@ const router = createBrowserRouter([
   {
     path: '/configuration',
     element: <ConfigurationScreen/>,
+  },
+  {
+    path: '/services',
+    element: <ServicesScreen mode={'actions'}/>,
+  },
+  {
+    path: '/services/area',
+    element: <ServiceAreaScreen/>,
+  },
+  {
+    path: '/services/:service',
+    element: <ServiceActionsScreen/>,
+  },
+  {
+    path: '/services/:service/reactions',
+    element: <ServicesScreen mode={'reactions'}/>,
+  },
+  {
+    path: '/services/:actionService/reactions/:reactionService',
+    element: <ServiceReactionsScreen/>,
   },
   {
     path: '*',

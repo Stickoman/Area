@@ -10,7 +10,7 @@ type ReactionFactory = (userId: string, data: object) => Promise<string>;
 
 const reactionAssociations = new Map<ReactionType, ReactionFactory>();
 
-reactionAssociations.set('discord-webhook', createDiscordWebhookReaction);
+reactionAssociations.set('discord:send_webhook', createDiscordWebhookReaction);
 
 async function createDiscordWebhookReaction(userId: string, data: IDiscordWebhookData): Promise<string> {
   const webhook = await new DiscordWebhookReaction({userId, ...data}).save();
@@ -30,7 +30,7 @@ async function retrieveReactionData(id: string, type: ReactionType): Promise<obj
   let data: object = {};
 
   switch (type) {
-  case 'discord-webhook':
+  case 'discord:send_webhook':
     data = (await DiscordWebhookReaction.findById(id).exec()) as ITimerData;
     break;
   }
@@ -50,7 +50,7 @@ async function callReaction(actionId: string) {
   };
 
   switch (reactionType) {
-  case 'discord-webhook':
+  case 'discord:send_webhook':
     if (isValidDiscordWebhookData(reactionData)) {
       const fullName: string = `${user.firstName} ${user.lastName}`;
       const text: string = reactionData.text.replace('${NAME}', fullName);

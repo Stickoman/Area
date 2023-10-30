@@ -1,0 +1,22 @@
+.service-title {
+    margin: 10px;
+    font-size: 2em;
+    font-weight: bold;
+    color: black;
+    text-align: center;
+}
+
+.service-back {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    margin: 20px;
+    width: 125px;
+}
+
+.service-back-ion {
+    margin-right: 10px;
+    font-size: 1.5em;
+}

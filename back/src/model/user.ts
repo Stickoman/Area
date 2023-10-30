@@ -1,4 +1,4 @@
-import {model, Schema} from 'mongoose';
+import {Schema, model} from 'mongoose';
 
 interface IUser {
   _id?: string;
@@ -7,10 +7,13 @@ interface IUser {
   email: string;
   password: string;
   twitterId?: string,
+  facebookId?: string,
+  redditId?: string,
   discordId?: string,
   githubId?: string,
   googleId?: string,
   googleEmail?: string
+  microsoftId?: string,
 }
 
 const schema = new Schema<IUser>({
@@ -34,6 +37,14 @@ const schema = new Schema<IUser>({
     type: String,
     required: false,
   },
+  facebookId: {
+    type: String,
+    required: false,
+  },
+  redditId: {
+    type: String,
+    required: false,
+  },
   discordId: {
     type: String,
     required: false,
@@ -47,6 +58,10 @@ const schema = new Schema<IUser>({
     required: false,
   },
   googleEmail: {
+    type: String,
+    required: false,
+  },
+  microsoftId: {
     type: String,
     required: false,
   },

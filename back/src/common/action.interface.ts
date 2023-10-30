@@ -1,5 +1,5 @@
 
-type ActionType = 'timer';
+type ActionType = 'timer:scheduled_task';
 
 interface Action {
   timerId?: string;

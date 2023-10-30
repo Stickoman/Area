@@ -12,7 +12,7 @@ export function configureAxios(): void {
   axios.interceptors.response.use(response => response, error => {
     if (error.response.status === 401) {
       Cookies.remove('token');
-      window.location = '/authentication';
+      window.location = `/authentication?callback=${window.location}`;
     }
   })
 }
