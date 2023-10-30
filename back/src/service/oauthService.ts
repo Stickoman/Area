@@ -48,6 +48,8 @@ async function associateAccount(user: IUser, flow: FlowData) {
     document.githubId = flow.userId;
   if (flow.service == 'google')
     document.googleId = flow.userId;
+  if (flow.service == 'microsoft')
+    document.microsoftId = flow.userId;
   await document.save();
 }
 
