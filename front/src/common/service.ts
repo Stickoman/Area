@@ -88,30 +88,6 @@ SERVICE_ITEMS.set('facebook', {
   ],
 } as IService);
 
-SERVICE_ITEMS.set('meta', {
-  name: 'meta',
-  color: '#1877f2',
-  icon: faMeta,
-  actions: [
-    {name: '', description: '', dataFields: []},
-  ],
-  reactions: [
-    {name: '', description: '', dataFields: []},
-  ],
-} as IService);
-
-SERVICE_ITEMS.set('instagram', {
-  name: 'instagram',
-  color: 'linear-gradient(45deg, rgb(240, 148, 51) 0%, rgb(230, 104, 60) 25%, rgb(220, 39, 67) 50%, rgb(204, 35, 102) 75%, rgb(188, 24, 136) 100%)',
-  icon: faInstagram,
-  actions: [
-    {name: '', description: '', dataFields: []},
-  ],
-  reactions: [
-    {name: '', description: '', dataFields: []},
-  ],
-} as IService);
-
 SERVICE_ITEMS.set('timer', {
   name: 'timer',
   color: '#000000',
