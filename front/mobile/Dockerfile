@@ -22,6 +22,7 @@ ENV GRADLE_USER_HOME /opt/gradle
 ENV PATH $PATH:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$GRADLE_USER_HOME/bin
 
 RUN npm run build-cordova
+RUN cordova platform rm android
 RUN cordova platform add android
 
 RUN cordova build android

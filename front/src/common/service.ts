@@ -97,7 +97,7 @@ SERVICE_ITEMS.set('github', {
   color: '#333333',
   icon: faGithub,
   actions: [
-    {name: '', description: '', dataFields: []},
+    {name: 'issues', description: 'Watch Issues updates on repository ', dataFields: ['repositoryUrl']},
   ],
   reactions: [
     {name: '', description: '', dataFields: []},
