@@ -6,7 +6,7 @@ import {RedditResponse, registerRedditAccount, requestAccessToken} from '../../s
 import {retrieveAssociatedRedditUser} from '../../service/authService';
 
 const router = Router();
-const redirectUri = 'http://localhost:8080/api/auth/reddit/callback';
+const redirectUri = `${process.env.API_URL}/auth/reddit/callback`;
 
 /**
  * @swagger

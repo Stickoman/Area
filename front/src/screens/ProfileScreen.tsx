@@ -8,9 +8,9 @@ import {
   disassociateDiscord, disassociateTwitter,
   getAuthorizedHeader,
   logout,
-  disassociateGithub, disassociateGoogle, disassociateReddit,
+  disassociateGithub, disassociateGoogle, disassociateReddit, disassociateMicrosoft,
 } from '../common/auth';
-import {faDiscord, faGithub, faGoogle, faTwitter, faReddit} from '@fortawesome/free-brands-svg-icons';
+import {faDiscord, faGithub, faGoogle, faTwitter, faReddit, faMicrosoft} from '@fortawesome/free-brands-svg-icons';
 import './ProfileScreen.css';
 
 interface IProfile {
@@ -22,6 +22,7 @@ interface IProfile {
   githubId?: string;
   googleId?: string;
   redditId?: string;
+  microsoftId?: string;
 }
 
 interface ProfileContentProperties {
@@ -59,12 +60,15 @@ function ProfileContent(props: ProfileContentProperties): React.JSX.Element {
         profile.googleId && (
           <DisassociateComponent name={'Google'} handleClick={disassociateGoogle} icon={faGoogle}
                                  style={'googleButtonStyle'}/>)
-      }
-        {
+      }{
           profile.redditId && (
             <DisassociateComponent name={'Reddit'} handleClick={disassociateReddit} icon={faReddit}
                                    style={'redditButtonStyle'}/>)
-        }
+        }{
+        profile.microsoftId && (
+          <DisassociateComponent name={'Microsoft'} handleClick={disassociateMicrosoft} icon={faMicrosoft}
+                                 style={'microsoftButtonStyle'}/>)
+      }
         <button type="submit" onClick={() => logout(navigate)} className="buttonStyle" style={{
           marginTop: '10px',
           marginBottom: '10px',
