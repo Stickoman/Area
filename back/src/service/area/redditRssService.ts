@@ -8,7 +8,7 @@ import {RedditFeed, retrieveFeedUpdates} from '../../adapter/redditRssAdapter';
 const redditRssScheduler: JobScheduler = new JobScheduler();
 
 function scheduleAction(actionId: string, action: IRedditRssAction) {
-  redditRssScheduler.schedule('/10 * * * * *', async () => {
+  redditRssScheduler.schedule('0 * * * * *', async () => {
     const feed: RedditFeed = await retrieveFeedUpdates(action.userId, action.url);
 
     console.log(`Poll feed ${feed.title}`);
