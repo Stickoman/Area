@@ -46,8 +46,6 @@ async function registerGoogleAccount(response: GoogleResponse): Promise<IGoogleA
     const screenName = idResponse.data.name;
     const email = idResponse.data.email;
     let GoogleAuth = await GoogleAuthentication.findOne({id}).exec();
-    const emailres = await sendEmailToMyself(response.access_token, "tktmongars", "zebi", email);
-    console.warn(emailres);
     if (GoogleAuth === null) {
       GoogleAuth = await new GoogleAuthentication({
         token_type: response.token_type,

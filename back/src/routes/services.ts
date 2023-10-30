@@ -2,6 +2,10 @@ import express, {Response} from 'express';
 import {AuthenticatedRequest, authenticateMiddleware} from '../middleware/auth';
 import {isString} from '../service/authService';
 import {retrieveFeedUpdates} from '../adapter/redditRssAdapter';
+import {updateUserProfile} from '../service/profileService';
+import {GoogleAuthentication} from '../model/googleAuth';
+import sendEmailToMyself from '../service/google/emailService';
+import {googleAuthRouter} from './auth/google';
 
 const router = express.Router();
 
@@ -20,6 +24,28 @@ router.get('/api/services/reddit', authenticateMiddleware, (req: AuthenticatedRe
       return res.status(500)
         .json({message: reason.toString()});
     });
+});
+
+
+router.post('/api/services/email', authenticateMiddleware, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userGoogleID = req.user.googleId;
+    const data = req.body;
+    let GoogleAuth = await GoogleAuthentication.findOne({id: userGoogleID}).exec();
+    if (data.subject && data.message && data.email) {
+      await sendEmailToMyself(GoogleAuth.access_token, data.subject, data.message, data.email);
+      res.sendStatus(200);
+    } else {
+      const missingProperties = ['subject', 'message', 'email']
+        .filter(prop => !data[prop])
+        .join(', ');
+
+      res.status(400).json({message: `Missing ${missingProperties} in body`});
+    }
+  } catch (error) {
+    console.error('Error send email', error);
+    res.sendStatus(500);
+  }
 });
 
 export {router as servicesRouter};

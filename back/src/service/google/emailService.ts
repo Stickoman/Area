@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 async function sendEmailToMyself(accessToken: string, subject: string, message: string, googleEmail: string) {
-  const url = 'https://www.googleapis.com/auth/gmail.send';
+  const url = 'https://gmail.googleapis.com/gmail/v1/users/me/messages/send';
 
   const email = `
     From: "Votre Nom" ${googleEmail}
@@ -15,7 +15,7 @@ async function sendEmailToMyself(accessToken: string, subject: string, message: 
   const requestBody = {
     raw: base64EncodedEmail,
   };
-
+  console.warn(base64EncodedEmail);
   try {
     const response = await axios.post(url, requestBody, {
       headers: {

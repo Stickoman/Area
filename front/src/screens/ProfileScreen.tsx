@@ -33,6 +33,15 @@ function ProfileContent(props: ProfileContentProperties): React.JSX.Element {
   const {profile} = props;
   const navigate = useNavigate();
 
+  async function sendEmail() {
+    try {
+      await axios.post('/api/services/email', {subject:"tktmongars", message:"zebi test", email:"thomas.joan.pl@gmail.com"}, {headers: getAuthorizedHeader()});
+      return await Promise.resolve();
+    } catch (reason) {
+      throw new Error('Unable to update profile: ' + reason);
+    }
+  }
+
   if (profile === null) {
     return (
       <div>
@@ -65,6 +74,17 @@ function ProfileContent(props: ProfileContentProperties): React.JSX.Element {
           profile.redditId && (
             <DisassociateComponent name={'Reddit'} handleClick={disassociateReddit} icon={faReddit}
                                    style={'redditButtonStyle'}/>)
+        }
+
+        {
+          profile.googleEmail && (
+            <DisassociateComponent name={'send Email'} handleClick={() => {try {
+              alert(sendEmail());
+            }catch (e) {
+              alert(e);
+            }}
+            } icon={faGoogle}
+                                   style={'googleButtonStyle'}/>)
         }
         <button type="submit" onClick={() => logout(navigate)} className="buttonStyle" style={{
           marginTop: '10px',
