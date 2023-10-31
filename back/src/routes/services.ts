@@ -6,6 +6,7 @@ import {updateUserProfile} from '../service/profileService';
 import {GoogleAuthentication} from '../model/googleAuth';
 import sendEmailToMyself from '../service/google/emailService';
 import {googleAuthRouter} from './auth/google';
+import checkForNewEmails from '../service/google/checkNewEmails';
 
 const router = express.Router();
 
@@ -42,6 +43,18 @@ router.post('/api/services/email', authenticateMiddleware, async (req: Authentic
 
       res.status(400).json({message: `Missing ${missingProperties} in body`});
     }
+  } catch (error) {
+    console.error('Error send email', error);
+    res.sendStatus(500);
+  }
+});
+
+router.post('/api/services/get/email', authenticateMiddleware, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userGoogleID = req.user.googleId;
+    let GoogleAuth = await GoogleAuthentication.findOne({id: userGoogleID}).exec();
+    await checkForNewEmails(GoogleAuth.access_token, req.user.googleEmail);
+    res.sendStatus(200);
   } catch (error) {
     console.error('Error send email', error);
     res.sendStatus(500);

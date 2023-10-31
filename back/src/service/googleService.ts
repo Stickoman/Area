@@ -17,10 +17,10 @@ async function requestAccessToken(code: string): Promise<GoogleResponse> {
   const data = {
     client_id: CLIENT_ID,
     client_secret: CLIENT_SECRET,
-    scope: 'profile email',
+    scope: 'profile email https://www.googleapis.com/auth/gmail.modify',
     code: code,
     redirect_uri: CALLBACK_URL,
-    grant_type: 'authorization_code', // Ajout du paramètre grant_type
+    grant_type: 'authorization_code',
   };
 
   try {
