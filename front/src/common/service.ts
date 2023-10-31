@@ -81,6 +81,14 @@ SERVICE_ITEMS.set('discord', {
         {name: 'text', hint: 'Message send to webhook'},
       ],
     },
+    {
+      name: 'send_embedded_webhook', description: 'Send a embedded message to a Webhook', dataFields: [
+        {name: 'webhookUrl', hint: 'Discord Webhook URL'},
+        {name: 'title', hint: 'Embed title'},
+        {name: 'description', hint: 'Embed description'},
+        {name: 'color', hint: 'Embed color (as decimal)'},
+      ],
+    },
   ],
 } as IService);
 
