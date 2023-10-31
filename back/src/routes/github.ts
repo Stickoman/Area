@@ -1,7 +1,5 @@
 import {Request, Response, Router} from 'express';
 import {GithubAuthentication, IGithubAuthentication} from '../model/githubAuth';
-import {IUser, User} from '../model/user';
-import {Area, IArea} from '../model/area';
 import {callReaction} from '../service/area/reactionService';
 import {GitHubIssuesAction, IIssueWebhookAction} from '../model/action/gitHubIssuesAction';
 
@@ -21,11 +19,14 @@ interface IIssueWebhook {
   repository: {
     html_url: string;
   },
+  sender: {
+    login: string;
+  }
 }
 
 router.post(`/api/github/webhook/issues/`, async (req: Request, res: Response) => {
   const data: IIssueWebhook = req.body;
-  const githubUser = await GithubAuthentication.findOne({ screenName: data.issue.user.login }).exec();
+  const githubUser = await GithubAuthentication.findOne({ screenName: data.sender.login }).exec();
 
   console.log(`Received data for ${data.issue.user.login}: ${data.action}`);
   if (!githubUser) {
@@ -35,13 +36,8 @@ router.post(`/api/github/webhook/issues/`, async (req: Request, res: Response) =
 
     console.log(`Find ${actions.length} actions matching with this webhook`);
     for (const action of actions) {
-      const area: IArea = await Area.findOne({
-        actionType: 'github:issues',
-        actionId: action._id,
-        userId: action.userId,
-      }).exec();
 
-      await callReaction(area.actionId, data);
+      await callReaction(action.id, data);
     }
     res.sendStatus(200);
   }
