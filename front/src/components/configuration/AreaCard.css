@@ -7,6 +7,7 @@
     display: flex;
     position: relative;
     color: white;
+    overflow: hidden;
 
     & > .gradient {
         width: 6%;
@@ -34,14 +35,6 @@
         }
     }
 
-    & > .action {
-        border-radius: 15px 0 0 15px;
-    }
-
-    & > .reaction {
-        border-radius: 0 15px 15px 0;
-    }
-
     & .button {
         width: 30px;
         height: 30px;
@@ -57,9 +50,6 @@
         transition: background-color .3s ease;
     }
 
-    & .button:hover {
-        background-color: #ddd;
-    }
 
     & .delete {
         box-sizing: border-box;
@@ -80,5 +70,15 @@
         margin: 0 10px 10px 0;
         font-size: 20px;
         font-weight: bold;
+    }
+}
+
+@media (max-width: 900px) {
+    .card-container {
+        flex-direction: column;
+
+        > .area-part {
+            width: 100%;
+        }
     }
 }
