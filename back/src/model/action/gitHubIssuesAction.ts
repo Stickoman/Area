@@ -1,9 +1,7 @@
 import { model, Schema } from 'mongoose';
 
 interface IIssueWebhookData {
-  repository: {
-    html_url: string;
-  };
+  repositoryUrl: string;
 }
 
 interface IIssueWebhookAction extends IIssueWebhookData {
@@ -15,11 +13,9 @@ const schema = new Schema<IIssueWebhookAction>({
     type: String,
     required: false,
   },
-  repository: {
-    html_url: {
-      type: String,
-      required: true,
-    },
+  repositoryUrl: {
+    type: String,
+    required: true,
   },
 });
 
