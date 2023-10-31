@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {IServiceItem, SERVICE_ITEMS, ServiceType} from '../../common/service';
+import {IFieldData, IServiceItem, SERVICE_ITEMS, ServiceType} from '../../common/service';
 import {capitalize} from '../../common/utils';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import './ServiceAreaCreation.css';
@@ -31,7 +31,7 @@ function ServiceAreaCreation(props: IServiceAreaCreationProperties): React.JSX.E
   const [actionData, setActionData] = useState(new Map<string, string>());
   const [reactionData, setReactionData] = useState(new Map<string, string>());
 
-  function renderFields(fields: string[], mode: ServicesContainerMode): React.JSX.Element[] {
+  function renderFields(fields: IFieldData[], mode: ServicesContainerMode): React.JSX.Element[] {
     function setData(field: string, value: string) {
       if (mode === 'actions')
         setActionData(actionData.set(field, value));
@@ -41,13 +41,19 @@ function ServiceAreaCreation(props: IServiceAreaCreationProperties): React.JSX.E
 
     return fields.map(field => {
       return (
-        <InputText key={field}
+        <InputText key={field.name}
                    type={'text'}
                    value={''}
-                   label={field}
-                   placeholder={'Enter a value'}
-                   callback={value => setData(field, value)}/>
+                   label={capitalize(field.name)}
+                   placeholder={field.hint}
+                   callback={value => setData(field.name, value)}/>
       );
+    });
+  }
+
+  function renderVariables(variables: string[]): React.JSX.Element[] {
+    return variables.map(variable => {
+      return <li key={variable}>{variable}</li>;
     });
   }
 
@@ -66,6 +72,11 @@ function ServiceAreaCreation(props: IServiceAreaCreationProperties): React.JSX.E
             {renderFields(actionFields, 'actions')}
           </div>
         </div>
+        {actionItem.variables?.length > 0 && <div className={'area-variables'}>
+          <h3>Variables</h3>
+          <ul>{renderVariables(actionItem.variables)}</ul>
+          <p>Use in reaction fields</p>
+        </div>}
         <div className={'area-reaction'} style={{background: reaction.color}}>
           <header>
             <FontAwesomeIcon icon={reaction.icon} size={'xl'}/>

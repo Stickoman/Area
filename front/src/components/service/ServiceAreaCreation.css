@@ -24,6 +24,26 @@
         padding: 15px;
     }
 
+    .area-variables {
+        padding: 15px;
+        background-color: lightgrey;
+        color: black;
+
+        > ul {
+            padding-left: 30px;
+            list-style-type: circle;
+        }
+
+        > h3 {
+            margin: 0;
+        }
+
+        > p {
+            font-style: italic;
+            margin-bottom: 0;
+        }
+    }
+
     .area-fields {
         margin-top: 20px;
 
