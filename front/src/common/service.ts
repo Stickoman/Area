@@ -101,7 +101,7 @@ SERVICE_ITEMS.set('github', {
       name: 'issues',
       description: 'Watch Issues updates on repository ',
       dataFields: [{name: 'repositoryUrl', hint: ' '}],
-      variables: ['GITHUB_ISSUE_ACTION', 'GITHUB_ISSUE_NAME', 'GITHUB_ISSUE_LINK', 'GITHUB_ISSUE_OWNER']
+      variables: ['GITHUB_ISSUE_ACTION', 'GITHUB_ISSUE_NAME', 'GITHUB_ISSUE_LINK', 'GITHUB_ISSUE_OWNER', 'GITHUB_ISSUE_USER']
     },
   ],
   reactions: [

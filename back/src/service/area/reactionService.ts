@@ -73,6 +73,7 @@ async function callReaction(actionId: string, data?: object) {
       .replace('${GITHUB_ISSUE_NAME}', (data as IIssueWebhook).issue.title)
       .replace('${GITHUB_ISSUE_LINK}', (data as IIssueWebhook).issue.html_url)
       .replace('${GITHUB_ISSUE_OWNER}', (data as IIssueWebhook).issue.user.login)
+      .replace('${GITHUB_ISSUE_USER}', (data as IIssueWebhook).sender.login)
       .replace('${RSS_TITLE}', (data as { title: string }).title)
       .replace('${RSS_CONTENT}', (data as { content: string }).content)
       .replace('${RSS_LINK}', (data as { link: string }).link)
