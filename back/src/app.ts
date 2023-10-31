@@ -14,7 +14,7 @@ import {profileRouter} from './routes/profile';
 import {redditAuthRouter} from './routes/auth/reddit';
 import {servicesRouter} from './routes/services';
 import {twitterAuthRouter} from './routes/auth/twitter';
-import {gitHubRouter} from './service/github/gitHubWebHook';
+import {githubRouter} from './routes/github';
 
 const APP = express();
 
@@ -33,6 +33,6 @@ APP.use(googleAuthRouter);
 APP.use(profileRouter);
 APP.use(servicesRouter);
 APP.use(oauthRouter);
-APP.use(gitHubRouter);
+APP.use(githubRouter);
 
 export default APP;

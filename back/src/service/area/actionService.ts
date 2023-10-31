@@ -12,7 +12,7 @@ const actionAssociations = new Map<ActionType, ActionFactory>();
 
 actionAssociations.set('timer:scheduled_task', createTimerAction);
 actionAssociations.set('reddit:poll_rss', createRssPoll);
-actionAssociations.set('github:poll_issues', createIssuesPoll);
+actionAssociations.set('github:issues', createIssuesPoll);
 
 async function refreshActions() {
   let count: number = 0;
@@ -37,7 +37,7 @@ async function retrieveActionData(id: string, type: ActionType): Promise<object>
   case 'timer:scheduled_task':
     data = (await TimerAction.findById(id).exec()) as ITimerData;
     break;
-    case 'github:poll_issues':
+    case 'github:issues':
       data = (await GitHubIssuesAction.findById(id).exec()) as IIssueWebhookData;
       break;
   case 'reddit:poll_rss':
