@@ -1,24 +1,25 @@
 import { Request, Response, Router } from 'express';
 import { GithubAuthentication } from '../../model/githubAuth';
 import { IUser, User } from '../../model/user';
-import { GitHubIssuesAction, IIssueWebhookAction } from '../../model/action/gitHubIssuesAction';
+import {GitHubIssuesAction, IIssueWebhookData} from '../../model/action/gitHubIssuesAction';
 import { callReaction } from '../area/reactionService';
+import {Area, IArea} from '../../model/area';
 
 const router = Router();
 
-const createIssuesPoll = async (userId: string, data: IIssueWebhookAction): Promise<string> => {
+const createIssuesPoll = async (userId: string, data: IIssueWebhookData): Promise<string> => {
   const gitHubIssues = new GitHubIssuesAction({ userId, ...data });
   router.post(`/api/github/webhook/issues/`, async (req: Request, res: Response) => {
-    data = req.body as IIssueWebhookAction;
-    console.log(`Received data for user ${userId}: ${data.action}`);
-    const githubUser = await GithubAuthentication.findOne({ screenName: data.issue.user.login }).exec();
+    console.log(`Received data for user ${userId}: ${req.body.action}`);
+    const githubUser = await GithubAuthentication.findOne({ screenName: req.body.issue.user.login }).exec();
     const user: IUser = await User.findOne({ githubId: githubUser?.id }).exec();
 
     if (!githubUser || !user) {
       res.sendStatus(403);
     } else {
       await gitHubIssues.save();
-      await callReaction(gitHubIssues.id, gitHubIssues);
+      const area: IArea = await Area.findOne({actionType: 'github:poll_issues', actionId: gitHubIssues._id, userId: user._id}).exec();
+      await callReaction(area.actionId, gitHubIssues);
 
       res.sendStatus(200);
     }
