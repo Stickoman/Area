@@ -8,6 +8,7 @@ import {
   DiscordWebhookEmbedReaction,
   IDiscordWebhookEmbedData,
 } from '../../model/reaction/discordWebhookEmbedReaction';
+import {IIssueWebhook} from '../../routes/github';
 
 type ReactionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -68,9 +69,14 @@ async function callReaction(actionId: string, data?: object) {
 
   const replaceVariables = (value: string): string => {
     return value.replace('${NAME}', fullName)
+      .replace('${GITHUB_ISSUE_ACTION}', (data as IIssueWebhook).action)
+      .replace('${GITHUB_ISSUE_NAME}', (data as IIssueWebhook).issue.title)
+      .replace('${GITHUB_ISSUE_LINK}', (data as IIssueWebhook).issue.html_url)
+      .replace('${GITHUB_ISSUE_OWNER}', (data as IIssueWebhook).issue.user.login)
       .replace('${RSS_TITLE}', (data as { title: string }).title)
       .replace('${RSS_CONTENT}', (data as { content: string }).content)
-      .replace('${RSS_LINK}', (data as { link: string }).link);
+      .replace('${RSS_LINK}', (data as { link: string }).link)
+      .replace('\\n', '\n');
   };
 
   switch (reactionType) {

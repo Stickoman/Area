@@ -16,6 +16,7 @@ async function saveArea(userId: string, config: AreaConfiguration) {
   const reactionId = await createReaction(userId, reactionType, config.reactionData);
   const actionId = await createAction(userId, actionType, config.actionData);
 
+  console.log(`save area ${actionId} : ${reactionId}`);
   await new Area({userId, actionType, actionId, reactionType, reactionId}).save();
 }
 
