@@ -1,9 +1,9 @@
-import {GitHubIssuesAction, IIssueWebhookData} from '../../model/action/gitHubIssuesAction';
+import {GitHubWebHookAction, IGitHubWebhookData} from '../../model/action/gitHubWebHookAction';
 
-const createIssuesPoll = async (userId: string, data: IIssueWebhookData): Promise<string> => {
-  const gitHubIssues = await new GitHubIssuesAction({ userId, ...data }).save();
+const createGithubWebhook = async (userId: string, data: IGitHubWebhookData): Promise<string> => {
+  const document = await new GitHubWebHookAction({userId, ...data}).save();
 
-  return gitHubIssues.id;
-}
+  return document.id;
+};
 
-export { createIssuesPoll };
+export {createGithubWebhook};

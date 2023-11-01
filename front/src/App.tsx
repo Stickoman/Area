@@ -16,6 +16,7 @@ import NotFoundScreen from './screens/NotFoundScreen';
 import ConfigurationScreen from './screens/ConfigurationScreen';
 import ServiceReactionsScreen from './screens/service/ServiceReactionsScreen';
 import ServiceAreaScreen from './screens/service/ServiceAreaScreen';
+import MaintenanceScreen from './screens/MaintenanceScreen';
 
 const router = createBrowserRouter([
   {
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
   {
     path: '/services/:actionService/reactions/:reactionService',
     element: <ServiceReactionsScreen/>,
+  },
+  {
+    path: '/maintenance',
+    element: <MaintenanceScreen/>,
   },
   {
     path: '*',

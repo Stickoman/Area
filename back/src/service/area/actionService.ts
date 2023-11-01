@@ -3,8 +3,10 @@ import {ITimerData, TimerAction} from '../../model/action/timerAction';
 import {createTimerAction, refreshTimers} from './timerService';
 import {createRssPoll, refreshRedditRss} from './redditRssService';
 import {IRedditRssData, RedditRssAction} from '../../model/action/redditRssAction';
-import {GitHubIssuesAction, IIssueWebhookData} from '../../model/action/gitHubIssuesAction';
-import {createIssuesPoll} from '../github/gitHubWebHook';
+import {GitHubWebHookAction, IGitHubWebhookData} from '../../model/action/gitHubWebHookAction';
+import {createGithubWebhook} from '../github/gitHubWebHook';
+import {Model} from 'mongoose';
+import {reject} from '../authService';
 
 type ActionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -12,7 +14,10 @@ const actionAssociations = new Map<ActionType, ActionFactory>();
 
 actionAssociations.set('timer:scheduled_task', createTimerAction);
 actionAssociations.set('reddit:poll_rss', createRssPoll);
-actionAssociations.set('github:issues', createIssuesPoll);
+actionAssociations.set('github:issues', createGithubWebhook);
+actionAssociations.set('github:branches', createGithubWebhook);
+actionAssociations.set('github:pushes', createGithubWebhook);
+actionAssociations.set('github:pull', createGithubWebhook);
 
 async function refreshActions() {
   let count: number = 0;
@@ -37,9 +42,12 @@ async function retrieveActionData(id: string, type: ActionType): Promise<object>
   case 'timer:scheduled_task':
     data = (await TimerAction.findById(id).exec()) as ITimerData;
     break;
-    case 'github:issues':
-      data = (await GitHubIssuesAction.findById(id).exec()) as IIssueWebhookData;
-      break;
+  case 'github:issues':
+  case 'github:branches':
+  case 'github:pushes':
+  case 'github:pull':
+    data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
+    break;
   case 'reddit:poll_rss':
     data = (await RedditRssAction.findById(id).exec()) as IRedditRssData;
   }
@@ -47,4 +55,30 @@ async function retrieveActionData(id: string, type: ActionType): Promise<object>
   return data;
 }
 
-export {refreshActions, createAction, retrieveActionData};
+async function deleteAction(id: string, type: ActionType) {
+  let model: Model<unknown> = null;
+
+  switch (type) {
+  case 'timer:scheduled_task':
+    model = TimerAction;
+    break;
+  case 'github:issues':
+  case 'github:branches':
+  case 'github:pushes':
+  case 'github:pull':
+    model = GitHubWebHookAction;
+    break;
+  case 'reddit:poll_rss':
+    model = RedditRssAction;
+    break;
+  }
+
+  if (model) {
+    const document = await model.findById(id).exec();
+    await document.deleteOne();
+  } else {
+    return reject('Unable to find reaction model');
+  }
+}
+
+export {refreshActions, createAction, retrieveActionData, deleteAction};

@@ -8,9 +8,10 @@ import {
   DiscordWebhookEmbedReaction,
   IDiscordWebhookEmbedData,
 } from '../../model/reaction/discordWebhookEmbedReaction';
-import {IIssueWebhook} from '../../routes/github';
 import {GoogleEmailReaction, IGoogleEmailData} from '../../model/reaction/googleEmailReaction';
 import sendEmailToMyself from '../google/emailService';
+import {IBranchWebhook, IIssueWebhook, IPullWebhook, IPushWebhook} from '../../routes/github';
+import {Model} from 'mongoose';
 
 type ReactionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -84,14 +85,29 @@ async function callReaction(actionId: string, data?: object) {
 
   const replaceVariables = (value: string): string => {
     return value.replace('${NAME}', fullName)
-      .replace('${GITHUB_ISSUE_ACTION}', (data as IIssueWebhook).action)
-      .replace('${GITHUB_ISSUE_NAME}', (data as IIssueWebhook).issue.title)
-      .replace('${GITHUB_ISSUE_LINK}', (data as IIssueWebhook).issue.html_url)
-      .replace('${GITHUB_ISSUE_OWNER}', (data as IIssueWebhook).issue.user.login)
-      .replace('${GITHUB_ISSUE_USER}', (data as IIssueWebhook).sender.login)
-      .replace('${RSS_TITLE}', (data as { title: string }).title)
-      .replace('${RSS_CONTENT}', (data as { content: string }).content)
-      .replace('${RSS_LINK}', (data as { link: string }).link)
+      .replace('${GITHUB_ISSUE_ACTION}', (data as IIssueWebhook)?.action)
+      .replace('${GITHUB_ISSUE_NAME}', (data as IIssueWebhook)?.issue?.title)
+      .replace('${GITHUB_ISSUE_LINK}', (data as IIssueWebhook)?.issue?.html_url)
+      .replace('${GITHUB_ISSUE_OWNER}', (data as IIssueWebhook)?.issue?.user?.login)
+      .replace('${GITHUB_ISSUE_USER}', (data as IIssueWebhook)?.sender?.login)
+      .replace('${GITHUB_ISSUE_REPOSITORY}', (data as IIssueWebhook)?.repository?.name)
+      .replace('${GITHUB_BRANCH_REPOSITORY}', (data as IBranchWebhook)?.repository?.name)
+      .replace('${GITHUB_BRANCH_LINK}', (data as IBranchWebhook)?.repository?.html_url)
+      .replace('${GITHUB_BRANCH_NAME}', (data as IBranchWebhook)?.ref)
+      .replace('${GITHUB_BRANCH_USER}', (data as IBranchWebhook)?.sender?.login)
+      .replace('${GITHUB_COMMITS_MESSAGE}', (data as IPushWebhook)?.head_commit?.message)
+      .replace('${GITHUB_COMMITS_AUTHOR}', (data as IPushWebhook)?.head_commit?.author?.username)
+      .replace('${GITHUB_PUSH_REPOSITORY}', (data as IPushWebhook)?.repository?.name)
+      .replace('${GITHUB_PUSH_USER}', (data as IPushWebhook)?.pusher?.name)
+      .replace('${GITHUB_PUSH_LINK}', (data as IPushWebhook)?.repository?.html_url)
+      .replace('${GITHUB_PULL_ACTION}', (data as IPullWebhook)?.action)
+      .replace('${GITHUB_PULL_AUTHOR}', (data as IPullWebhook)?.pull_request?.user?.login)
+      .replace('${GITHUB_PULL_REPOSITORY}', (data as IPullWebhook)?.repository?.name)
+      .replace('${GITHUB_PULL_MESSAGE}', (data as IPullWebhook)?.pull_request?.title)
+      .replace('${GITHUB_PULL_LINK}', (data as IPullWebhook)?.repository?.html_url)
+      .replace('${RSS_TITLE}', (data as { title: string })?.title)
+      .replace('${RSS_CONTENT}', (data as { content: string })?.content)
+      .replace('${RSS_LINK}', (data as { link: string })?.link)
       .replace('\\n', '\n');
   };
 
@@ -112,4 +128,24 @@ async function callReaction(actionId: string, data?: object) {
   }
 }
 
-export {createReaction, retrieveReactionData, callReaction};
+async function deleteReaction(id: string, type: ReactionType) {
+  let model: Model<unknown> = null;
+
+  switch (type) {
+  case 'discord:send_webhook':
+    model = DiscordWebhookReaction;
+    break;
+  case 'discord:send_embedded_webhook':
+    model = DiscordWebhookEmbedReaction;
+    break;
+  }
+
+  if (model) {
+    const document = await model.findById(id).exec();
+    await document.deleteOne();
+  } else {
+    return reject('Unable to find reaction model');
+  }
+}
+
+export {createReaction, retrieveReactionData, callReaction, deleteReaction};

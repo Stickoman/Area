@@ -28,20 +28,25 @@ function HomeScreen() {
   };
 
   const paragraphStyle: CSSProperties = {
-      fontSize: '1.2rem',
-      lineHeight: '1.6',
-      color: '#555',
-      textAlign: 'center',
-      margin: '0 auto',
-      maxWidth: '800px',
-      padding: '0 15px',
-    };
+    fontSize: '1.2rem',
+    lineHeight: '1.6',
+    color: '#555',
+    textAlign: 'center',
+    margin: '0 auto',
+    maxWidth: '800px',
+    padding: '0 15px',
+  };
+
   return (
     <div style={containerStyle}>
       <NavigationBar color={'#000'}/>
       <div style={subContainerStyle}>
-        <h1 style={titleStyle}>Simplify Your Digital Life with Joe Solutions</h1>
-        <p style={paragraphStyle}>Joe Solutions is a company specialized in developing automation platforms to simplify the management of
+        <img alt={'Application logo'}
+             src={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtDkQxZtfjjBT1kVJlrj0_2eZGZwEMLe_g30IIgzTrZCyF73Dm'}/>
+
+        <h1 style={titleStyle}>Simplify Your Digital Life with AREA</h1>
+        <p style={paragraphStyle}>Joe Solutions is a company specialized in developing automation platforms to simplify
+          the management of
           digital life. Our software suite allows users to connect and automate various online services such as social
           media, messaging platforms, file storage, and much more.</p>
         <div style={buttonContainerStyle} className={'buttonContainerStyle'}>

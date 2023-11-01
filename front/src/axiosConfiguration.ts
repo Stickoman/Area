@@ -14,5 +14,9 @@ export function configureAxios(): void {
       Cookies.remove('token');
       window.location = `/authentication?callback=${window.location}`;
     }
+
+    if (error.response?.status && error.response.status === 502) {
+      window.location = `/maintenance`;
+    }
   });
 }
