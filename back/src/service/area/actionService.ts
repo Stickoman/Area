@@ -3,7 +3,7 @@ import {ITimerData, TimerAction} from '../../model/action/timerAction';
 import {createTimerAction, refreshTimers} from './timerService';
 import {createRssPoll, refreshRedditRss} from './redditRssService';
 import {IRedditRssData, RedditRssAction} from '../../model/action/redditRssAction';
-import {GitHubWebHookAction, IIssueWebhookData} from '../../model/action/gitHubWebHookAction';
+import {GitHubWebHookAction, IGitHubWebhookData} from '../../model/action/gitHubWebHookAction';
 import {createBranchesPoll, createIssuesPoll, createPushesPoll} from '../github/gitHubWebHook';
 
 type ActionFactory = (userId: string, data: object) => Promise<string>;
@@ -40,13 +40,13 @@ async function retrieveActionData(id: string, type: ActionType): Promise<object>
     data = (await TimerAction.findById(id).exec()) as ITimerData;
     break;
     case 'github:issues':
-      data = (await GitHubWebHookAction.findById(id).exec()) as IIssueWebhookData;
+      data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
       break;
     case 'github:branches':
-      data = (await GitHubWebHookAction.findById(id).exec()) as IIssueWebhookData;
+      data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
       break;
     case 'github:pushes':
-      data = (await GitHubWebHookAction.findById(id).exec()) as IIssueWebhookData;
+      data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
       break;
   case 'reddit:poll_rss':
     data = (await RedditRssAction.findById(id).exec()) as IRedditRssData;

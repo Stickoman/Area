@@ -1,14 +1,14 @@
 import { model, Schema } from 'mongoose';
 
-interface IIssueWebhookData {
+interface IGitHubWebhookData {
   repositoryUrl: string;
 }
 
-interface IIssueWebhookAction extends IIssueWebhookData {
+interface IGitHubWebHookAction extends IGitHubWebhookData {
   userId?: string;
 }
 
-const schema = new Schema<IIssueWebhookAction>({
+const schema = new Schema<IGitHubWebHookAction>({
   userId: {
     type: String,
     required: false,
@@ -19,7 +19,7 @@ const schema = new Schema<IIssueWebhookAction>({
   },
 });
 
-const GitHubWebHookAction = model<IIssueWebhookAction>('GitHubWebHookAction', schema);
+const GitHubWebHookAction = model<IGitHubWebHookAction>('GitHubWebHookAction', schema);
 
-export type { IIssueWebhookData, IIssueWebhookAction };
+export type { IGitHubWebhookData, IGitHubWebHookAction };
 export { GitHubWebHookAction };

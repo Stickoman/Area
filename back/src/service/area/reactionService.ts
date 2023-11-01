@@ -8,7 +8,7 @@ import {
   DiscordWebhookEmbedReaction,
   IDiscordWebhookEmbedData,
 } from '../../model/reaction/discordWebhookEmbedReaction';
-import {IIssueWebhook} from '../../routes/github';
+import {IBranchWebhook, IIssueWebhook, IPushWebhook} from '../../routes/github';
 
 type ReactionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -74,6 +74,16 @@ async function callReaction(actionId: string, data?: object) {
       .replace('${GITHUB_ISSUE_LINK}', (data as IIssueWebhook).issue.html_url)
       .replace('${GITHUB_ISSUE_OWNER}', (data as IIssueWebhook).issue.user.login)
       .replace('${GITHUB_ISSUE_USER}', (data as IIssueWebhook).sender.login)
+      .replace('${GITHUB_ISSUE_REPOSITORY}', (data as IIssueWebhook).repository.name)
+      .replace('${GITHUB_BRANCH_REPOSITORY}', (data as IBranchWebhook).repository.name)
+      .replace('${GITHUB_BRANCH_LINK}', (data as IBranchWebhook).repository.html_url)
+      .replace('${GITHUB_BRANCH_NAME}', (data as IBranchWebhook).ref)
+      .replace('${GITHUB_BRANCH_USER}', (data as IBranchWebhook).sender.login)
+      .replace('${GITHUB_COMMITS_MESSAGE}', (data as IPushWebhook).head_commit.message)
+      .replace('${GITHUB_COMMITS_AUTHOR}', (data as IPushWebhook).head_commit.author.username)
+      .replace('${GITHUB_PUSH_REPOSITORY}', (data as IPushWebhook).repository.name)
+      .replace('${GITHUB_PUSH_USER}', (data as IPushWebhook).pusher.name)
+      .replace('${GITHUB_PUSH_LINK}', (data as IPushWebhook).repository.html_url)
       .replace('${RSS_TITLE}', (data as { title: string }).title)
       .replace('${RSS_CONTENT}', (data as { content: string }).content)
       .replace('${RSS_LINK}', (data as { link: string }).link)
