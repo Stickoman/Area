@@ -110,6 +110,7 @@ router.post('/api/auth/google/disassociate', authenticateMiddleware, async (req:
     document.googleId = '';
     document.googleEmail = '';
     await document.save();
+    res.sendStatus(200);
   } else {
     res.sendStatus(401);
   }

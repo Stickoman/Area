@@ -6,7 +6,6 @@ import {RedditResponse, registerRedditAccount, requestAccessToken} from '../../s
 import {retrieveAssociatedRedditUser} from '../../service/authService';
 
 const router = Router();
-const redirectUri = 'http://localhost:8080/api/auth/reddit/callback';
 
 /**
  * @swagger
@@ -22,7 +21,7 @@ const redirectUri = 'http://localhost:8080/api/auth/reddit/callback';
  *         description: Error initiating Reddit authentication.
  */
 router.get('/api/auth/reddit', [], async (req: Request, res: Response) => {
-  const authorizationUrl = `https://www.reddit.com/api/v1/authorize?client_id=${process.env.REDDIT_CLIENT_ID}&response_type=code&state=random_state&redirect_uri=${redirectUri}&duration=permanent&scope=identity`;
+  const authorizationUrl = `https://www.reddit.com/api/v1/authorize?client_id=${process.env.REDDIT_CLIENT_ID}&response_type=code&state=random_state&redirect_uri=${process.env.API_URL}/auth/reddit/callback&duration=permanent&scope=identity`;
 
   res.redirect(authorizationUrl);
 });
@@ -76,14 +75,15 @@ router.get('/api/auth/reddit/callback', [], async (req: Request, res: Response) 
 });
 
 router.post('/api/auth/reddit/disassociate', authenticateMiddleware, async (req: AuthenticatedRequest, res: Response) => {
-    const document = await User.findOne({_id: req.user._id}).exec();
+  const document = await User.findOne({_id: req.user._id}).exec();
 
-    if (document !== null) {
-      document.redditId = '';
-      await document.save();
-    } else {
-      res.sendStatus(401);
-    }
-  });
+  if (document !== null) {
+    document.redditId = '';
+    await document.save();
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(401);
+  }
+});
 
 export {router as redditAuthRouter};

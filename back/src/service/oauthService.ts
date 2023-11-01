@@ -46,6 +46,8 @@ async function associateAccount(user: IUser, flow: FlowData) {
     document.discordId = flow.userId;
   if (flow.service == 'github')
     document.githubId = flow.userId;
+  if (flow.service == 'microsoft')
+    document.microsoftId = flow.userId;
   if (flow.service == 'google') {
     document.googleId = flow.userId;
     document.googleEmail = flow.googleEmail;

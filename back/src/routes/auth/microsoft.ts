@@ -3,7 +3,6 @@ import {User} from '../../model/user';
 import {MicrosoftResponse, registerMicrosoftAccount, requestAccessToken} from '../../service/microsoftService';
 import {Request, Response, Router} from 'express';
 import {isString, retrieveAssociatedMicrosoft} from '../../service/authService';
-
 import {IMicrosoftAuthentication} from '../../model/microsoftAuth';
 import {initOAuthFlow} from '../../service/oauthService';
 
@@ -24,8 +23,8 @@ const router = Router();
  */
 router.get('/api/auth/microsoft', [], async (req: Request, res: Response) => {
   try {
-    const REDIRECT_URI = 'http://localhost:8080/api/auth/microsoft/callback';
-    const CLIENT_ID = '8562c76e-ef8d-4f37-93aa-f02b7311bc26';
+    const REDIRECT_URI = `${process.env.API_URL}/auth/microsoft/callback`;
+    const CLIENT_ID = process.env.MICROSOFT_CLIENT_ID;
     const SCOPE = 'openid User.Read Mail.Read';
 
     res.redirect(`https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPE}&response_type=code`);
@@ -74,11 +73,11 @@ router.get('/api/auth/microsoft/callback', [], async (req: Request, res: Respons
         document.microsoftId = account.id;
         await document.save();
 
-        res.redirect(`http://localhost:8081/login?jwt=${generateAccessToken(user)}&name=${account.screenName}`);
+        res.redirect(`${process.env.FRONT_URL}/login?jwt=${generateAccessToken(user)}&name=${account.screenName}`);
       })
       .catch(() => {
         const id: string = initOAuthFlow('microsoft', account.id, account.screenName);
-        res.redirect(`http://localhost:8081/oauth?id=${id}`);
+        res.redirect(`${process.env.FRONT_URL}/oauth?id=${id}`);
       });
   } catch (error) {
     res.status(500).send('Error during Microsoft callback processing');
@@ -107,6 +106,7 @@ router.post('/api/auth/microsoft/disassociate', authenticateMiddleware, async (r
   if (document !== null) {
     document.microsoftId = '';
     await document.save();
+    res.sendStatus(200);
   } else {
     res.sendStatus(401);
   }

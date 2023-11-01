@@ -1,11 +1,11 @@
 import React from 'react';
 import {FlowProps} from '../../common/flow';
 import axios from 'axios';
-import LoginComponent, {LoginFormData} from '../LoginComponent';
-import RegisterComponent from '../RegisterComponent';
+import LoginComponent, {ILoginFormData} from '../LoginComponent';
+import RegisterComponent, {IRegisterFormData} from '../RegisterComponent';
 import Cookies from 'js-cookie';
 
-const loginProcess = async (data: LoginFormData, props: FlowProps) => {
+const loginProcess = async (data: ILoginFormData, props: FlowProps) => {
   const {id, refreshFlow} = props;
 
   try {
@@ -28,6 +28,29 @@ const loginProcess = async (data: LoginFormData, props: FlowProps) => {
   }
 }
 
+const registerProcess = async (data: IRegisterFormData, props: FlowProps) => {
+  const {id, refreshFlow} = props;
+
+  try {
+    await axios.post('/api/auth/register', data);
+    const response = await axios.post('/api/auth/login', data);
+    const token = response.data.token;
+
+    axios.post(`/api/oauth/associate?id=${id}`, {}, {
+      headers: {
+        authorization: 'Bearer ' + token,
+      },
+    }).then(() => {
+      Cookies.set('token', token);
+      axios.post(`/api/oauth/next?id=${id}`)
+        .then(() => refreshFlow())
+        .catch(reason => console.error(reason.message));
+    }).catch(reason => console.error(reason.message));
+  } catch (error) {
+    console.error('Error logging in:', error);
+  }
+}
+
 function Connection(props: FlowProps): React.JSX.Element {
   const {id, flow, refreshFlow} = props;
 
@@ -38,9 +61,9 @@ function Connection(props: FlowProps): React.JSX.Element {
   }
 
   if (flow.connectionType === 'login')
-    return (<LoginComponent callback={(data) => loginProcess(data, props)}/>);
+    return (<LoginComponent callback={data => loginProcess(data, props)}/>);
   if (flow.connectionType === 'register')
-    return (<RegisterComponent/>);
+    return (<RegisterComponent callback={data => registerProcess(data, props)}/>);
 }
 
 export default Connection;

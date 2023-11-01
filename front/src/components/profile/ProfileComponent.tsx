@@ -8,23 +8,24 @@ interface ProfileComponentProperties {
 }
 
 function ProfileComponent(props: ProfileComponentProperties) {
-  const [isEditing, setEditing] = useState(false);
-  const [user, _] = useState(props.user);
+  const [isEditing, setIsEditing] = useState(false);
+  const [user, setUser] = useState(props.user);
 
   const wrapperStyle: CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: '25px',
-  }
+    maxWidth: '500px',
+    margin: '0 auto 25px auto',
+  };
   const inputsStyle: CSSProperties = {
     width: '100%',
     marginBottom: 15,
   };
 
   function saveProfile() {
-    setEditing(false);
+    setIsEditing(false);
 
     handleFormSubmit(user)
       .catch(reason => console.log(reason));
@@ -33,15 +34,16 @@ function ProfileComponent(props: ProfileComponentProperties) {
   return (
     <div style={wrapperStyle}>
       <div style={inputsStyle}>
-        <InputText type={'text'} disabled={!isEditing} value={user.firstName} callback={value => user.firstName = value} />
-        <InputText type={'text'} disabled={!isEditing} value={user.lastName} callback={value => user.lastName = value} />
-        <InputText type={'email'} disabled={!isEditing} value={user.email} callback={value => user.email = value} />
+        <InputText type={'text'} disabled={!isEditing} value={user.firstName}
+                   callback={value => user.firstName = value}/>
+        <InputText type={'text'} disabled={!isEditing} value={user.lastName} callback={value => user.lastName = value}/>
+        <InputText type={'email'} disabled={!isEditing} value={user.email} callback={value => user.email = value}/>
       </div>
 
-      {!isEditing && <button className="buttonStyle" onClick={() => setEditing(true)}>Edit</button>}
+      {!isEditing && <button className="buttonStyle" onClick={() => setIsEditing(true)}>Edit</button>}
       {isEditing && <button className="buttonStyle" onClick={() => saveProfile()}>Save</button>}
     </div>
-  )
+  );
 }
 
 export default ProfileComponent;

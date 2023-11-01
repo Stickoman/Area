@@ -22,8 +22,12 @@ function disassociateTwitter() {
 }
 
 function disassociateDiscord() {
+  console.log('post discord');
   axios.post('/api/auth/discord/disassociate', {}, {headers: getAuthorizedHeader()})
-    .then(() => window.location.reload())
+    .then(() => {
+      console.log('reload discord');
+      window.location.reload();
+    })
     .catch(reason => console.warn('Unable to disassociate Discord: ', reason));
 }
 
@@ -45,4 +49,16 @@ function disassociateReddit() {
     .catch(reason => console.warn('Unable to disassociate Reddit: ', reason));
 }
 
-export {logout, disassociateTwitter, disassociateDiscord, getAuthorizedHeader, disassociateGoogle, disassociateGithub, disassociateReddit};
+function disassociateMicrosoft() {
+  axios.post('/api/auth/microsoft/disassociate', {}, {headers: getAuthorizedHeader()})
+    .then(() => window.location.reload())
+    .catch(reason => console.warn('Unable to disassociate Microsoft: ', reason));
+}
+
+function disassociateFacebook() {
+  axios.post('/api/auth/facebook/disassociate', {}, {headers: getAuthorizedHeader()})
+    .then(() => window.location.reload())
+    .catch(reason => console.warn('Unable to disassociate Facebook: ', reason));
+}
+
+export {logout, disassociateTwitter, disassociateDiscord, getAuthorizedHeader, disassociateGoogle, disassociateGithub, disassociateReddit, disassociateMicrosoft, disassociateFacebook};

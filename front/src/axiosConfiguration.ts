@@ -10,9 +10,9 @@ export function configureAxios(): void {
   axios.defaults.headers.common['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, DELETE';
 
   axios.interceptors.response.use(response => response, error => {
-    if (error.response.status === 401) {
+    if (!error.response?.status || error.response.status === 401) {
       Cookies.remove('token');
       window.location = `/authentication?callback=${window.location}`;
     }
-  })
+  });
 }

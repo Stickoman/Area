@@ -5,17 +5,31 @@ import {
   faFacebook,
   faGithub,
   faGoogle,
-  faInstagram,
-  faMeta,
   faMicrosoft, faReddit,
 } from '@fortawesome/free-brands-svg-icons';
 
-type ServiceType = 'google' | 'microsoft' | 'discord' | 'github' | 'facebook' | 'meta' | 'instagram' | 'timer' | 'reddit';
+type ServiceType =
+  'twitter'
+  | 'google'
+  | 'microsoft'
+  | 'discord'
+  | 'github'
+  | 'facebook'
+  | 'meta'
+  | 'instagram'
+  | 'timer'
+  | 'reddit';
+
+interface IFieldData {
+  name: string;
+  hint: string;
+}
 
 interface IServiceItem {
   name: string;
   description: string;
-  dataFields: string[];
+  dataFields: IFieldData[];
+  variables?: string[];
 }
 
 interface IService {
@@ -25,6 +39,8 @@ interface IService {
   actions: IServiceItem[];
   reactions: IServiceItem[];
 }
+
+const GLOBAL_VARIABLES = ['FULL_NAME', 'FIRST_NAME', 'LAST_NAME'];
 
 const SERVICE_ITEMS: Map<ServiceType, IService> = new Map<ServiceType, IService>();
 
@@ -60,7 +76,20 @@ SERVICE_ITEMS.set('discord', {
     {name: '', description: '', dataFields: []},
   ],
   reactions: [
-    {name: 'send_webhook', description: 'Send a message to a Webhook', dataFields: ['webhookUrl', 'text']},
+    {
+      name: 'send_webhook', description: 'Send a message to a Webhook', dataFields: [
+        {name: 'webhookUrl', hint: 'Discord Webhook URL'},
+        {name: 'text', hint: 'Message send to webhook'},
+      ],
+    },
+    {
+      name: 'send_embedded_webhook', description: 'Send a embedded message to a Webhook', dataFields: [
+        {name: 'webhookUrl', hint: 'Discord Webhook URL'},
+        {name: 'title', hint: 'Embed title'},
+        {name: 'description', hint: 'Embed description'},
+        {name: 'color', hint: 'Embed color (as decimal)'},
+      ],
+    },
   ],
 } as IService);
 
@@ -69,7 +98,12 @@ SERVICE_ITEMS.set('github', {
   color: '#333333',
   icon: faGithub,
   actions: [
-    {name: '', description: '', dataFields: []},
+    {
+      name: 'issues',
+      description: 'Watch Issues updates on repository ',
+      dataFields: [{name: 'repositoryUrl', hint: ' '}],
+      variables: ['GITHUB_ISSUE_ACTION', 'GITHUB_ISSUE_NAME', 'GITHUB_ISSUE_LINK', 'GITHUB_ISSUE_OWNER', 'GITHUB_ISSUE_USER']
+    },
   ],
   reactions: [
     {name: '', description: '', dataFields: []},
@@ -88,36 +122,16 @@ SERVICE_ITEMS.set('facebook', {
   ],
 } as IService);
 
-SERVICE_ITEMS.set('meta', {
-  name: 'meta',
-  color: '#1877f2',
-  icon: faMeta,
-  actions: [
-    {name: '', description: '', dataFields: []},
-  ],
-  reactions: [
-    {name: '', description: '', dataFields: []},
-  ],
-} as IService);
-
-SERVICE_ITEMS.set('instagram', {
-  name: 'instagram',
-  color: 'linear-gradient(45deg, rgb(240, 148, 51) 0%, rgb(230, 104, 60) 25%, rgb(220, 39, 67) 50%, rgb(204, 35, 102) 75%, rgb(188, 24, 136) 100%)',
-  icon: faInstagram,
-  actions: [
-    {name: '', description: '', dataFields: []},
-  ],
-  reactions: [
-    {name: '', description: '', dataFields: []},
-  ],
-} as IService);
-
 SERVICE_ITEMS.set('timer', {
   name: 'timer',
   color: '#000000',
   icon: faClock,
   actions: [
-    {name: 'scheduled_task', description: 'Setup a scheduled task', dataFields: ['each']},
+    {
+      name: 'scheduled_task', description: 'Setup a scheduled task', dataFields: [
+        {name: 'each', hint: 'second minute hour day month dayofweek'},
+      ],
+    },
     {name: 'reminder', description: 'Setup a reminder', dataFields: []},
   ],
   reactions: [],
@@ -128,10 +142,17 @@ SERVICE_ITEMS.set('reddit', {
   color: '#FF5700',
   icon: faReddit,
   actions: [
-    {name: 'poll_rss', description: 'Poll news from Reddit Feed', dataFields: ['url']},
+    {
+      name: 'poll_rss',
+      description: 'Poll news from Reddit Feed',
+      dataFields: [
+        {name: 'url', hint: 'Reddit Feed URL'},
+      ],
+      variables: ['RSS_TITLE', 'RSS_LINK', 'RSS_CONTENT'],
+    },
   ],
   reactions: [],
 } as IService);
 
-export type {ServiceType, IServiceItem, IService};
-export {SERVICE_ITEMS};
+export type {ServiceType, IServiceItem, IService, IFieldData};
+export {SERVICE_ITEMS, GLOBAL_VARIABLES};

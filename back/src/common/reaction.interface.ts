@@ -1,8 +1,3 @@
+type ReactionType = 'discord:send_webhook' | 'discord:send_embedded_webhook';
 
-type ReactionType = 'discord:send_webhook' | 'google-email';
-
-interface Reaction {
-  discordWebhookId?: string;
-}
-
-export type {Reaction, ReactionType};
+export type {ReactionType};

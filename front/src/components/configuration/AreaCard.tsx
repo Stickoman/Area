@@ -1,12 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {deleteArea, IArea, IAreaDetails, retrieveAreaDetails} from '../../common/area';
-
-import './AreaCard.css';
-import {faClock, faXmark} from '@fortawesome/free-solid-svg-icons';
-import {faDiscord, faReddit} from '@fortawesome/free-brands-svg-icons';
+import {faXmark} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {IconProp} from '@fortawesome/fontawesome-svg-core';
 import {IService, SERVICE_ITEMS, ServiceType} from '../../common/service';
+import './AreaCard.css';
 
 interface IAreaCardProperties {
   area: IArea;

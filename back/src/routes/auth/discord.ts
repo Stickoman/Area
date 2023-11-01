@@ -110,6 +110,7 @@ router.post('/api/auth/discord/disassociate', authenticateMiddleware, async (req
   if (document !== null) {
     document.discordId = '';
     await document.save();
+    res.sendStatus(200);
   } else {
     res.sendStatus(401);
   }

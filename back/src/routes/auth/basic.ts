@@ -121,7 +121,7 @@ router.post('/api/auth/login', [], async (req: Request, res: Response) => {
       res.status(200)
         .json({token: jwt});
     } catch (e) {
-      res.status(401)
+      res.status(403)
         .json({message: 'Invalid credentials'});
     }
   } else {
