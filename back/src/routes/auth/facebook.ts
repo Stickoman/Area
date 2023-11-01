@@ -103,6 +103,7 @@ router.post('/api/auth/facebook/disassociate', authenticateMiddleware, async (re
   if (document !== null) {
     document.facebookId = '';
     await document.save();
+    res.sendStatus(200);
   } else {
     res.sendStatus(401);
   }

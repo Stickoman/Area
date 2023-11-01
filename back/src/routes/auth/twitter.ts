@@ -108,6 +108,7 @@ router.post('/api/auth/twitter/disassociate', authenticateMiddleware, async (req
   if (document !== null) {
     document.twitterId = '';
     await document.save();
+    res.sendStatus(200);
   } else {
     res.sendStatus(401);
   }
