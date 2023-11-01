@@ -35,7 +35,6 @@ function updateFlow(id: string, flow: FlowData) {
 
 async function associateAccount(user: IUser, flow: FlowData) {
   const document = await User.findOne({_id: user._id}).exec();
-
   if (flow.service == 'twitter')
     document.twitterId = flow.userId;
   if (flow.service == 'facebook')
@@ -46,10 +45,11 @@ async function associateAccount(user: IUser, flow: FlowData) {
     document.discordId = flow.userId;
   if (flow.service == 'github')
     document.githubId = flow.userId;
-  if (flow.service == 'google')
-    document.googleId = flow.userId;
   if (flow.service == 'microsoft')
     document.microsoftId = flow.userId;
+  if (flow.service == 'google') {
+    document.googleId = flow.userId;
+  }
   await document.save();
 }
 

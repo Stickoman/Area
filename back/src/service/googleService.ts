@@ -1,6 +1,7 @@
 import axios from 'axios';
 import qs from 'querystring';
 import {GoogleAuthentication, IGoogleAuthentication} from '../model/googleAuth';
+import sendEmailToMyself from './google/emailService';
 
 interface GoogleResponse {
   token_type: string;
@@ -16,10 +17,10 @@ async function requestAccessToken(code: string): Promise<GoogleResponse> {
   const data = {
     client_id: CLIENT_ID,
     client_secret: CLIENT_SECRET,
-    scope: 'profile email',
+    scope: 'profile email https://www.googleapis.com/auth/gmail.modify',
     code: code,
     redirect_uri: CALLBACK_URL,
-    grant_type: 'authorization_code', // Ajout du paramètre grant_type
+    grant_type: 'authorization_code',
   };
 
   try {
@@ -36,7 +37,6 @@ async function requestAccessToken(code: string): Promise<GoogleResponse> {
 
 async function registerGoogleAccount(response: GoogleResponse): Promise<IGoogleAuthentication> {
   try {
-
     const idResponse = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
       headers: {
         'Authorization': `${response.token_type} ${response.access_token}`,
@@ -44,8 +44,8 @@ async function registerGoogleAccount(response: GoogleResponse): Promise<IGoogleA
     });
     const id = idResponse.data.sub;
     const screenName = idResponse.data.name;
+    const email = idResponse.data.email;
     let GoogleAuth = await GoogleAuthentication.findOne({id}).exec();
-
     if (GoogleAuth === null) {
       GoogleAuth = await new GoogleAuthentication({
         token_type: response.token_type,
@@ -53,6 +53,7 @@ async function registerGoogleAccount(response: GoogleResponse): Promise<IGoogleA
         scope: response.scope,
         id: id,
         screenName: screenName,
+        email: email
       }).save();
     }
     return GoogleAuth;

@@ -118,7 +118,6 @@ router.post('/api/auth/login', [], async (req: Request, res: Response) => {
 
     try {
       const jwt = await login({email, password});
-
       res.status(200)
         .json({token: jwt});
     } catch (e) {

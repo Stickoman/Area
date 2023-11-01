@@ -23,7 +23,8 @@ const loginProcess = async (data: ILoginFormData, props: FlowProps) => {
         .catch(reason => console.error(reason.message));
     }).catch(reason => console.error(reason.message));
   } catch (error) {
-    console.error('Error logging in:', error);
+    console.warn('Error logging in:', error);
+    alert('Une erreur s\'est produite lors de la connexion. Veuillez réessayer.');
   }
 }
 

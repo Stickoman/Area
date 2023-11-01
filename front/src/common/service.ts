@@ -52,7 +52,12 @@ SERVICE_ITEMS.set('google', {
     {name: '', description: '', dataFields: []},
   ],
   reactions: [
-    {name: '', description: '', dataFields: []},
+    {
+      name: 'send_email', description: 'Send an email at Gmail', dataFields: [
+        {name: 'subject', hint: 'Google Email Subject'},
+        {name: 'message', hint: 'Google Email Message'},
+      ],
+    },
   ],
 } as IService);
 
