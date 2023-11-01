@@ -3,6 +3,7 @@ import {swagger} from '../swagger';
 import {isConnected} from '../mongodb';
 import swaggerUi from 'swagger-ui-express';
 import express from 'express';
+import {SERVICE_ITEMS} from '../common/service';
 
 const SWAGGER_SPECS = swaggerJsdoc(swagger);
 const router = express.Router();
@@ -65,6 +66,22 @@ router.get('/api/mobile', (req, res) => {
   const file = '/usr/src/app/shared/client.apk';
 
   res.download(file);
+});
+
+router.get('/api/about.json', (req, res) => {
+  const date: Date = new Date();
+
+  res.status(200).send({
+    client: {
+      host: req.hostname,
+    },
+    server: {
+      current_time: Math.floor(date.getTime() / 1000),
+      services: [
+        ...SERVICE_ITEMS.values(),
+      ],
+    },
+  });
 });
 
 router.use('/api/docs', swaggerUi.serve, swaggerUi.setup(SWAGGER_SPECS));
