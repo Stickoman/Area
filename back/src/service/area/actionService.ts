@@ -4,7 +4,9 @@ import {createTimerAction, refreshTimers} from './timerService';
 import {createRssPoll, refreshRedditRss} from './redditRssService';
 import {IRedditRssData, RedditRssAction} from '../../model/action/redditRssAction';
 import {GitHubWebHookAction, IGitHubWebhookData} from '../../model/action/gitHubWebHookAction';
-import {createBranchesPoll, createIssuesPoll, createPullPoll, createPushesPoll} from '../github/gitHubWebHook';
+import {createGithubWebhook} from '../github/gitHubWebHook';
+import {Model} from 'mongoose';
+import {reject} from '../authService';
 
 type ActionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -12,10 +14,10 @@ const actionAssociations = new Map<ActionType, ActionFactory>();
 
 actionAssociations.set('timer:scheduled_task', createTimerAction);
 actionAssociations.set('reddit:poll_rss', createRssPoll);
-actionAssociations.set('github:issues', createIssuesPoll);
-actionAssociations.set('github:branches', createBranchesPoll);
-actionAssociations.set('github:pushes', createPushesPoll);
-actionAssociations.set('github:pull', createPullPoll);
+actionAssociations.set('github:issues', createGithubWebhook);
+actionAssociations.set('github:branches', createGithubWebhook);
+actionAssociations.set('github:pushes', createGithubWebhook);
+actionAssociations.set('github:pull', createGithubWebhook);
 
 async function refreshActions() {
   let count: number = 0;
@@ -37,26 +39,46 @@ async function retrieveActionData(id: string, type: ActionType): Promise<object>
   let data: object = {};
 
   switch (type) {
-    case 'timer:scheduled_task':
-      data = (await TimerAction.findById(id).exec()) as ITimerData;
-      break;
-    case 'github:issues':
-      data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
-      break;
-    case 'github:branches':
-      data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
-      break;
-    case 'github:pushes':
-      data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
-      break;
-    case 'github:pull':
-      data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
-      break;
-    case 'reddit:poll_rss':
-      data = (await RedditRssAction.findById(id).exec()) as IRedditRssData;
+  case 'timer:scheduled_task':
+    data = (await TimerAction.findById(id).exec()) as ITimerData;
+    break;
+  case 'github:issues':
+  case 'github:branches':
+  case 'github:pushes':
+  case 'github:pull':
+    data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
+    break;
+  case 'reddit:poll_rss':
+    data = (await RedditRssAction.findById(id).exec()) as IRedditRssData;
   }
 
   return data;
 }
 
-export {refreshActions, createAction, retrieveActionData};
+async function deleteAction(id: string, type: ActionType) {
+  let model: Model<unknown> = null;
+
+  switch (type) {
+  case 'timer:scheduled_task':
+    model = TimerAction;
+    break;
+  case 'github:issues':
+  case 'github:branches':
+  case 'github:pushes':
+  case 'github:pull':
+    model = GitHubWebHookAction;
+    break;
+  case 'reddit:poll_rss':
+    model = RedditRssAction;
+    break;
+  }
+
+  if (model) {
+    const document = await model.findById(id).exec();
+    await document.deleteOne();
+  } else {
+    return reject('Unable to find reaction model');
+  }
+}
+
+export {refreshActions, createAction, retrieveActionData, deleteAction};

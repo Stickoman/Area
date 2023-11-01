@@ -1,11 +1,12 @@
 import express, {Response} from 'express';
 import {AuthenticatedRequest, authenticateMiddleware} from '../middleware/auth';
-import {retrieveAreas, saveArea} from '../service/area/areaService';
+import {deleteArea, retrieveAreas, saveArea} from '../service/area/areaService';
 import {Area, IArea} from '../model/area';
 import {ActionType} from '../common/action.interface';
 import {ReactionType} from '../common/reaction.interface';
 import {retrieveActionData} from '../service/area/actionService';
 import {retrieveReactionData} from '../service/area/reactionService';
+import {ObjectId} from 'mongodb';
 
 const router = express.Router();
 
@@ -144,8 +145,8 @@ router.delete('/api/areas/:id', [authenticateMiddleware], async (req: Authentica
   try {
     const area: IArea = await Area.findById(id).exec();
 
-    if (area) {
-      await Area.deleteOne({_id: id}).exec();
+    if (area && area.userId === req.user._id.toString()) {
+      await deleteArea(id);
 
       res.sendStatus(200);
     } else res.sendStatus(404);
