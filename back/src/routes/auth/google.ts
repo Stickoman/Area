@@ -74,12 +74,11 @@ router.get('/api/auth/google/callback', [], async (req: Request, res: Response) 
         const document = await User.findOne({googleId: account.id}).exec();
 
         document.googleId = account.id;
-        document.googleEmail = account.email;
         await document.save();
         res.redirect(`${FRONT_URL}/login?jwt=${generateAccessToken(user)}&name=${account.screenName}`);
       })
       .catch(async (user: IUser) => {
-        const id: string = initOAuthFlow('google', account.id, account.screenName, account.email);
+        const id: string = initOAuthFlow('google', account.id, account.screenName);
         res.redirect(`${FRONT_URL}/oauth?id=${id}`);
       });
   } catch (error) {
@@ -108,7 +107,6 @@ router.post('/api/auth/google/disassociate', authenticateMiddleware, async (req:
 
   if (document !== null) {
     document.googleId = '';
-    document.googleEmail = '';
     await document.save();
     res.sendStatus(200);
   } else {

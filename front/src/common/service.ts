@@ -52,7 +52,12 @@ SERVICE_ITEMS.set('google', {
     {name: '', description: '', dataFields: []},
   ],
   reactions: [
-    {name: '', description: '', dataFields: []},
+    {
+      name: 'send_email', description: 'Send an email at Gmail', dataFields: [
+        {name: 'subject', hint: 'Google Email Subject'},
+        {name: 'message', hint: 'Google Email Message'},
+      ],
+    },
   ],
 } as IService);
 
@@ -102,7 +107,7 @@ SERVICE_ITEMS.set('github', {
       name: 'issues',
       description: 'Watch Issues updates on repository ',
       dataFields: [{name: 'repositoryUrl', hint: ' '}],
-      variables: ['GITHUB_ISSUE_ACTION', 'GITHUB_ISSUE_NAME', 'GITHUB_ISSUE_LINK', 'GITHUB_ISSUE_OWNER', 'GITHUB_ISSUE_USER']
+      variables: ['GITHUB_ISSUE_ACTION', 'GITHUB_ISSUE_NAME', 'GITHUB_ISSUE_LINK', 'GITHUB_ISSUE_OWNER', 'GITHUB_ISSUE_USER'],
     },
   ],
   reactions: [

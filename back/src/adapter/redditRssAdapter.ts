@@ -45,18 +45,22 @@ function filterRedditFeed(feed: RedditFeed, afterDate: Date): RedditFeed {
 }
 
 async function retrieveFeedUpdates(userId: string, feedUrl: string): Promise<RedditFeed> {
-  const feed = await parseRedditFeed(feedUrl);
+  try {
+    const feed = await parseRedditFeed(feedUrl);
 
-  return retrieveFeedUpdate(userId, feedUrl)
-    .then(update => {
-      return filterRedditFeed(feed, update.lastUpdate);
-    })
-    .catch(() => {
-      return feed;
-    })
-    .finally(async () => {
-      await updateFeed(userId, feedUrl);
-    });
+    return retrieveFeedUpdate(userId, feedUrl)
+      .then(update => {
+        return filterRedditFeed(feed, update.lastUpdate);
+      })
+      .catch(() => {
+        return feed;
+      })
+      .finally(async () => {
+        await updateFeed(userId, feedUrl);
+      });
+  } catch (e) {
+    console.warn('Unable to parse RSS feed', e);
+  }
 }
 
 export type {RedditFeed, RedditFeedItem};

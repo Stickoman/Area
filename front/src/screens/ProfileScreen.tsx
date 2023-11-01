@@ -32,7 +32,6 @@ interface IProfile {
   discordId?: string;
   githubId?: string;
   googleId?: string;
-  googleEmail?: string
   redditId?: string;
   microsoftId?: string;
   facebookId?: string;

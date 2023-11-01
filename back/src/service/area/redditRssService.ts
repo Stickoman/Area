@@ -9,12 +9,16 @@ const redditRssScheduler: JobScheduler = new JobScheduler();
 
 function scheduleAction(actionId: string, action: IRedditRssAction) {
   redditRssScheduler.schedule('0 * * * * *', async () => {
-    const feed: RedditFeed = await retrieveFeedUpdates(action.userId, action.url);
+    try {
+      const feed: RedditFeed = await retrieveFeedUpdates(action.userId, action.url);
 
-    console.log(`Poll feed ${feed.title}`);
-    for (const feedItem of feed.items) {
-      await callReaction(actionId, feedItem)
-        .catch(reason => console.error(reason));
+      console.log(`Poll feed ${feed.title}`);
+      for (const feedItem of feed.items) {
+        await callReaction(actionId, feedItem)
+          .catch(reason => console.error(reason));
+      }
+    } catch (e) {
+      console.warn('Unable to poll RSS feed', e);
     }
   });
 }

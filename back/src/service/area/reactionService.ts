@@ -9,6 +9,8 @@ import {
   IDiscordWebhookEmbedData,
 } from '../../model/reaction/discordWebhookEmbedReaction';
 import {IIssueWebhook} from '../../routes/github';
+import {GoogleEmailReaction, IGoogleEmailData} from '../../model/reaction/googleEmailReaction';
+import sendEmailToMyself from '../google/emailService';
 
 type ReactionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -16,6 +18,7 @@ const reactionAssociations = new Map<ReactionType, ReactionFactory>();
 
 reactionAssociations.set('discord:send_webhook', createDiscordWebhookReaction);
 reactionAssociations.set('discord:send_embedded_webhook', createDiscordWebhookEmbedReaction);
+reactionAssociations.set('google:send_email', createGoogleEmailReaction);
 
 async function createDiscordWebhookReaction(userId: string, data: IDiscordWebhookData): Promise<string> {
   const webhook = await new DiscordWebhookReaction({userId, ...data}).save();
@@ -27,6 +30,12 @@ async function createDiscordWebhookEmbedReaction(userId: string, data: IDiscordW
   const webhook = await new DiscordWebhookEmbedReaction({userId, ...data}).save();
 
   return webhook.id;
+}
+
+async function createGoogleEmailReaction(userId: string, data: IGoogleEmailData): Promise<string> {
+  const email = await new GoogleEmailReaction({userId, ...data}).save();
+
+  return email.id;
 }
 
 async function createReaction(userId: string, type: ReactionType, data: object): Promise<string> {
@@ -41,12 +50,15 @@ async function retrieveReactionData(id: string, type: ReactionType): Promise<obj
   let data: object = {};
 
   switch (type) {
-  case 'discord:send_webhook':
-    data = (await DiscordWebhookReaction.findById(id).exec()) as IDiscordWebhookData;
-    break;
-  case 'discord:send_embedded_webhook':
-    data = (await DiscordWebhookEmbedReaction.findById(id).exec()) as IDiscordWebhookEmbedData;
-    break;
+    case 'discord:send_webhook':
+      data = (await DiscordWebhookReaction.findById(id).exec()) as IDiscordWebhookData;
+      break;
+    case 'discord:send_embedded_webhook':
+      data = (await DiscordWebhookEmbedReaction.findById(id).exec()) as IDiscordWebhookEmbedData;
+      break;
+    case 'google:send_email':
+      data = (await GoogleEmailReaction.findById(id).exec()) as IGoogleEmailData;
+      break;
   }
 
   return data;
@@ -66,6 +78,9 @@ async function callReaction(actionId: string, data?: object) {
   const isValidDiscordWebhookEmbedData = (data: object): data is IDiscordWebhookEmbedData => {
     return !!(data as IDiscordWebhookEmbedData);
   };
+  const isValidGoogleEmailData = (data: object): data is IGoogleEmailData => {
+    return !!(data as IGoogleEmailData);
+  };
 
   const replaceVariables = (value: string): string => {
     return value.replace('${NAME}', fullName)
@@ -81,14 +96,19 @@ async function callReaction(actionId: string, data?: object) {
   };
 
   switch (reactionType) {
-  case 'discord:send_webhook':
-    if (isValidDiscordWebhookData(reactionData))
-      await sendWebhook(reactionData.webhookUrl, fullName, replaceVariables(reactionData.text));
-    break;
-  case 'discord:send_embedded_webhook':
-    if (isValidDiscordWebhookEmbedData(reactionData))
-      await sendEmbedWebhook(reactionData.webhookUrl, fullName, replaceVariables(reactionData.title), replaceVariables(reactionData.description), reactionData.color);
-    break;
+    case 'discord:send_webhook':
+      if (isValidDiscordWebhookData(reactionData))
+        await sendWebhook(reactionData.webhookUrl, fullName, replaceVariables(reactionData.text));
+      break;
+    case 'discord:send_embedded_webhook':
+      if (isValidDiscordWebhookEmbedData(reactionData))
+        await sendEmbedWebhook(reactionData.webhookUrl, fullName, replaceVariables(reactionData.title), replaceVariables(reactionData.description), reactionData.color);
+      break;
+    case 'google:send_email':
+      console.warn(reactionData);
+      if (isValidGoogleEmailData(reactionData))
+        await sendEmailToMyself(replaceVariables(reactionData.subject), replaceVariables(reactionData.message), user.googleId);
+      break
   }
 }
 

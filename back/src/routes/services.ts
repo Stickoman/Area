@@ -30,14 +30,12 @@ router.get('/api/services/reddit', authenticateMiddleware, (req: AuthenticatedRe
 
 router.post('/api/services/email', authenticateMiddleware, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const userGoogleID = req.user.googleId;
     const data = req.body;
-    let GoogleAuth = await GoogleAuthentication.findOne({id: userGoogleID}).exec();
-    if (data.subject && data.message && data.email) {
-      await sendEmailToMyself(GoogleAuth.access_token, data.subject, data.message, data.email);
+    if (data.subject && data.message) {
+      await sendEmailToMyself(data.subject, data.message, req.user.googleId);
       res.sendStatus(200);
     } else {
-      const missingProperties = ['subject', 'message', 'email']
+      const missingProperties = ['subject', 'message']
         .filter(prop => !data[prop])
         .join(', ');
 
@@ -53,7 +51,8 @@ router.post('/api/services/get/email', authenticateMiddleware, async (req: Authe
   try {
     const userGoogleID = req.user.googleId;
     let GoogleAuth = await GoogleAuthentication.findOne({id: userGoogleID}).exec();
-    await checkForNewEmails(GoogleAuth.access_token, req.user.googleEmail);
+    const googleEmail = GoogleAuth.email;
+    await checkForNewEmails(GoogleAuth.access_token, googleEmail);
     res.sendStatus(200);
   } catch (error) {
     console.error('Error send email', error);
