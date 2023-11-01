@@ -9,6 +9,11 @@ import {
   IDiscordWebhookEmbedData,
 } from '../../model/reaction/discordWebhookEmbedReaction';
 import {IBranchWebhook, IIssueWebhook, IPullWebhook, IPushWebhook} from '../../routes/github';
+import {ActionType} from '../../common/action.interface';
+import {TimerAction} from '../../model/action/timerAction';
+import {GitHubIssuesAction} from '../../model/action/gitHubIssuesAction';
+import {RedditRssAction} from '../../model/action/redditRssAction';
+import {Model} from 'mongoose';
 
 type ReactionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -107,4 +112,24 @@ async function callReaction(actionId: string, data?: object) {
   }
 }
 
-export {createReaction, retrieveReactionData, callReaction};
+async function deleteReaction(id: string, type: ReactionType) {
+  let model: Model<unknown> = null;
+
+  switch (type) {
+  case 'discord:send_webhook':
+    model = DiscordWebhookReaction;
+    break;
+  case 'discord:send_embedded_webhook':
+    model = DiscordWebhookEmbedReaction;
+    break;
+  }
+
+  if (model) {
+    const document = await model.findById(id).exec();
+    await document.deleteOne();
+  } else {
+    return reject('Unable to find reaction model');
+  }
+}
+
+export {createReaction, retrieveReactionData, callReaction, deleteReaction};
