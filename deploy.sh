@@ -40,7 +40,7 @@ fi
 
 tar --exclude='node_modules' -czf area.tar.gz ./area
 scp area.tar.gz root@area.baragouin.fr:/root/dev
-ssh root@area.baragouin.fr 'cd /root/dev/ && tar -xzf area.tar.gz && cd area && docker-compose up -d --build front back'
+ssh root@area.baragouin.fr 'cd /root/dev/ && tar -xzf area.tar.gz && cd area && docker-compose down && docker-compose up -d --build front back'
 
 curl \
   -H "Content-Type: application/json" \

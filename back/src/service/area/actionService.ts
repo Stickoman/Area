@@ -3,8 +3,8 @@ import {ITimerData, TimerAction} from '../../model/action/timerAction';
 import {createTimerAction, refreshTimers} from './timerService';
 import {createRssPoll, refreshRedditRss} from './redditRssService';
 import {IRedditRssData, RedditRssAction} from '../../model/action/redditRssAction';
-import {GitHubIssuesAction, IIssueWebhookData} from '../../model/action/gitHubIssuesAction';
-import {createIssuesPoll} from '../github/gitHubWebHook';
+import {GitHubWebHookAction, IGitHubWebhookData} from '../../model/action/gitHubWebHookAction';
+import {createBranchesPoll, createIssuesPoll, createPullPoll, createPushesPoll} from '../github/gitHubWebHook';
 
 type ActionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -13,6 +13,9 @@ const actionAssociations = new Map<ActionType, ActionFactory>();
 actionAssociations.set('timer:scheduled_task', createTimerAction);
 actionAssociations.set('reddit:poll_rss', createRssPoll);
 actionAssociations.set('github:issues', createIssuesPoll);
+actionAssociations.set('github:branches', createBranchesPoll);
+actionAssociations.set('github:pushes', createPushesPoll);
+actionAssociations.set('github:pull', createPullPoll);
 
 async function refreshActions() {
   let count: number = 0;
@@ -34,14 +37,23 @@ async function retrieveActionData(id: string, type: ActionType): Promise<object>
   let data: object = {};
 
   switch (type) {
-  case 'timer:scheduled_task':
-    data = (await TimerAction.findById(id).exec()) as ITimerData;
-    break;
-    case 'github:issues':
-      data = (await GitHubIssuesAction.findById(id).exec()) as IIssueWebhookData;
+    case 'timer:scheduled_task':
+      data = (await TimerAction.findById(id).exec()) as ITimerData;
       break;
-  case 'reddit:poll_rss':
-    data = (await RedditRssAction.findById(id).exec()) as IRedditRssData;
+    case 'github:issues':
+      data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
+      break;
+    case 'github:branches':
+      data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
+      break;
+    case 'github:pushes':
+      data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
+      break;
+    case 'github:pull':
+      data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
+      break;
+    case 'reddit:poll_rss':
+      data = (await RedditRssAction.findById(id).exec()) as IRedditRssData;
   }
 
   return data;
