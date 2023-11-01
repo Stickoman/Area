@@ -68,6 +68,73 @@ router.get('/api/mobile', (req, res) => {
   res.download(file);
 });
 
+/**
+ * @swagger
+ * /api/about.json:
+ *   get:
+ *     summary: Get information about the server and its services.
+ *     tags:
+ *       - Server status
+ *     responses:
+ *       200:
+ *         description: Successfully returns server information and services.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 client:
+ *                   type: object
+ *                   properties:
+ *                     host:
+ *                       type: string
+ *                       description: Hostname of the client making the request.
+ *                 server:
+ *                   type: object
+ *                   properties:
+ *                     current_time:
+ *                       type: integer
+ *                       format: int64
+ *                       description: Current time on the server (in seconds since the epoch).
+ *                     services:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           name:
+ *                             type: string
+ *                           actions:
+ *                             type: array
+ *                             items:
+ *                               type: object
+ *                               properties:
+ *                                 name:
+ *                                   type: string
+ *                                 description:
+ *                                   type: string
+ *                           reactions:
+ *                             type: array
+ *                             items:
+ *                               type: object
+ *                               properties:
+ *                                 name:
+ *                                   type: string
+ *                                 description:
+ *                                   type: string
+ *         example:
+ *           client:
+ *             host: "10.101.53.35"
+ *           server:
+ *             current_time: 1531680780
+ *             services:
+ *               - name: "facebook"
+ *                 actions:
+ *                   - { "name": "new_message_in_group", "description": "A new message is posted in the group" }
+ *                   - { "name": "new_message_inbox", "description": "A new private message is received by the user" }
+ *                   - { "name": "new_like", "description": "The user gains a like from one of their messages" }
+ *                 reactions:
+ *                   - { "name": "like_message", "description": "The user likes a message" }
+ */
 router.get('/api/about.json', (req, res) => {
   const date: Date = new Date();
 
