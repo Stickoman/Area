@@ -1,22 +1,17 @@
 import React, {CSSProperties, useState} from 'react';
 import '../index.css';
 
-interface LoginFormData {
+interface ILoginFormData {
   email: string;
   password: string;
 }
 
-interface LoginComponentProps {
-  callback: (data: LoginFormData) => void;
+interface ILoginComponentProperties {
+  callback: (data: ILoginFormData) => void;
 }
 
-function LoginComponent(props: LoginComponentProps) {
-  const [formData, setFormData] = useState({email: '', password: ''} as LoginFormData);
-
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    props.callback(formData);
-  };
+function LoginComponent(props: ILoginComponentProperties): React.JSX.Element {
+  const [formData, setFormData] = useState({email: '', password: ''} as ILoginFormData);
 
   const containerStyle: CSSProperties = {
     maxWidth: '500px',
@@ -25,13 +20,18 @@ function LoginComponent(props: LoginComponentProps) {
     borderRadius: '8px',
   };
 
-  const handleChange = (e: { target: { name: string, value: string; }; }) => {
-    const {name, value} = e.target;
+  const handleChange = (event: { target: { name: string, value: string; }; }) => {
+    const {name, value} = event.target;
 
     setFormData({
       ...formData,
       [name]: value,
     });
+  };
+
+  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    props.callback(formData);
   };
 
   return (
@@ -64,5 +64,5 @@ function LoginComponent(props: LoginComponentProps) {
   );
 }
 
-export {LoginFormData};
+export {ILoginFormData};
 export default LoginComponent;

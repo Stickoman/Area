@@ -1,6 +1,7 @@
 import {Router, Response} from 'express';
 import {AuthenticatedRequest, authenticateMiddleware} from '../middleware/auth';
 import {updateUserProfile} from '../service/profileService';
+import {User} from '../model/user';
 
 const router = Router();
 
@@ -34,6 +35,35 @@ const router = Router();
  */
 router.get('/api/me', authenticateMiddleware, (req: AuthenticatedRequest, res: Response) => {
   return res.send(req.user);
+});
+
+
+/**
+ * @swagger
+ * /api/me:
+ *   delete:
+ *     security:
+ *       - Bearer: []
+ *     summary: Delete the user account
+ *     tags:
+ *       - Profile
+ *     responses:
+ *       200:
+ *         description: Successfully delete account.
+ *       401:
+ *         description: Unauthorized.
+ */
+router.delete('/api/me', authenticateMiddleware, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const user = await User.findById(req.user._id).exec();
+
+    if (user)
+      await user.deleteOne();
+    res.sendStatus(200);
+  } catch (e) {
+    console.warn('Error while deleting account', e);
+    res.sendStatus(500);
+  }
 });
 
 /**

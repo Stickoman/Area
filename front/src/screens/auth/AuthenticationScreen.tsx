@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import NavigationBar from '../../components/common/NavigationBar';
-import LoginComponent, {LoginFormData} from '../../components/LoginComponent';
-import RegisterComponent from '../../components/RegisterComponent';
+import LoginComponent, {ILoginFormData} from '../../components/LoginComponent';
+import RegisterComponent, {IRegisterFormData} from '../../components/RegisterComponent';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import {useNavigate} from 'react-router-dom';
@@ -18,22 +18,48 @@ import SocialButton from '../../components/common/SocialButton';
 import './AuthenticationScreen.css';
 
 function AuthenticationContainer(): React.JSX.Element {
+  const [error, setError] = useState(null as string);
   const [login, setLogin] = useState(true);
   const navigate = useNavigate();
 
-  async function tryLogin(data: LoginFormData) {
+  function navigateToCallback() {
+    const queryParameters = new URLSearchParams(window.location.search);
+
+    if (queryParameters.has('callback'))
+      window.location.href = queryParameters.get('callback');
+    else
+      navigate('/profile');
+  }
+
+  async function tryLogin(data: ILoginFormData) {
+    setError(null);
     try {
-      const queryParameters = new URLSearchParams(window.location.search);
+      const response = await axios.post('/api/auth/login', data);
+      const token = response?.data.token;
+
+      if (token) {
+        Cookies.set('token', token);
+        navigateToCallback();
+      } else {
+        setError('Invalid credentials');
+      }
+    } catch (error) {
+      console.error('Error logging in:', error);
+      setError('Unable to retrieve server data');
+    }
+  }
+
+  async function tryRegister(data: IRegisterFormData) {
+    setError(null);
+    try {
+      await axios.post('/api/auth/register', data);
       const response = await axios.post('/api/auth/login', data);
       const token = response.data.token;
 
       Cookies.set('token', token);
-      if (queryParameters.has('callback'))
-        window.location.href = queryParameters.get('callback');
-      else
-        navigate('/profile');
-      } catch (error) {
-      console.error('Error logging in:', error);
+      navigateToCallback();
+    } catch (error) {
+      console.error('Error register in:', error);
     }
   }
 
@@ -43,14 +69,20 @@ function AuthenticationContainer(): React.JSX.Element {
 
     return (
       <p className={'toggleText'}>{hintText}
-        <span className={'toggleLink'} onClick={() => setLogin(!login)}>{buttonText}</span>
+        <span className={'toggleLink'}
+              onClick={() => setLogin(!login)}
+              onKeyDown={() => setLogin(!login)}>
+          {buttonText}
+        </span>
       </p>
     );
   }
 
   return (
     <div>
-      {login ? (<LoginComponent callback={tryLogin}/>) : (<RegisterComponent/>)}
+      {login ? (<LoginComponent callback={tryLogin}/>) : (<RegisterComponent callback={tryRegister}/>)}
+      {error && <p style={{textAlign: 'center', color: '#f33', fontWeight: 'bold', fontSize: '20px'}}>{error}</p>}
+
       <div className="toggleContainer">
         {renderSwitchButton()}
       </div>

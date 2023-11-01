@@ -19,7 +19,7 @@ describe('Basic Auth Login', () => {
     const response = await request(app).post('/api/auth/login')
       .send({email: USER_CREDENTIALS.email, password: 'bad_password'});
 
-    expect(response.status).toBe(401);
+    expect(response.status).toBe(403);
   });
 });
 

@@ -20,6 +20,7 @@ import {
   faFacebook,
 } from '@fortawesome/free-brands-svg-icons';
 import './ProfileScreen.css';
+import {deleteAccount} from '../common/profile';
 
 interface IProfile {
   email: string;
@@ -49,43 +50,56 @@ function ProfileContent(props: ProfileContentProperties): React.JSX.Element {
       </div>
     );
   } else {
+    const buttonStyle: CSSProperties = {
+      marginTop: '10px',
+      marginBottom: '10px',
+    };
+
     return (
       <div>
         <ProfileComponent user={profile}/>
 
-        {
-          profile.twitterId && (
-            <DisassociateComponent name={'Twitter'} handleClick={disassociateTwitter} icon={faTwitter}
-                                   style={'twitterButtonStyle'}/>)
-        }{
-        profile.discordId && (
+        {profile.twitterId && (
+          <DisassociateComponent name={'Twitter'} handleClick={disassociateTwitter} icon={faTwitter}
+                                 style={'twitterButtonStyle'}/>
+        )}
+        {profile.discordId && (
           <DisassociateComponent name={'Discord'} handleClick={disassociateDiscord} icon={faDiscord}
-                                 style={'discordButtonStyle'}/>)
-      }{
-        profile.githubId && (
+                                 style={'discordButtonStyle'}/>
+        )}
+        {profile.githubId && (
           <DisassociateComponent name={'Github'} handleClick={disassociateGithub} icon={faGithub}
-                                 style={'githubButtonStyle'}/>)
-      }{
-        profile.googleId && (
+                                 style={'githubButtonStyle'}/>
+        )}
+        {profile.googleId && (
           <DisassociateComponent name={'Google'} handleClick={disassociateGoogle} icon={faGoogle}
-                                 style={'googleButtonStyle'}/>)
-      }{
-          profile.redditId && (
-            <DisassociateComponent name={'Reddit'} handleClick={disassociateReddit} icon={faReddit}
-                                   style={'redditButtonStyle'}/>)
-        }{
-        profile.microsoftId && (
+                                 style={'googleButtonStyle'}/>
+        )}
+        {profile.redditId && (
+          <DisassociateComponent name={'Reddit'} handleClick={disassociateReddit} icon={faReddit}
+                                 style={'redditButtonStyle'}/>
+        )}
+        {profile.microsoftId && (
           <DisassociateComponent name={'Microsoft'} handleClick={disassociateMicrosoft} icon={faMicrosoft}
-                                 style={'microsoftButtonStyle'}/>)
-      }{
-        profile.facebookId && (
+                                 style={'microsoftButtonStyle'}/>
+        )}
+        {profile.facebookId && (
           <DisassociateComponent name={'Facebook'} handleClick={disassociateFacebook} icon={faFacebook}
-                                 style={'facebookButtonStyle'}/>)
-      }
-        <button type="submit" onClick={() => logout(navigate)} className="buttonStyle" style={{
-          marginTop: '10px',
-          marginBottom: '10px',
-        }}>Logout
+                                 style={'facebookButtonStyle'}/>
+        )}
+
+        <button type={'button'}
+                onClick={() => logout(navigate)}
+                className="buttonStyle"
+                style={buttonStyle}>
+          Logout
+        </button>
+
+        <button type={'button'}
+                onClick={async () => await deleteAccount(navigate)}
+                className="buttonStyle"
+                style={{...buttonStyle, backgroundColor: '#f22'}}>
+          Delete account
         </button>
       </div>
     );
