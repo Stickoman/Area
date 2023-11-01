@@ -9,10 +9,6 @@ import {
   IDiscordWebhookEmbedData,
 } from '../../model/reaction/discordWebhookEmbedReaction';
 import {IBranchWebhook, IIssueWebhook, IPullWebhook, IPushWebhook} from '../../routes/github';
-import {ActionType} from '../../common/action.interface';
-import {TimerAction} from '../../model/action/timerAction';
-import {GitHubIssuesAction} from '../../model/action/gitHubIssuesAction';
-import {RedditRssAction} from '../../model/action/redditRssAction';
 import {Model} from 'mongoose';
 
 type ReactionFactory = (userId: string, data: object) => Promise<string>;
