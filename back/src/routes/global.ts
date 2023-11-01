@@ -140,7 +140,7 @@ router.get('/api/about.json', (req, res) => {
 
   res.status(200).send({
     client: {
-      host: req.hostname,
+      host: req.headers['x-forwarded-for'] || req.socket.remoteAddress,
     },
     server: {
       current_time: Math.floor(date.getTime() / 1000),
