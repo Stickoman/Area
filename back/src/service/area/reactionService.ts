@@ -138,6 +138,9 @@ async function deleteReaction(id: string, type: ReactionType) {
   case 'discord:send_embedded_webhook':
     model = DiscordWebhookEmbedReaction;
     break;
+  case 'google:send_email':
+    model = GoogleEmailReaction;
+    break;
   }
 
   if (model) {
