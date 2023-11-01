@@ -6,8 +6,12 @@ import {FlowData, serviceColor} from '../../common/flow';
 import Callback from '../../components/oauth/Callback';
 import Connection from '../../components/oauth/Connection';
 import Finish from '../../components/oauth/Finish';
+import Cookies from 'js-cookie';
+import {getAuthorizedHeader} from '../../common/auth';
+import {useNavigate} from 'react-router-dom';
 
 function OAuthScreen(): React.JSX.Element {
+  const navigate = useNavigate();
   const wrapperStyle: CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
@@ -31,6 +35,16 @@ function OAuthScreen(): React.JSX.Element {
       .catch(reason => console.error(reason.message))
       .finally(() => setLoading(false));
   }
+
+  useEffect(() => {
+    const token = Cookies.get('token');
+
+    if (token) {
+      axios.post(`/api/oauth/associate?id=${id}`, {}, {headers: getAuthorizedHeader(),})
+        .catch(reason => console.warn(reason))
+        .finally(() => navigate('/profile'));
+    }
+  }, []);
 
   useEffect(() => {
     refreshFlow();

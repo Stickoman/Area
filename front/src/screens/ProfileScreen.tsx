@@ -21,6 +21,9 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import './ProfileScreen.css';
 import {deleteAccount} from '../common/profile';
+import {IconProp} from '@fortawesome/fontawesome-svg-core';
+import SocialButton from '../components/common/SocialButton';
+import Cookies from 'js-cookie';
 
 interface IProfile {
   email: string;
@@ -35,13 +38,111 @@ interface IProfile {
   facebookId?: string;
 }
 
+type ServiceId = 'twitterId' | 'discordId' | 'githubId' | 'googleId' | 'redditId' | 'microsoftId' | 'facebookId';
+
 interface ProfileContentProperties {
   profile: IProfile;
 }
 
+interface IServiceData {
+  id: ServiceId;
+  name: string;
+  color: string;
+  icon: IconProp;
+  class: string;
+  associatePath: string;
+  disassociate: () => void;
+}
+
+const SERVICES_OAUTH: IServiceData[] = [
+  {
+    id: 'twitterId',
+    name: 'Twitter',
+    color: '#1da1f2',
+    icon: faTwitter,
+    class: 'twitterButtonStyle',
+    associatePath: '/api/auth/twitter',
+    disassociate: disassociateTwitter,
+  },
+  {
+    id: 'discordId',
+    name: 'Discord',
+    color: '#7289da',
+    icon: faDiscord,
+    class: 'discordButtonStyle',
+    associatePath: '/api/auth/discord',
+    disassociate: disassociateDiscord,
+  },
+  {
+    id: 'githubId',
+    name: 'Github',
+    color: '#333333',
+    icon: faGithub,
+    class: 'githubButtonStyle',
+    associatePath: '/api/auth/github',
+    disassociate: disassociateGithub,
+  },
+  {
+    id: 'googleId',
+    name: 'Google',
+    color: '#db4a39ff',
+    icon: faGoogle,
+    class: 'googleButtonStyle',
+    associatePath: '/api/auth/google',
+    disassociate: disassociateGoogle,
+  },
+  {
+    id: 'redditId',
+    name: 'Reddit',
+    color: '#FF5700',
+    icon: faReddit,
+    class: 'redditButtonStyle',
+    associatePath: '/api/auth/reddit',
+    disassociate: disassociateReddit,
+  },
+  {
+    id: 'microsoftId',
+    name: 'Microsoft',
+    color: '#ea4300',
+    icon: faMicrosoft,
+    class: 'microsoftButtonStyle',
+    associatePath: '/api/auth/microsoft',
+    disassociate: disassociateMicrosoft,
+  },
+  {
+    id: 'facebookId',
+    name: 'Facebook',
+    color: '#1877f2',
+    icon: faFacebook,
+    class: 'facebookButtonStyle',
+    associatePath: '/api/auth/facebook',
+    disassociate: disassociateFacebook,
+  },
+];
+
 function ProfileContent(props: ProfileContentProperties): React.JSX.Element {
   const {profile} = props;
   const navigate = useNavigate();
+
+  function renderServiceButtons(): React.JSX.Element[] {
+    return SERVICES_OAUTH.map(service => {
+      if (profile[service.id]) {
+        return <DisassociateComponent key={service.name}
+                                      name={service.name}
+                                      handleClick={service.disassociate}
+                                      icon={service.icon}
+                                      style={service.class}/>;
+      } else {
+        return <SocialButton key={service.name}
+                             text={`Associate ${service.name}`}
+                             color={service.color}
+                             border={service.name === 'Google'}
+                             icon={service.icon}
+                             redirectPath={service.associatePath}
+                             profile={true}/>;
+      }
+    });
+  }
 
   if (profile === null) {
     return (
@@ -59,34 +160,7 @@ function ProfileContent(props: ProfileContentProperties): React.JSX.Element {
       <div>
         <ProfileComponent user={profile}/>
 
-        {profile.twitterId && (
-          <DisassociateComponent name={'Twitter'} handleClick={disassociateTwitter} icon={faTwitter}
-                                 style={'twitterButtonStyle'}/>
-        )}
-        {profile.discordId && (
-          <DisassociateComponent name={'Discord'} handleClick={disassociateDiscord} icon={faDiscord}
-                                 style={'discordButtonStyle'}/>
-        )}
-        {profile.githubId && (
-          <DisassociateComponent name={'Github'} handleClick={disassociateGithub} icon={faGithub}
-                                 style={'githubButtonStyle'}/>
-        )}
-        {profile.googleId && (
-          <DisassociateComponent name={'Google'} handleClick={disassociateGoogle} icon={faGoogle}
-                                 style={'googleButtonStyle'}/>
-        )}
-        {profile.redditId && (
-          <DisassociateComponent name={'Reddit'} handleClick={disassociateReddit} icon={faReddit}
-                                 style={'redditButtonStyle'}/>
-        )}
-        {profile.microsoftId && (
-          <DisassociateComponent name={'Microsoft'} handleClick={disassociateMicrosoft} icon={faMicrosoft}
-                                 style={'microsoftButtonStyle'}/>
-        )}
-        {profile.facebookId && (
-          <DisassociateComponent name={'Facebook'} handleClick={disassociateFacebook} icon={faFacebook}
-                                 style={'facebookButtonStyle'}/>
-        )}
+        {profile && renderServiceButtons()}
 
         <button type={'button'}
                 onClick={() => logout(navigate)}
@@ -125,7 +199,7 @@ function ProfileScreen(): React.JSX.Element {
       headers: getAuthorizedHeader(),
     });
 
-    setProfile(response.data);
+    setProfile(response?.data);
   }
 
   useEffect(() => {

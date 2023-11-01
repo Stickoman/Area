@@ -22,8 +22,12 @@ function disassociateTwitter() {
 }
 
 function disassociateDiscord() {
+  console.log('post discord');
   axios.post('/api/auth/discord/disassociate', {}, {headers: getAuthorizedHeader()})
-    .then(() => window.location.reload())
+    .then(() => {
+      console.log('reload discord');
+      window.location.reload();
+    })
     .catch(reason => console.warn('Unable to disassociate Discord: ', reason));
 }
 
