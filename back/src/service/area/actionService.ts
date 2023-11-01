@@ -4,7 +4,7 @@ import {createTimerAction, refreshTimers} from './timerService';
 import {createRssPoll, refreshRedditRss} from './redditRssService';
 import {IRedditRssData, RedditRssAction} from '../../model/action/redditRssAction';
 import {GitHubWebHookAction, IGitHubWebhookData} from '../../model/action/gitHubWebHookAction';
-import {createBranchesPoll, createIssuesPoll, createPushesPoll} from '../github/gitHubWebHook';
+import {createBranchesPoll, createIssuesPoll, createPullPoll, createPushesPoll} from '../github/gitHubWebHook';
 
 type ActionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -15,6 +15,7 @@ actionAssociations.set('reddit:poll_rss', createRssPoll);
 actionAssociations.set('github:issues', createIssuesPoll);
 actionAssociations.set('github:branches', createBranchesPoll);
 actionAssociations.set('github:pushes', createPushesPoll);
+actionAssociations.set('github:pull', createPullPoll);
 
 async function refreshActions() {
   let count: number = 0;
@@ -36,9 +37,9 @@ async function retrieveActionData(id: string, type: ActionType): Promise<object>
   let data: object = {};
 
   switch (type) {
-  case 'timer:scheduled_task':
-    data = (await TimerAction.findById(id).exec()) as ITimerData;
-    break;
+    case 'timer:scheduled_task':
+      data = (await TimerAction.findById(id).exec()) as ITimerData;
+      break;
     case 'github:issues':
       data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
       break;
@@ -48,8 +49,11 @@ async function retrieveActionData(id: string, type: ActionType): Promise<object>
     case 'github:pushes':
       data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
       break;
-  case 'reddit:poll_rss':
-    data = (await RedditRssAction.findById(id).exec()) as IRedditRssData;
+    case 'github:pull':
+      data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
+      break;
+    case 'reddit:poll_rss':
+      data = (await RedditRssAction.findById(id).exec()) as IRedditRssData;
   }
 
   return data;

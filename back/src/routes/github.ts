@@ -61,6 +61,26 @@ interface IPushWebhook {
       },
 }
 
+interface IPullWebhook {
+  action: string;
+  pull_request: {
+    title: string;
+    user: {
+      login: string;
+    }
+  }
+  repository: {
+    name: string;
+    owner: {
+      login: string;
+    },
+    html_url: string;
+  },
+  sender: {
+    login: string;
+  }
+}
+
 router.post(`/api/github/webhook/issues/`, async (req: Request, res: Response) => {
   const data: IIssueWebhook = req.body;
   const githubUser = await GithubAuthentication.findOne({ screenName: data.sender.login }).exec();
@@ -117,5 +137,24 @@ router.post(`/api/github/webhook/pushes/`, async (req: Request, res: Response) =
   }
 });
 
-export type {IIssueWebhook, IBranchWebhook, IPushWebhook};
+router.post(`/api/github/webhook/pull/`, async (req: Request, res: Response) => {
+  const data: IPullWebhook = req.body;
+  const githubUser = await GithubAuthentication.findOne({ screenName: data.sender.login }).exec();
+
+  console.log(`Received data for ${data.repository.owner.login}: repo "${data.repository.name}" pull request "${data.pull_request.title}" ${data.action} by ${data.pull_request.user.login}`);
+  if (!githubUser) {
+    res.sendStatus(403);
+  } else {
+    const actions = await GitHubWebHookAction.find({repositoryUrl: data.repository.html_url});
+
+    console.log(`Find ${actions.length} actions matching with this webhook`);
+    for (const action of actions) {
+
+      await callReaction(action.id, data);
+    }
+    res.sendStatus(200);
+  }
+});
+
+export type {IIssueWebhook, IBranchWebhook, IPushWebhook, IPullWebhook};
 export {router as githubRouter};

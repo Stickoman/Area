@@ -116,6 +116,12 @@ SERVICE_ITEMS.set('github', {
       dataFields: [{name: 'repositoryUrl', hint: ' '}],
       variables: ['GITHUB_COMMITS_MESSAGE', 'GITHUB_COMMITS_AUTHOR', 'GITHUB_PUSH_REPOSITORY', 'GITHUB_PUSH_USER', 'GITHUB_PUSH_LINK']
     },
+    {
+      name: 'pull',
+      description: 'Pull request alert on repository ',
+      dataFields: [{name: 'repositoryUrl', hint: ' '}],
+      variables: ['GITHUB_PULL_ACTION', 'GITHUB_PULL_MESSAGE', 'GITHUB_PULL_AUTHOR', 'GITHUB_PULL_REPOSITORY', 'GITHUB_PULL_LINK']
+    },
   ],
   reactions: [
     {name: '', description: '', dataFields: []},

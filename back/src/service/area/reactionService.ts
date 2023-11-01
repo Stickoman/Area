@@ -8,7 +8,7 @@ import {
   DiscordWebhookEmbedReaction,
   IDiscordWebhookEmbedData,
 } from '../../model/reaction/discordWebhookEmbedReaction';
-import {IBranchWebhook, IIssueWebhook, IPushWebhook} from '../../routes/github';
+import {IBranchWebhook, IIssueWebhook, IPullWebhook, IPushWebhook} from '../../routes/github';
 
 type ReactionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -84,6 +84,11 @@ async function callReaction(actionId: string, data?: object) {
       .replace('${GITHUB_PUSH_REPOSITORY}', (data as IPushWebhook).repository.name)
       .replace('${GITHUB_PUSH_USER}', (data as IPushWebhook).pusher.name)
       .replace('${GITHUB_PUSH_LINK}', (data as IPushWebhook).repository.html_url)
+      .replace('${GITHUB_PULL_ACTION}', (data as IPullWebhook).action)
+      .replace('${GITHUB_PULL_AUTHOR}', (data as IPullWebhook).pull_request.user.login)
+      .replace('${GITHUB_PULL_REPOSITORY}', (data as IPullWebhook).repository.name)
+      .replace('${GITHUB_PULL_MESSAGE}', (data as IPullWebhook).pull_request.title)
+      .replace('${GITHUB_PULL_LINK}', (data as IPullWebhook).repository.html_url)
       .replace('${RSS_TITLE}', (data as { title: string }).title)
       .replace('${RSS_CONTENT}', (data as { content: string }).content)
       .replace('${RSS_LINK}', (data as { link: string }).link)

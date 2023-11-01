@@ -18,4 +18,10 @@ const createPushesPoll = async (userId: string, data: IGitHubWebhookData): Promi
   return gitHubPushes.id;
 }
 
-export { createIssuesPoll, createBranchesPoll, createPushesPoll };
+const createPullPoll = async (userId: string, data: IGitHubWebhookData): Promise<string> => {
+  const gitHubPull = await new GitHubWebHookAction({ userId, ...data }).save();
+
+  return gitHubPull.id;
+}
+
+export { createIssuesPoll, createBranchesPoll, createPushesPoll,createPullPoll };
