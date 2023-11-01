@@ -1,7 +1,7 @@
 import {Request, Response, Router} from 'express';
 import {GithubAuthentication, IGithubAuthentication} from '../model/githubAuth';
 import {callReaction} from '../service/area/reactionService';
-import {GitHubIssuesAction, IIssueWebhookAction} from '../model/action/gitHubIssuesAction';
+import {GitHubWebHookAction, IIssueWebhookAction} from '../model/action/gitHubWebHookAction';
 
 const router = Router();
 
@@ -32,7 +32,45 @@ router.post(`/api/github/webhook/issues/`, async (req: Request, res: Response) =
   if (!githubUser) {
     res.sendStatus(403);
   } else {
-    const actions = await GitHubIssuesAction.find({repositoryUrl: data.repository.html_url});
+    const actions = await GitHubWebHookAction.find({repositoryUrl: data.repository.html_url});
+
+    console.log(`Find ${actions.length} actions matching with this webhook`);
+    for (const action of actions) {
+
+      await callReaction(action.id, data);
+    }
+    res.sendStatus(200);
+  }
+});
+
+router.post(`/api/github/webhook/branches/`, async (req: Request, res: Response) => {
+  const data: IIssueWebhook = req.body;
+  const githubUser = await GithubAuthentication.findOne({ screenName: data.sender.login }).exec();
+
+  console.log(`Received data for ${data.issue.user.login}: ${data.action}`);
+  if (!githubUser) {
+    res.sendStatus(403);
+  } else {
+    const actions = await GitHubWebHookAction.find({repositoryUrl: data.repository.html_url});
+
+    console.log(`Find ${actions.length} actions matching with this webhook`);
+    for (const action of actions) {
+
+      await callReaction(action.id, data);
+    }
+    res.sendStatus(200);
+  }
+});
+
+router.post(`/api/github/webhook/pushes/`, async (req: Request, res: Response) => {
+  const data: IIssueWebhook = req.body;
+  const githubUser = await GithubAuthentication.findOne({ screenName: data.sender.login }).exec();
+
+  console.log(`Received data for ${data.issue.user.login}: ${data.action}`);
+  if (!githubUser) {
+    res.sendStatus(403);
+  } else {
+    const actions = await GitHubWebHookAction.find({repositoryUrl: data.repository.html_url});
 
     console.log(`Find ${actions.length} actions matching with this webhook`);
     for (const action of actions) {

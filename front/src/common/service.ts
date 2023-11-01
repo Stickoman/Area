@@ -104,6 +104,18 @@ SERVICE_ITEMS.set('github', {
       dataFields: [{name: 'repositoryUrl', hint: ' '}],
       variables: ['GITHUB_ISSUE_ACTION', 'GITHUB_ISSUE_NAME', 'GITHUB_ISSUE_LINK', 'GITHUB_ISSUE_OWNER', 'GITHUB_ISSUE_USER']
     },
+    {
+      name: 'branches',
+      description: 'Watch Branches updates on repository ',
+      dataFields: [{name: 'repositoryUrl', hint: ' '}],
+      variables: ['GITHUB_ISSUE_ACTION', 'GITHUB_ISSUE_NAME', 'GITHUB_ISSUE_LINK', 'GITHUB_ISSUE_OWNER', 'GITHUB_ISSUE_USER']
+    },
+    {
+      name: 'pushes',
+      description: 'Pushes alert on repository ',
+      dataFields: [{name: 'repositoryUrl', hint: ' '}],
+      variables: ['GITHUB_ISSUE_ACTION', 'GITHUB_ISSUE_NAME', 'GITHUB_ISSUE_LINK', 'GITHUB_ISSUE_OWNER', 'GITHUB_ISSUE_USER']
+    },
   ],
   reactions: [
     {name: '', description: '', dataFields: []},

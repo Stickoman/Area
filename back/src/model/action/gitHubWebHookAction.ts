@@ -19,7 +19,7 @@ const schema = new Schema<IIssueWebhookAction>({
   },
 });
 
-const GitHubIssuesAction = model<IIssueWebhookAction>('GitHubIssuesAction', schema);
+const GitHubWebHookAction = model<IIssueWebhookAction>('GitHubWebHookAction', schema);
 
 export type { IIssueWebhookData, IIssueWebhookAction };
-export { GitHubIssuesAction };
+export { GitHubWebHookAction };
