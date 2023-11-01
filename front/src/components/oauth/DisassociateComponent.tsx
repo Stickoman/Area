@@ -11,8 +11,9 @@ type DisassociateComponentProps = {
 };
 
 const containerStyle: CSSProperties = {
-  marginTop: '10px',
-  marginBottom: '10px',
+  width: '100%',
+  minWidth: '300px',
+  margin: '5px 0',
   borderRadius: '8px',
 };
 function DisassociateComponent(props: DisassociateComponentProps) {

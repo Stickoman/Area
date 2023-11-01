@@ -106,6 +106,7 @@ router.post('/api/auth/microsoft/disassociate', authenticateMiddleware, async (r
   if (document !== null) {
     document.microsoftId = '';
     await document.save();
+    res.sendStatus(200);
   } else {
     res.sendStatus(401);
   }

@@ -110,6 +110,7 @@ router.post('/api/auth/github/disassociate', authenticateMiddleware, async (req:
   if (document !== null) {
     document.githubId = '';
     await document.save();
+    res.sendStatus(200);
   } else {
     res.sendStatus(401);
   }

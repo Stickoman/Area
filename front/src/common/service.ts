@@ -9,7 +9,8 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 
 type ServiceType =
-  'google'
+  'twitter'
+  | 'google'
   | 'microsoft'
   | 'discord'
   | 'github'

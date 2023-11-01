@@ -109,6 +109,7 @@ router.post('/api/auth/google/disassociate', authenticateMiddleware, async (req:
   if (document !== null) {
     document.googleId = '';
     await document.save();
+    res.sendStatus(200);
   } else {
     res.sendStatus(401);
   }

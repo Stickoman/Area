@@ -10,14 +10,15 @@ interface ISocialButtonProperties {
   border: boolean;
   icon: IconProp;
   redirectPath: string;
+  profile?: boolean;
 }
 
 function SocialButton(props: ISocialButtonProperties): React.JSX.Element {
-  const {text, color, border, icon, redirectPath} = props;
+  const {text, color, border, icon, redirectPath, profile} = props;
   const containerStyle: CSSProperties = {
-    width: '90%',
+    width: profile ? '100%' : '90%',
     minWidth: '300px',
-    margin: '5px 20px',
+    margin: profile ? '5px 0' : '5px 20px',
   };
 
   const buttonStyle: CSSProperties = {
