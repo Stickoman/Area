@@ -12,6 +12,7 @@ type DisassociateComponentProps = {
 
 const containerStyle: CSSProperties = {
   width: '100%',
+  minWidth: '300px',
   margin: '5px 0',
   borderRadius: '8px',
 };

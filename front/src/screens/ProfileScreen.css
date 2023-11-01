@@ -1,15 +1,50 @@
 .profile-container {
-    width: 35%;
+    width: 80%;
+}
+
+.social-buttons {
+    margin: auto;
+    width: 80vw;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    > div {
+        width: 38vw !important;
+        margin: 5px calc(1vw) !important;
+    }
+}
+
+.account-actions {
+    margin: 20px auto;
+    max-width: 500px;
 }
 
 @media (max-width: 900px) {
     .profile-container {
         width: 80%;
     }
+
+    .social-buttons {
+        width: 80vw;
+        flex-direction: column;
+        align-items: center;
+
+        > div {
+            max-width: 500px;
+            width: 100% !important;
+            margin: 5px 0 !important;
+        }
+    }
 }
 
 @media (max-width: 550px) {
     .profile-container {
         width: 90%;
+    }
+
+
+    .social-buttons {
+        width: 90vw;
     }
 }

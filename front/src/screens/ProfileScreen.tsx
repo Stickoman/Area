@@ -19,11 +19,10 @@ import {
   faMicrosoft,
   faFacebook,
 } from '@fortawesome/free-brands-svg-icons';
-import './ProfileScreen.css';
 import {deleteAccount} from '../common/profile';
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
 import SocialButton from '../components/common/SocialButton';
-import Cookies from 'js-cookie';
+import './ProfileScreen.css';
 
 interface IProfile {
   email: string;
@@ -160,21 +159,25 @@ function ProfileContent(props: ProfileContentProperties): React.JSX.Element {
       <div>
         <ProfileComponent user={profile}/>
 
-        {profile && renderServiceButtons()}
+        {profile &&
+          <div className={'social-buttons'}>{renderServiceButtons()}</div>
+        }
 
-        <button type={'button'}
-                onClick={() => logout(navigate)}
-                className="buttonStyle"
-                style={buttonStyle}>
-          Logout
-        </button>
+        <div className={'account-actions'}>
+          <button type={'button'}
+                  onClick={() => logout(navigate)}
+                  className="buttonStyle"
+                  style={buttonStyle}>
+            Logout
+          </button>
 
-        <button type={'button'}
-                onClick={async () => await deleteAccount(navigate)}
-                className="buttonStyle"
-                style={{...buttonStyle, backgroundColor: '#f22'}}>
-          Delete account
-        </button>
+          <button type={'button'}
+                  onClick={async () => await deleteAccount(navigate)}
+                  className="buttonStyle"
+                  style={{...buttonStyle, backgroundColor: '#f22'}}>
+            Delete account
+          </button>
+        </div>
       </div>
     );
   }

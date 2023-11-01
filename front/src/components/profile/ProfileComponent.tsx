@@ -16,7 +16,8 @@ function ProfileComponent(props: ProfileComponentProperties) {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: '25px',
+    maxWidth: '500px',
+    margin: '0 auto 25px auto',
   };
   const inputsStyle: CSSProperties = {
     width: '100%',
