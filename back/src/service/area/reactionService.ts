@@ -89,9 +89,9 @@ async function callReaction(actionId: string, data?: object) {
       .replace('${GITHUB_PULL_REPOSITORY}', (data as IPullWebhook)?.repository?.name)
       .replace('${GITHUB_PULL_MESSAGE}', (data as IPullWebhook)?.pull_request?.title)
       .replace('${GITHUB_PULL_LINK}', (data as IPullWebhook)?.repository?.html_url)
-      .replace('${RSS_TITLE}', (data as { title: string }).title)
-      .replace('${RSS_CONTENT}', (data as { content: string }).content)
-      .replace('${RSS_LINK}', (data as { link: string }).link)
+      .replace('${RSS_TITLE}', (data as { title: string })?.title)
+      .replace('${RSS_CONTENT}', (data as { content: string })?.content)
+      .replace('${RSS_LINK}', (data as { link: string })?.link)
       .replace('\\n', '\n');
   };
 
