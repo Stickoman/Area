@@ -10,7 +10,7 @@ import {
 } from '../../model/reaction/discordWebhookEmbedReaction';
 import {GoogleEmailReaction, IGoogleEmailData} from '../../model/reaction/googleEmailReaction';
 import sendEmailToMyself from '../google/emailService';
-import {IBranchWebhook, IIssueWebhook, IPullWebhook, IPushWebhook} from '../../routes/github';
+import {IBranchWebhook, IIssueWebhook, IPullWebhook, IPushWebhook, IBranchWebhookHeader} from '../../routes/github';
 import {Model} from 'mongoose';
 
 type ReactionFactory = (userId: string, data: object) => Promise<string>;
@@ -65,7 +65,7 @@ async function retrieveReactionData(id: string, type: ReactionType): Promise<obj
   return data;
 }
 
-async function callReaction(actionId: string, data?: object) {
+async function callReaction(actionId: string, data?: object, dataHeader?: object) {
   const area: IArea = await Area.findOne({actionId}).exec();
   if (area === null) return reject(`Orphan action #${actionId}`);
   const {reactionId, reactionType} = area;
@@ -95,6 +95,7 @@ async function callReaction(actionId: string, data?: object) {
       .replace('${GITHUB_BRANCH_LINK}', (data as IBranchWebhook)?.repository?.html_url)
       .replace('${GITHUB_BRANCH_NAME}', (data as IBranchWebhook)?.ref)
       .replace('${GITHUB_BRANCH_USER}', (data as IBranchWebhook)?.sender?.login)
+      .replace('${GITHUB_BRANCH_ACTION}', (dataHeader as IBranchWebhookHeader)?.['x-github-event'])
       .replace('${GITHUB_COMMITS_MESSAGE}', (data as IPushWebhook)?.head_commit?.message)
       .replace('${GITHUB_COMMITS_AUTHOR}', (data as IPushWebhook)?.head_commit?.author?.username)
       .replace('${GITHUB_PUSH_REPOSITORY}', (data as IPushWebhook)?.repository?.name)

@@ -113,7 +113,7 @@ SERVICE_ITEMS.set('github', {
       name: 'branches',
       description: 'Watch Branches updates on repository ',
       dataFields: [{name: 'repositoryUrl', hint: ' '}],
-      variables: ['GITHUB_BRANCH_NAME', 'GITHUB_BRANCH_REPOSITORY', 'GITHUB_BRANCH_USER', 'GITHUB_BRANCH_LINK']
+      variables: ['GITHUB_BRANCH_ACTION', 'GITHUB_BRANCH_NAME', 'GITHUB_BRANCH_REPOSITORY', 'GITHUB_BRANCH_USER', 'GITHUB_BRANCH_LINK']
     },
     {
       name: 'pushes',

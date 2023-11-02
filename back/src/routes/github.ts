@@ -39,6 +39,10 @@ interface IBranchWebhook {
   }
 }
 
+interface IBranchWebhookHeader {
+  'x-github-event'?: string;
+}
+
 interface IPushWebhook {
   repository: {
     name: string;
@@ -102,18 +106,18 @@ router.post(`/api/github/webhook/issues/`, async (req: Request, res: Response) =
 
 router.post(`/api/github/webhook/branches/`, async (req: Request, res: Response) => {
   const data: IBranchWebhook = req.body;
+  const dataHeader: IBranchWebhookHeader = req.headers as IBranchWebhookHeader;
   const githubUser = await GithubAuthentication.findOne({ screenName: data.sender.login }).exec();
 
-  console.log(`Received data for ${data.repository.owner.login}: repo "${data.repository.name}" branch named "${data.ref}" ${req.headers['x-github-event']} by ${data.sender.login}`);
-  if (!githubUser) {
+  if (!githubUser || data.ref.length === 0) {
     res.sendStatus(403);
   } else {
     const actions = await GitHubWebHookAction.find({repositoryUrl: data.repository.html_url});
-
+    console.log(`Received data for ${data.repository.owner.login}: repo "${data.repository.name}" branch named "${data.ref}" ${dataHeader['x-github-event']} by ${data.sender.login}`);
     console.log(`Find ${actions.length} actions matching with this webhook`);
     for (const action of actions) {
 
-      await callReaction(action.id, data);
+      await callReaction(action.id, data, dataHeader);
     }
     res.sendStatus(200);
   }
@@ -156,5 +160,5 @@ router.post(`/api/github/webhook/pull/`, async (req: Request, res: Response) => 
   }
 });
 
-export type {IIssueWebhook, IBranchWebhook, IPushWebhook, IPullWebhook};
+export type {IIssueWebhook, IBranchWebhook, IPushWebhook, IPullWebhook, IBranchWebhookHeader};
 export {router as githubRouter};
