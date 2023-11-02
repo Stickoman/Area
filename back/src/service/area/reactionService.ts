@@ -51,15 +51,15 @@ async function retrieveReactionData(id: string, type: ReactionType): Promise<obj
   let data: object = {};
 
   switch (type) {
-    case 'discord:send_webhook':
-      data = (await DiscordWebhookReaction.findById(id).exec()) as IDiscordWebhookData;
-      break;
-    case 'discord:send_embedded_webhook':
-      data = (await DiscordWebhookEmbedReaction.findById(id).exec()) as IDiscordWebhookEmbedData;
-      break;
-    case 'google:send_email':
-      data = (await GoogleEmailReaction.findById(id).exec()) as IGoogleEmailData;
-      break;
+  case 'discord:send_webhook':
+    data = (await DiscordWebhookReaction.findById(id).exec()) as IDiscordWebhookData;
+    break;
+  case 'discord:send_embedded_webhook':
+    data = (await DiscordWebhookEmbedReaction.findById(id).exec()) as IDiscordWebhookEmbedData;
+    break;
+  case 'google:send_email':
+    data = (await GoogleEmailReaction.findById(id).exec()) as IGoogleEmailData;
+    break;
   }
 
   return data;
@@ -113,19 +113,19 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
   };
 
   switch (reactionType) {
-    case 'discord:send_webhook':
-      if (isValidDiscordWebhookData(reactionData))
-        await sendWebhook(reactionData.webhookUrl, fullName, replaceVariables(reactionData.text));
-      break;
-    case 'discord:send_embedded_webhook':
-      if (isValidDiscordWebhookEmbedData(reactionData))
-        await sendEmbedWebhook(reactionData.webhookUrl, fullName, replaceVariables(reactionData.title), replaceVariables(reactionData.description), reactionData.color);
-      break;
-    case 'google:send_email':
-      console.warn(reactionData);
-      if (isValidGoogleEmailData(reactionData))
-        await sendEmailToMyself(replaceVariables(reactionData.subject), replaceVariables(reactionData.message), user.googleId);
-      break
+  case 'discord:send_webhook':
+    if (isValidDiscordWebhookData(reactionData))
+      await sendWebhook(reactionData.webhookUrl, fullName, replaceVariables(reactionData.text));
+    break;
+  case 'discord:send_embedded_webhook':
+    if (isValidDiscordWebhookEmbedData(reactionData))
+      await sendEmbedWebhook(reactionData.webhookUrl, fullName, replaceVariables(reactionData.title), replaceVariables(reactionData.description), reactionData.color);
+    break;
+  case 'google:send_email':
+    console.warn(reactionData);
+    if (isValidGoogleEmailData(reactionData))
+      await sendEmailToMyself(replaceVariables(reactionData.subject), replaceVariables(reactionData.message), user.googleId);
+    break;
   }
 }
 
