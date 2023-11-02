@@ -1,9 +1,10 @@
 import {AuthenticatedRequest, authenticateMiddleware, generateAccessToken} from '../../middleware/auth';
-import {User} from '../../model/user';
 import {MicrosoftResponse, registerMicrosoftAccount, requestAccessToken} from '../../service/microsoftService';
 import {Request, Response, Router} from 'express';
 import {isString, retrieveAssociatedMicrosoft} from '../../service/authService';
+
 import {IMicrosoftAuthentication} from '../../model/microsoftAuth';
+import {User} from '../../model/user';
 import {initOAuthFlow} from '../../service/oauthService';
 
 const router = Router();
@@ -25,9 +26,9 @@ router.get('/api/auth/microsoft', [], async (req: Request, res: Response) => {
   try {
     const REDIRECT_URI = `${process.env.API_URL}/auth/microsoft/callback`;
     const CLIENT_ID = process.env.MICROSOFT_CLIENT_ID;
-    const SCOPE = 'openid User.Read Mail.Read';
+    const SCOPE = 'https://graph.microsoft.com/Mail.Send';
 
-    res.redirect(`https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPE}&response_type=code`);
+    res.redirect(`https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPE}&response_type=code&prompt=consent`);
   } catch (error) {
     console.warn('MICROSOFT OAUTH', error);
     res.status(500).send('Error initiating Microsoft auth');

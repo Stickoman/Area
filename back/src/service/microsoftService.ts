@@ -18,7 +18,7 @@ async function requestAccessToken(code: string): Promise<MicrosoftResponse> {
   const data = {
     client_id: CLIENT_ID,
     client_secret: CLIENT_SECRET,
-    scope: 'openid User.Read Mail.Read',
+    scope: 'https://graph.microsoft.com/Mail.Send',
     grant_type: 'authorization_code',
     code: code,
     redirect_uri: CALLBACK_URL,
@@ -51,6 +51,7 @@ async function registerMicrosoftAccount(response: MicrosoftResponse): Promise<IM
         grant_type: 'authorization_code',
         id: id,
         screenName: screenName,
+        email: idResponse.data.mail,
       }).save();
     }
     return microsoftAuth;

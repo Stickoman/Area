@@ -1,11 +1,13 @@
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
 import {faClock} from '@fortawesome/free-solid-svg-icons';
 import {
-  faDiscord, faDocker,
+  faDiscord,
+  faDocker,
   faFacebook,
   faGithub,
   faGoogle,
-  faMicrosoft, faReddit,
+  faMicrosoft,
+  faReddit,
 } from '@fortawesome/free-brands-svg-icons';
 
 type ServiceType =
@@ -68,7 +70,12 @@ SERVICE_ITEMS.set('microsoft', {
   actions: [
   ],
   reactions: [
-  ],
+    {
+      name: 'send_email_microsoft', description: 'Send an email at microsoft', dataFields: [
+        {name: 'subject', hint: 'microsoft Email Subject'},
+        {name: 'message', hint: 'microsoft Email Message'},
+      ],
+    },  ],
 } as IService);
 
 SERVICE_ITEMS.set('discord', {

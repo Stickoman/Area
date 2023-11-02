@@ -1,16 +1,16 @@
-import {ReactionType} from '../../common/reaction.interface';
-import {DiscordWebhookReaction, IDiscordWebhookData} from '../../model/reaction/discordWebhookReaction';
 import {Area, IArea} from '../../model/area';
-import {sendEmbedWebhook, sendWebhook} from '../discord/webhookService';
-import {IUser, User} from '../../model/user';
-import {reject} from '../authService';
 import {
   DiscordWebhookEmbedReaction,
   IDiscordWebhookEmbedData,
 } from '../../model/reaction/discordWebhookEmbedReaction';
+import {DiscordWebhookReaction, IDiscordWebhookData} from '../../model/reaction/discordWebhookReaction';
 import {GoogleEmailReaction, IGoogleEmailData} from '../../model/reaction/googleEmailReaction';
 import sendEmailToMyself from '../google/emailService';
-import {IBranchWebhook, IIssueWebhook, IPullWebhook, IPushWebhook, IBranchWebhookHeader, IStarWebhook, IReleaseWebhook,} from '../../routes/github';
+import {IBranchWebhook, IIssueWebhook, IPullWebhook, IPushWebhook, IBranchWebhookHeader, IStarWebhook, IReleaseWebhook} from '../../routes/github';
+import {IMicrosoftEmailData, MicrosoftEmailReaction} from '../../model/reaction/microsoftEmailReaction';
+import {IUser, User} from '../../model/user';
+import {sendEmbedWebhook, sendWebhook} from '../discord/webhookService';
+
 import {Model} from 'mongoose';
 import {IDockerData} from '../../routes/docker';
 import { IRedditPostData, RedditPostReaction } from '../../model/reaction/redditPostReaction';
@@ -26,6 +26,8 @@ import { closeGitHubIssue } from '../github/closeIssue';
 import { GithubPostCommentReaction, IGithubPostCommentData } from '../../model/reaction/githubPostCommentReaction';
 import { postGithubComment } from '../github/postComment';
 
+import sendMicrosoftEmailToMyself from '../microsoft/microsoftEmailService';
+
 type ReactionFactory = (userId: string, data: object) => Promise<string>;
 
 const reactionAssociations = new Map<ReactionType, ReactionFactory>();
@@ -39,6 +41,7 @@ reactionAssociations.set('reddit:post_comment', createRedditPostCommentReaction)
 reactionAssociations.set('github:open_issue', createGithubOpenIssueReaction);
 reactionAssociations.set('github:close_issue', createGithubCloseIssueReaction);
 reactionAssociations.set('github:post_comment', createGithubPostCommentReaction);
+reactionAssociations.set('microsoft:send_email_microsoft', createMicrosoftEmailReaction);
 
 async function createDiscordWebhookReaction(userId: string, data: IDiscordWebhookData): Promise<string> {
   const webhook = await new DiscordWebhookReaction({userId, ...data}).save();
@@ -54,6 +57,12 @@ async function createDiscordWebhookEmbedReaction(userId: string, data: IDiscordW
 
 async function createGoogleEmailReaction(userId: string, data: IGoogleEmailData): Promise<string> {
   const email = await new GoogleEmailReaction({userId, ...data}).save();
+
+  return email.id;
+}
+
+async function createMicrosoftEmailReaction(userId: string, data: IMicrosoftEmailData): Promise<string> {
+  const email = await new MicrosoftEmailReaction({userId, ...data}).save();
 
   return email.id;
 }
@@ -134,6 +143,9 @@ async function retrieveReactionData(id: string, type: ReactionType): Promise<obj
   case 'github:post_comment':
     data = (await GithubPostCommentReaction.findById(id).exec()) as IGithubPostCommentData;
     break;
+  case 'microsoft:send_email_microsoft':
+    data = (await MicrosoftEmailReaction.findById(id).exec()) as IMicrosoftEmailData;
+    break;
   }
 
   return data;
@@ -174,7 +186,9 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
   const isValidGithubPostCommentData = (data: object): data is IGithubPostCommentData => {
     return !!(data as IGithubPostCommentData);
   };
-
+  const isValidMicrosoftEmailData = (data: object): data is IMicrosoftEmailData => {
+    return !!(data as IMicrosoftEmailData);
+  };
 
   const replaceVariables = (value: string): string => {
     return value.replace('${NAME}', fullName)
@@ -259,6 +273,10 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
     if (isValidGithubPostCommentData(reactionData))
       await postGithubComment(user.githubId, reactionData.repository, reactionData.issueId, reactionData.comment);
     break;
+  case 'microsoft:send_email_microsoft':
+    if (isValidMicrosoftEmailData(reactionData))
+      await sendMicrosoftEmailToMyself(replaceVariables(reactionData.subject), replaceVariables(reactionData.message), user.microsoftId);
+    break;
   }
 }
 
@@ -292,6 +310,9 @@ async function deleteReaction(id: string, type: ReactionType) {
     break;
   case 'github:post_comment':
     model = GithubPostCommentReaction;
+    break;
+  case 'microsoft:send_email_microsoft':
+    model = MicrosoftEmailReaction;
     break;
   }
 

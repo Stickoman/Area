@@ -1,12 +1,14 @@
-import express, {Response} from 'express';
 import {AuthenticatedRequest, authenticateMiddleware} from '../middleware/auth';
+import express, {Response} from 'express';
+
+import {GoogleAuthentication} from '../model/googleAuth';
+import checkForNewEmails from '../service/google/checkNewEmails';
+import {googleAuthRouter} from './auth/google';
 import {isString} from '../service/authService';
 import {retrieveFeedUpdates} from '../adapter/redditRssAdapter';
-import {updateUserProfile} from '../service/profileService';
-import {GoogleAuthentication} from '../model/googleAuth';
 import sendEmailToMyself from '../service/google/emailService';
-import {googleAuthRouter} from './auth/google';
-import checkForNewEmails from '../service/google/checkNewEmails';
+import sendMicrosoftEmailToMyself from '../service/microsoft/microsoftEmailService';
+import {updateUserProfile} from '../service/profileService';
 
 const router = express.Router();
 
@@ -54,6 +56,25 @@ router.post('/api/services/get/email', authenticateMiddleware, async (req: Authe
     const googleEmail = GoogleAuth.email;
     await checkForNewEmails(GoogleAuth.access_token, googleEmail);
     res.sendStatus(200);
+  } catch (error) {
+    console.error('Error send email', error);
+    res.sendStatus(500);
+  }
+});
+
+router.post('/api/services/emailMicrosoft', authenticateMiddleware, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const data = req.body;
+    if (data.subject && data.message) {
+      await sendMicrosoftEmailToMyself(data.subject, data.message, req.user.microsoftId);
+      res.sendStatus(200);
+    } else {
+      const missingProperties = ['subject', 'message']
+        .filter(prop => !data[prop])
+        .join(', ');
+
+      res.status(400).json({message: `Missing ${missingProperties} in body`});
+    }
   } catch (error) {
     console.error('Error send email', error);
     res.sendStatus(500);
