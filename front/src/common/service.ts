@@ -124,6 +124,18 @@ SERVICE_ITEMS.set('github', {
       dataFields: [{name: 'repositoryUrl', hint: ' '}],
       variables: ['GITHUB_PULL_ACTION', 'GITHUB_PULL_MESSAGE', 'GITHUB_PULL_AUTHOR', 'GITHUB_PULL_REPOSITORY', 'GITHUB_PULL_LINK']
     },
+    {
+      name: 'star',
+      description: 'Star alert on repository ',
+      dataFields: [{name: 'repositoryUrl', hint: ' '}],
+      variables: ['GITHUB_STAR_ACTION', 'GITHUB_STAR_AT', 'GITHUB_STAR_AUTHOR', 'GITHUB_STAR_REPOSITORY', 'GITHUB_STAR_LINK']
+    },
+    {
+      name: 'release',
+      description: 'Release alert on repository ',
+      dataFields: [{name: 'repositoryUrl', hint: ' '}],
+      variables: ['GITHUB_RELEASE_ACTION', 'GITHUB_RELEASE_AUTHOR', 'GITHUB_RELEASE_REPOSITORY', 'GITHUB_RELEASE_LINK', 'GITHUB_RELEASE_NAME', 'GITHUB_RELEASE_TAG_NAME']
+    },
   ],
   reactions: [
     {

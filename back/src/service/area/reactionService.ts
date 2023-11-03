@@ -10,7 +10,7 @@ import {
 } from '../../model/reaction/discordWebhookEmbedReaction';
 import {GoogleEmailReaction, IGoogleEmailData} from '../../model/reaction/googleEmailReaction';
 import sendEmailToMyself from '../google/emailService';
-import {IBranchWebhook, IIssueWebhook, IPullWebhook, IPushWebhook, IBranchWebhookHeader} from '../../routes/github';
+import {IBranchWebhook, IIssueWebhook, IPullWebhook, IPushWebhook, IBranchWebhookHeader, IStarWebhook, IReleaseWebhook,} from '../../routes/github';
 import {Model} from 'mongoose';
 import {IDockerData} from '../../routes/docker';
 import { IRedditPostData, RedditPostReaction } from '../../model/reaction/redditPostReaction';
@@ -199,6 +199,17 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
       .replace('${GITHUB_PULL_REPOSITORY}', (data as IPullWebhook)?.repository?.name)
       .replace('${GITHUB_PULL_MESSAGE}', (data as IPullWebhook)?.pull_request?.title)
       .replace('${GITHUB_PULL_LINK}', (data as IPullWebhook)?.repository?.html_url)
+      .replace('${GITHUB_STAR_ACTION}', (data as IStarWebhook)?.action)
+      .replace('${GITHUB_STAR_AUTHOR}', (data as IStarWebhook)?.sender?.login)
+      .replace('${GITHUB_STAR_REPOSITORY}', (data as IStarWebhook)?.repository?.name)
+      .replace('${GITHUB_STAR_AT}', (data as IStarWebhook)?.starred_at)
+      .replace('${GITHUB_STAR_LINK}', (data as IStarWebhook)?.repository?.html_url)
+      .replace('${GITHUB_RELEASE_ACTION}', (data as IReleaseWebhook)?.action)
+      .replace('${GITHUB_RELEASE_AUTHOR}', (data as IReleaseWebhook)?.release?.author?.login)
+      .replace('${GITHUB_RELEASE_REPOSITORY}', (data as IReleaseWebhook)?.repository?.name)
+      .replace('${GITHUB_RELEASE_NAME}', (data as IReleaseWebhook)?.release?.name)
+      .replace('${GITHUB_RELEASE_TAG_NAME}', (data as IReleaseWebhook)?.release?.tag_name)
+      .replace('${GITHUB_RELEASE_LINK}', (data as IReleaseWebhook)?.release?.html_url)
       .replace('${DOCKER_TAG}', (data as IDockerData)?.push_data?.tag)
       .replace('${DOCKER_PUSHER}', (data as IDockerData)?.push_data?.pusher)
       .replace('${DOCKER_DESCRIPTION}', (data as IDockerData)?.repository?.description)

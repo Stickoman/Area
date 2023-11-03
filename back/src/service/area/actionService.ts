@@ -19,8 +19,10 @@ actionAssociations.set('reddit:poll_rss', createRssPoll);
 actionAssociations.set('github:issues', createGithubWebhook);
 actionAssociations.set('github:branches', createGithubWebhook);
 actionAssociations.set('github:pushes', createGithubWebhook);
-actionAssociations.set('github:pull', createGithubWebhook);
 actionAssociations.set('docker:watch_webhook', createDockerPushAction);
+actionAssociations.set('github:pulls', createGithubWebhook);
+actionAssociations.set('github:stars', createGithubWebhook);
+actionAssociations.set('github:releases', createGithubWebhook);
 
 async function refreshActions() {
   let count: number = 0;
@@ -48,7 +50,9 @@ async function retrieveActionData(id: string, type: ActionType): Promise<object>
   case 'github:issues':
   case 'github:branches':
   case 'github:pushes':
-  case 'github:pull':
+  case 'github:pulls':
+  case 'github:stars':
+  case 'github:releases':
     data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
     break;
   case 'reddit:poll_rss':
@@ -72,7 +76,9 @@ async function deleteAction(id: string, type: ActionType) {
   case 'github:issues':
   case 'github:branches':
   case 'github:pushes':
-  case 'github:pull':
+  case 'github:pulls':
+  case 'github:stars':
+  case 'github:releases':
     model = GitHubWebHookAction;
     break;
   case 'reddit:poll_rss':
