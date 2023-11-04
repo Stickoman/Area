@@ -218,6 +218,7 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
     if (isValidGoogleEmailData(reactionData))
       await sendEmailToMyself(replaceVariables(reactionData.subject), replaceVariables(reactionData.message), user.googleId);
   case 'reddit:post_message':
+    console.log("Trigger reddit:post_message")
     if (isValidRedditPostData(reactionData))
       await postRedditContent(reactionData.subreddit, reactionData.title, reactionData.content, user.redditId);
     break;
