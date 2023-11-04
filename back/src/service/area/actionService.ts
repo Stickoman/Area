@@ -7,6 +7,8 @@ import {GitHubWebHookAction, IGitHubWebhookData} from '../../model/action/gitHub
 import {createGithubWebhook} from '../github/gitHubWebHook';
 import {Model} from 'mongoose';
 import {reject} from '../authService';
+import {createEmailsPoll, refreshGoogleEmails} from './googleEmailsService';
+import {GoogleEmailsAction, IGoogleEmailsData} from '../../model/action/googleEmailsAction';
 
 type ActionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -18,12 +20,14 @@ actionAssociations.set('github:issues', createGithubWebhook);
 actionAssociations.set('github:branches', createGithubWebhook);
 actionAssociations.set('github:pushes', createGithubWebhook);
 actionAssociations.set('github:pull', createGithubWebhook);
+actionAssociations.set('google:poll_mailbox', createEmailsPoll);
 
 async function refreshActions() {
   let count: number = 0;
 
   count += await refreshTimers();
   count += await refreshRedditRss();
+  count += await refreshGoogleEmails();
   console.log(`Loaded ${count} actions`);
 }
 
@@ -50,8 +54,11 @@ async function retrieveActionData(id: string, type: ActionType): Promise<object>
     break;
   case 'reddit:poll_rss':
     data = (await RedditRssAction.findById(id).exec()) as IRedditRssData;
+    break;
+  case 'google:poll_mailbox':
+    data = (await GoogleEmailsAction.findById(id).exec()) as IGoogleEmailsData;
+    break;
   }
-
   return data;
 }
 
@@ -70,6 +77,9 @@ async function deleteAction(id: string, type: ActionType) {
     break;
   case 'reddit:poll_rss':
     model = RedditRssAction;
+    break;
+  case 'google:poll_mailbox':
+    model = GoogleEmailsAction;
     break;
   }
 
