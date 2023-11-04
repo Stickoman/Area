@@ -21,7 +21,7 @@ const router = Router();
  *         description: Error initiating Reddit authentication.
  */
 router.get('/api/auth/reddit', [], async (req: Request, res: Response) => {
-  const authorizationUrl = `https://www.reddit.com/api/v1/authorize?client_id=${process.env.REDDIT_CLIENT_ID}&response_type=code&state=random_state&redirect_uri=${process.env.API_URL}/auth/reddit/callback&duration=permanent&scope=identity`;
+  const authorizationUrl = `https://www.reddit.com/api/v1/authorize?client_id=${process.env.REDDIT_CLIENT_ID}&response_type=code&state=random_state&redirect_uri=${process.env.API_URL}/auth/reddit/callback&duration=permanent&scope=identity submit`;
 
   res.redirect(authorizationUrl);
 });

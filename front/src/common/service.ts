@@ -174,7 +174,15 @@ SERVICE_ITEMS.set('reddit', {
       variables: ['RSS_TITLE', 'RSS_LINK', 'RSS_CONTENT'],
     },
   ],
-  reactions: [],
+  reactions: [
+    {
+      name: 'post_message', description: 'Post message on a subreddit', dataFields: [
+        {name: 'subreddit', hint: 'subreddit name'},
+        {name: 'title', hint: 'title of the message'},
+        {name: 'content', hint: 'content of the message'},
+      ],
+    },
+  ],
 } as IService);
 
 export type {ServiceType, IServiceItem, IService, IFieldData};

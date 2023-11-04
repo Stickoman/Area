@@ -88,7 +88,9 @@ SERVICE_ITEMS.set('reddit', {
   actions: [
     {name: 'poll_rss', description: 'Poll news from Reddit Feed'},
   ],
-  reactions: [],
+  reactions: [
+    {name: 'post_message', description: 'Post a message on a subreddit'}
+  ],
 } as IService);
 
 export type {ServiceType, IServiceItem, IService};

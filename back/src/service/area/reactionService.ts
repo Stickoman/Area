@@ -12,6 +12,8 @@ import {GoogleEmailReaction, IGoogleEmailData} from '../../model/reaction/google
 import sendEmailToMyself from '../google/emailService';
 import {IBranchWebhook, IIssueWebhook, IPullWebhook, IPushWebhook, IBranchWebhookHeader} from '../../routes/github';
 import {Model} from 'mongoose';
+import { IRedditPostData, RedditPostReaction } from '../../model/reaction/redditPostReaction';
+import postRedditContent from '../reddit/postMessage';
 
 type ReactionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -20,6 +22,7 @@ const reactionAssociations = new Map<ReactionType, ReactionFactory>();
 reactionAssociations.set('discord:send_webhook', createDiscordWebhookReaction);
 reactionAssociations.set('discord:send_embedded_webhook', createDiscordWebhookEmbedReaction);
 reactionAssociations.set('google:send_email', createGoogleEmailReaction);
+reactionAssociations.set('reddit:post_message', createRedditPostReaction);
 
 async function createDiscordWebhookReaction(userId: string, data: IDiscordWebhookData): Promise<string> {
   const webhook = await new DiscordWebhookReaction({userId, ...data}).save();
@@ -37,6 +40,12 @@ async function createGoogleEmailReaction(userId: string, data: IGoogleEmailData)
   const email = await new GoogleEmailReaction({userId, ...data}).save();
 
   return email.id;
+}
+
+async function createRedditPostReaction(userId: string, data: IRedditPostData): Promise<string> {
+  const redditPost = await new RedditPostReaction({userId, ...data}).save();
+
+  return redditPost.id;
 }
 
 async function createReaction(userId: string, type: ReactionType, data: object): Promise<string> {
@@ -60,6 +69,9 @@ async function retrieveReactionData(id: string, type: ReactionType): Promise<obj
   case 'google:send_email':
     data = (await GoogleEmailReaction.findById(id).exec()) as IGoogleEmailData;
     break;
+  case 'reddit:post_message':
+    data = (await RedditPostReaction.findById(id).exec()) as IRedditPostData;
+    break;
   }
 
   return data;
@@ -81,6 +93,9 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
   };
   const isValidGoogleEmailData = (data: object): data is IGoogleEmailData => {
     return !!(data as IGoogleEmailData);
+  };
+  const isValidRedditPostData = (data: object): data is IRedditPostData => {
+    return !!(data as IRedditPostData);
   };
 
   const replaceVariables = (value: string): string => {
@@ -125,6 +140,9 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
     console.warn(reactionData);
     if (isValidGoogleEmailData(reactionData))
       await sendEmailToMyself(replaceVariables(reactionData.subject), replaceVariables(reactionData.message), user.googleId);
+  case 'reddit:post_message':
+    if (isValidRedditPostData(reactionData))
+      await postRedditContent(reactionData.subreddit, reactionData.title, reactionData.content, user.redditId);
     break;
   }
 }
