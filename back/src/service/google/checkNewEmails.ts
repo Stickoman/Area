@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {reject} from '../authService';
 
 async function checkForNewEmails(accessToken: string, googleEmail: string) {
   const url = `https://gmail.googleapis.com/gmail/v1/users/${googleEmail}/messages`;
@@ -10,13 +11,13 @@ async function checkForNewEmails(accessToken: string, googleEmail: string) {
         'Content-Type': 'application/json',
       },
     });
-
     const emails = response.data.messages;
-    console.log('Liste des e-mails:', emails);
+
+    console.log('Google Emails:', emails);
     return Promise.resolve(emails);
   } catch (error) {
-    console.error('Erreur lors de la récupération des e-mails:', error);
-    return Promise.reject(new Error('Erreur lors de la récupération des e-mails'));
+    console.error('Error while retrieving emails:', error.data?.error);
+    return reject('Error while retrieving emails');
   }
 }
 

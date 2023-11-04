@@ -15,6 +15,7 @@ import {redditAuthRouter} from './routes/auth/reddit';
 import {servicesRouter} from './routes/services';
 import {twitterAuthRouter} from './routes/auth/twitter';
 import {githubRouter} from './routes/github';
+import {dockerRouter} from './routes/docker';
 
 const APP = express();
 
@@ -34,5 +35,6 @@ APP.use(profileRouter);
 APP.use(servicesRouter);
 APP.use(oauthRouter);
 APP.use(githubRouter);
+APP.use(dockerRouter);
 
 export default APP;
