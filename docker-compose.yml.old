@@ -1,28 +1,32 @@
 version: '3'
 
 services:
-  client_frontend:
-    image: baragouin/area-frontend
-    container_name: client_frontend
+  front:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    container_name: client_web
     ports:
       - "8081:8081"
     depends_on:
-      - server
-#      - client_mobile
+      - back
+#      - mobile
     volumes:
       - shared-volume:/usr/src/app/src/shared
 
-  server:
-    image: baragouin/area-backend
+  back:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
     container_name: server
     ports:
       - "8080:8080"
 #    depends_on:
-#      - client_mobile
+#      - mobile
     volumes:
       - shared-volume:/usr/src/app/shared
 
-#  client_mobile:
+#  mobile:
 #    build:
 #      context: ./front
 #      dockerfile: ./mobile/Dockerfile

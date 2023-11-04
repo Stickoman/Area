@@ -1,6 +1,7 @@
 #! /bin/bash
 
-export GIT_DIR=".git"
+export GIT_DIR="./area/.git"
+
 BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
 USERNAME=$(git config user.name)
 
@@ -26,35 +27,22 @@ curl \
   -d "{\"username\": \"Deployment Notifier\", \"content\": \"$USERNAME started deploying branch $BRANCH_NAME\"}" \
   $WEBHOOK_URL
 
-echo "=========[SSH ACCESS]========="
-
 if [ -f ~/.ssh/id_ed25519 ]; then
-  eval "$(ssh-agent)" && ssh-add ~/.ssh/id_ed25519
-elif [ -f ~/.ssh/id_rsa ]; then
-  eval "$(ssh-agent)" && ssh-add ~/.ssh/id_rsa
+    eval "$(ssh-agent)" && ssh-add ~/.ssh/id_ed25519
 else
-  echo "No supported SSH keys found (neither Ed25519 nor RSA)."
-  exit 1
+    if [ -f ~/.ssh/id_rsa ]; then
+        eval "$(ssh-agent)" && ssh-add ~/.ssh/id_rsa
+    else
+        echo "No supported SSH keys found (neither Ed25519 nor RSA)."
+        exit 1
+    fi
 fi
 
-echo "=========[BUILD IMAGES]========="
-
-docker build -t baragouin/area-frontend front
-docker build -t baragouin/area-backend back
-
-echo "=========[PUSH IMAGES]========="
-
-docker push baragouin/area-frontend:latest
-docker push baragouin/area-backend:latest
-
-echo "=========[SERVER UPDATE]========="
-
-scp docker-compose.yml root@area.baragouin.fr:/root/dev
-ssh root@area.baragouin.fr 'cd /root/dev/ && docker-compose down && docker-compose pull && docker-compose up -d'
+tar --exclude='node_modules' -czf area.tar.gz ./area
+scp area.tar.gz root@area.baragouin.fr:/root/dev
+ssh root@area.baragouin.fr 'cd /root/dev/ && tar -xzf area.tar.gz && cd area && docker-compose down && docker-compose up -d --build front back'
 
 curl \
   -H "Content-Type: application/json" \
   -d "{\"username\": \"Deployment Notifier\", \"content\": \"Deployment finished for branch $BRANCH_NAME\"}" \
   $WEBHOOK_URL
-
-echo "Done."
