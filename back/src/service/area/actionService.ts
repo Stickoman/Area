@@ -7,6 +7,8 @@ import {GitHubWebHookAction, IGitHubWebhookData} from '../../model/action/gitHub
 import {createGithubWebhook} from '../github/gitHubWebHook';
 import {Model} from 'mongoose';
 import {reject} from '../authService';
+import {DockerPushAction, IDockerPushData} from '../../model/action/dockerPushAction';
+import {createDockerPushAction} from './dockerService';
 
 type ActionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -18,6 +20,7 @@ actionAssociations.set('github:issues', createGithubWebhook);
 actionAssociations.set('github:branches', createGithubWebhook);
 actionAssociations.set('github:pushes', createGithubWebhook);
 actionAssociations.set('github:pull', createGithubWebhook);
+actionAssociations.set('docker:watch_webhook', createDockerPushAction);
 
 async function refreshActions() {
   let count: number = 0;
@@ -50,6 +53,10 @@ async function retrieveActionData(id: string, type: ActionType): Promise<object>
     break;
   case 'reddit:poll_rss':
     data = (await RedditRssAction.findById(id).exec()) as IRedditRssData;
+    break;
+  case 'docker:watch_webhook':
+    data = (await DockerPushAction.findById(id).exec()) as IDockerPushData;
+    break;
   }
 
   return data;
@@ -70,6 +77,9 @@ async function deleteAction(id: string, type: ActionType) {
     break;
   case 'reddit:poll_rss':
     model = RedditRssAction;
+    break;
+  case 'docker:watch_webhook':
+    model = DockerPushAction;
     break;
   }
 

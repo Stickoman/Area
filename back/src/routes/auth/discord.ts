@@ -28,7 +28,6 @@ router.get('/api/auth/discord', [], async (req: Request, res: Response) => {
     const REDIRECT_URI = `${API_URL}/auth/discord/callback`;
     const SCOPE = 'identify';
 
-    console.log(REDIRECT_URI);
     res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=${SCOPE}`);
   } catch (error) {
     console.warn('DISCORD OAUTH', error);

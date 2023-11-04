@@ -6,7 +6,6 @@ import {ActionType} from '../common/action.interface';
 import {ReactionType} from '../common/reaction.interface';
 import {retrieveActionData} from '../service/area/actionService';
 import {retrieveReactionData} from '../service/area/reactionService';
-import {ObjectId} from 'mongodb';
 
 const router = express.Router();
 
