@@ -9,7 +9,7 @@ import {
   IDiscordWebhookEmbedData,
 } from '../../model/reaction/discordWebhookEmbedReaction';
 import {GoogleEmailReaction, IGoogleEmailData} from '../../model/reaction/googleEmailReaction';
-import sendEmailToMyself from '../google/emailService';
+import sendEmail from '../google/emailService';
 import {IBranchWebhook, IIssueWebhook, IPullWebhook, IPushWebhook} from '../../routes/github';
 import {Model} from 'mongoose';
 
@@ -19,6 +19,7 @@ const reactionAssociations = new Map<ReactionType, ReactionFactory>();
 
 reactionAssociations.set('discord:send_webhook', createDiscordWebhookReaction);
 reactionAssociations.set('discord:send_embedded_webhook', createDiscordWebhookEmbedReaction);
+reactionAssociations.set('google:send_email_to_myself', createGoogleEmailReaction);
 reactionAssociations.set('google:send_email', createGoogleEmailReaction);
 
 async function createDiscordWebhookReaction(userId: string, data: IDiscordWebhookData): Promise<string> {
@@ -32,7 +33,6 @@ async function createDiscordWebhookEmbedReaction(userId: string, data: IDiscordW
 
   return webhook.id;
 }
-
 async function createGoogleEmailReaction(userId: string, data: IGoogleEmailData): Promise<string> {
   const email = await new GoogleEmailReaction({userId, ...data}).save();
 
@@ -60,6 +60,9 @@ async function retrieveReactionData(id: string, type: ReactionType): Promise<obj
     case 'google:send_email':
       data = (await GoogleEmailReaction.findById(id).exec()) as IGoogleEmailData;
       break;
+    case 'google:send_email_to_myself':
+      data = (await GoogleEmailReaction.findById(id).exec()) as IGoogleEmailData;
+      break;
   }
 
   return data;
@@ -80,6 +83,12 @@ async function callReaction(actionId: string, data?: object) {
     return !!(data as IDiscordWebhookEmbedData);
   };
   const isValidGoogleEmailData = (data: object): data is IGoogleEmailData => {
+    return !!(data as IGoogleEmailData);
+  };
+  const isValidEmailData = (data: object): data is IGoogleEmailData => {
+    const dataTmp = data as IGoogleEmailData;
+    if (!dataTmp.email)
+      return false;
     return !!(data as IGoogleEmailData);
   };
 
@@ -120,11 +129,14 @@ async function callReaction(actionId: string, data?: object) {
       if (isValidDiscordWebhookEmbedData(reactionData))
         await sendEmbedWebhook(reactionData.webhookUrl, fullName, replaceVariables(reactionData.title), replaceVariables(reactionData.description), reactionData.color);
       break;
-    case 'google:send_email':
-      console.warn(reactionData);
+    case 'google:send_email_to_myself':
       if (isValidGoogleEmailData(reactionData))
-        await sendEmailToMyself(replaceVariables(reactionData.subject), replaceVariables(reactionData.message), user.googleId);
-      break
+        await sendEmail(replaceVariables(reactionData.subject), replaceVariables(reactionData.message), user.googleId);
+      break;
+    case 'google:send_email':
+      if (isValidEmailData(reactionData))
+        await sendEmail(replaceVariables(reactionData.subject), replaceVariables(reactionData.message), user.googleId, reactionData.email);
+      break;
   }
 }
 
@@ -139,6 +151,9 @@ async function deleteReaction(id: string, type: ReactionType) {
     model = DiscordWebhookEmbedReaction;
     break;
   case 'google:send_email':
+    model = GoogleEmailReaction;
+    break;
+  case 'google:send_email_to_myself':
     model = GoogleEmailReaction;
     break;
   }

@@ -1,13 +1,13 @@
 import axios from 'axios';
 import {GoogleAuthentication} from '../../model/googleAuth';
 
-async function sendEmailToMyself(subject: string, message: string, userGoogleID: string) {
+async function sendEmail(subject: string, message: string, userGoogleID: string, to?: string) {
   let GoogleAuth = await GoogleAuthentication.findOne({id: userGoogleID}).exec();
   const googleEmail = GoogleAuth.email;
   const accessToken = GoogleAuth.access_token;
   const url = `https://gmail.googleapis.com/gmail/v1/users/${googleEmail}/messages/send`;
-
-  const raw = makeBody(googleEmail, googleEmail, subject, message);
+  const toEmail = (to ? to : googleEmail);
+  const raw = makeBody(toEmail, googleEmail, subject, message);
 
   const requestBody = {
     raw: raw,
@@ -43,4 +43,4 @@ function makeBody(to: string, from: string, subject: string, message: string) {
   return Buffer.from(str, 'utf-8').toString('base64').replace(/\+/g, '-').replace(/\//g, '_');
 }
 
-export default sendEmailToMyself;
+export default sendEmail;

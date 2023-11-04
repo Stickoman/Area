@@ -4,7 +4,7 @@ import {isString} from '../service/authService';
 import {retrieveFeedUpdates} from '../adapter/redditRssAdapter';
 import {updateUserProfile} from '../service/profileService';
 import {GoogleAuthentication} from '../model/googleAuth';
-import sendEmailToMyself from '../service/google/emailService';
+import sendEmail from '../service/google/emailService';
 import {googleAuthRouter} from './auth/google';
 import checkForNewEmails from '../service/google/checkNewEmails';
 
@@ -32,7 +32,7 @@ router.post('/api/services/email', authenticateMiddleware, async (req: Authentic
   try {
     const data = req.body;
     if (data.subject && data.message) {
-      await sendEmailToMyself(data.subject, data.message, req.user.googleId);
+      await sendEmail(data.subject, data.message, req.user.googleId);
       res.sendStatus(200);
     } else {
       const missingProperties = ['subject', 'message']

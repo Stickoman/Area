@@ -1,7 +1,6 @@
 import axios from 'axios';
 import qs from 'querystring';
 import {GoogleAuthentication, IGoogleAuthentication} from '../model/googleAuth';
-import sendEmailToMyself from './google/emailService';
 
 interface GoogleResponse {
   token_type: string;

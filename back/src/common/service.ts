@@ -29,7 +29,10 @@ SERVICE_ITEMS.set('google', {
     {name: '', description: ''},
   ],
   reactions: [
-    {name: '', description: ''},
+    {
+      name: 'send_email_to_myself', description: 'Send an email to myself at Gmail'},
+    {
+      name: 'send_email', description: 'Send an email at Gmail'},
   ],
 } as IService);
 

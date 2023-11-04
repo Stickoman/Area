@@ -56,6 +56,13 @@ SERVICE_ITEMS.set('google', {
       name: 'send_email', description: 'Send an email at Gmail', dataFields: [
         {name: 'subject', hint: 'Google Email Subject'},
         {name: 'message', hint: 'Google Email Message'},
+        {name: 'email', hint: 'Send Email To'},
+      ],
+    },
+    {
+      name: 'send_email_to_myself', description: 'Send an email at Gmail', dataFields: [
+        {name: 'subject', hint: 'Google Email Subject'},
+        {name: 'message', hint: 'Google Email Message'},
       ],
     },
   ],
