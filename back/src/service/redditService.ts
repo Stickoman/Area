@@ -47,7 +47,7 @@ async function registerRedditAccount(response: RedditResponse): Promise<IRedditA
         token_type: response.token_type,
         access_token: response.access_token,
         expires_in: response.expires_in,
-        userId: id,
+        id: id,
         screenName: screenName,
       }).save();
     }
