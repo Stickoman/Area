@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {reject} from '../authService';
 import {GoogleAuthentication} from '../../model/googleAuth';
 
 interface QueryParameters {
@@ -15,14 +16,13 @@ async function checkForNewEmailsIds(googleEmail: string, accessToken: string, se
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
+      params: params
     });
-
     const emails = response.data.messages;
-    console.warn(emails);
     return Promise.resolve(emails);
   } catch (error) {
-    console.error('Erreur lors de la récupération des e-mails:', error);
-    return Promise.reject(new Error('Erreur lors de la récupération des e-mails'));
+    console.error('Error while retrieving emails ids:', error.data?.error);
+    return reject('Error while retrieving emails ids');
   }
 }
 

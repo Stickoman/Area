@@ -10,13 +10,13 @@ The project consists of two main components:
 
 The backend serves as the core of the AREA platform and provides the necessary APIs and server infrastructure to manage and execute automation tasks. It is built using modern technologies and tools, including TypeScript, Express, and ESLint.
 
-For detailed information on the backend, installation instructions, and available scripts, please refer to the [Backend README](./backend/README.md).
+For detailed information on the backend, installation instructions, and available scripts, please refer to the [Backend README](./back/README.md).
 
 ### Frontend
 
 The frontend complements the backend by providing a user interface for creating and managing automation tasks. It is typically built using popular web technologies such as React, React Router, Axios, and Tailwind CSS.
 
-For detailed information on the frontend, installation instructions, and available scripts, please refer to the [Frontend README](./frontend/README.md).
+For detailed information on the frontend, installation instructions, and available scripts, please refer to the [Frontend README](./front/README.md).
 
 ## Installation and Setup
 
@@ -31,11 +31,11 @@ cd <directoryName>
 
 2. **Backend Installation**
 
-For the backend, refer to the [Backend README](./backend/README.md) for installation and setup instructions.
+For the backend, refer to the [Backend README](./back/README.md) for installation and setup instructions.
 
 3. **Frontend Installation**
 
-For the frontend, refer to the [Frontend README](./frontend/README.md) for installation and setup instructions.
+For the frontend, refer to the [Frontend README](./front/README.md) for installation and setup instructions.
 
 ## Project Structure
 
@@ -66,5 +66,5 @@ For specific Cordova-related instructions, refer to the Cordova documentation.
 
 For specific details and instructions on using the backend and frontend, please refer to their respective README files and documentation.
 
-- [Backend README](./backend/README.md)
-- [Frontend README](./frontend/README.md)
+- [Backend README](./back/README.md)
+- [Frontend README](./front/README.md)

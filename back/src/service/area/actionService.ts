@@ -9,6 +9,8 @@ import {Model} from 'mongoose';
 import {reject} from '../authService';
 import {createEmailsPoll, refreshGoogleEmails} from './googleEmailsService';
 import {GoogleEmailsAction, IGoogleEmailsData} from '../../model/action/googleEmailsAction';
+import {DockerPushAction, IDockerPushData} from '../../model/action/dockerPushAction';
+import {createDockerPushAction} from './dockerService';
 
 type ActionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -21,6 +23,7 @@ actionAssociations.set('github:branches', createGithubWebhook);
 actionAssociations.set('github:pushes', createGithubWebhook);
 actionAssociations.set('github:pull', createGithubWebhook);
 actionAssociations.set('google:poll_mailbox', createEmailsPoll);
+actionAssociations.set('docker:watch_webhook', createDockerPushAction);
 
 async function refreshActions() {
   let count: number = 0;
@@ -58,6 +61,9 @@ async function retrieveActionData(id: string, type: ActionType): Promise<object>
   case 'google:poll_mailbox':
     data = (await GoogleEmailsAction.findById(id).exec()) as IGoogleEmailsData;
     break;
+  case 'docker:watch_webhook':
+    data = (await DockerPushAction.findById(id).exec()) as IDockerPushData;
+    break;
   }
   return data;
 }
@@ -80,6 +86,9 @@ async function deleteAction(id: string, type: ActionType) {
     break;
   case 'google:poll_mailbox':
     model = GoogleEmailsAction;
+    break;
+  case 'docker:watch_webhook':
+    model = DockerPushAction;
     break;
   }
 

@@ -1,7 +1,7 @@
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
 import {faClock} from '@fortawesome/free-solid-svg-icons';
 import {
-  faDiscord,
+  faDiscord, faDocker,
   faFacebook,
   faGithub,
   faGoogle,
@@ -18,7 +18,8 @@ type ServiceType =
   | 'meta'
   | 'instagram'
   | 'timer'
-  | 'reddit';
+  | 'reddit'
+  | 'docker';
 
 interface IFieldData {
   name: string;
@@ -180,6 +181,23 @@ SERVICE_ITEMS.set('reddit', {
         {name: 'url', hint: 'Reddit Feed URL'},
       ],
       variables: ['RSS_TITLE', 'RSS_LINK', 'RSS_CONTENT'],
+    },
+  ],
+  reactions: [],
+} as IService);
+
+SERVICE_ITEMS.set('docker', {
+  name: 'docker',
+  color: '#0db7ed',
+  icon: faDocker,
+  actions: [
+    {
+      name: 'watch_webhook',
+      description: 'Image Push on DockerHub',
+      dataFields: [
+        {name: 'repositoryName', hint: 'Repository Name (owner/repository)'},
+      ],
+      variables: ['DOCKER_TAG', 'DOCKER_PUSHER', 'DOCKER_DESCRIPTION', 'DOCKER_NAME', 'DOCKER_URL'],
     },
   ],
   reactions: [],
