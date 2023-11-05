@@ -18,6 +18,8 @@ import { IRedditSendPmData, RedditSendPmReaction } from '../../model/reaction/Re
 import { sendRedditPrivateMessage } from '../reddit/sendPm';
 import { IRedditPostCommentData, RedditPostCommentReaction } from '../../model/reaction/redditPostComment';
 import { postRedditComment } from '../reddit/postComment';
+import { GithubOpenIssueReaction, IGithubOpenIssueData } from '../../model/reaction/githubOpenIssueReaction';
+import { createGitHubIssue } from '../github/openIssue';
 
 type ReactionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -29,6 +31,7 @@ reactionAssociations.set('google:send_email', createGoogleEmailReaction);
 reactionAssociations.set('reddit:post_message', createRedditPostReaction);
 reactionAssociations.set('reddit:send_pm', createRedditSendPmReaction);
 reactionAssociations.set('reddit:post_comment', createRedditPostCommentReaction);
+reactionAssociations.set('github:open_issue', createGithubOpenIssueReaction);
 
 async function createDiscordWebhookReaction(userId: string, data: IDiscordWebhookData): Promise<string> {
   const webhook = await new DiscordWebhookReaction({userId, ...data}).save();
@@ -66,6 +69,12 @@ async function createRedditPostCommentReaction(userId: string, data: IRedditPost
   return redditPost.id;
 }
 
+async function createGithubOpenIssueReaction(userId: string, data: IGithubOpenIssueData): Promise<string> {
+  const redditPost = await new GithubOpenIssueReaction({userId, ...data}).save();
+
+  return redditPost.id;
+}
+
 async function createReaction(userId: string, type: ReactionType, data: object): Promise<string> {
   for (const [key, value] of reactionAssociations) {
     if (key == type) {
@@ -95,6 +104,9 @@ async function retrieveReactionData(id: string, type: ReactionType): Promise<obj
     break;
   case 'reddit:post_comment':
     data = (await RedditPostCommentReaction.findById(id).exec()) as IRedditPostCommentData;
+    break;
+  case 'github:open_issue':
+    data = (await GithubOpenIssueReaction.findById(id).exec()) as IGithubOpenIssueData;
     break;
   }
 
@@ -126,6 +138,9 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
   };
   const isValidRedditPostCommentData = (data: object): data is IRedditPostCommentData => {
     return !!(data as IRedditPostCommentData);
+  };
+  const isValidGithubOpenIssueData = (data: object): data is IGithubOpenIssueData => {
+    return !!(data as IGithubOpenIssueData);
   };
 
 
@@ -182,6 +197,10 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
   case 'reddit:post_comment':
     if (isValidRedditPostCommentData(reactionData))
       await postRedditComment(user.redditId, reactionData.postId, reactionData.text);
+    break;
+  case 'github:open_issue':
+    if (isValidGithubOpenIssueData(reactionData))
+      await createGitHubIssue(user.githubId, reactionData.repository, reactionData.title, reactionData.body);
     break;
   }
 }

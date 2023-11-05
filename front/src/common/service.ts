@@ -129,7 +129,13 @@ SERVICE_ITEMS.set('github', {
     },
   ],
   reactions: [
-    {name: '', description: '', dataFields: []},
+    {
+      name: 'open_issue', description: 'Open issue on a repository', dataFields: [
+        {name: 'repository', hint: 'Repository'},
+        {name: 'title', hint: 'Title of the issue'},
+        {name: 'body', hint: 'Body of the issue'},
+      ],
+    },
   ],
 } as IService);
 

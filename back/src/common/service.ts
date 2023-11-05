@@ -60,7 +60,7 @@ SERVICE_ITEMS.set('github', {
     {name: 'issues', description: 'Watch Issues updates on repository '},
   ],
   reactions: [
-    {name: '', description: ''},
+    {name: 'open_issue', description: 'Open issue on a repository'},
   ],
 } as IService);
 
