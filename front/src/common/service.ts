@@ -1,7 +1,7 @@
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
 import {faClock} from '@fortawesome/free-solid-svg-icons';
 import {
-  faDiscord,
+  faDiscord, faDocker,
   faFacebook,
   faGithub,
   faGoogle,
@@ -18,7 +18,8 @@ type ServiceType =
   | 'meta'
   | 'instagram'
   | 'timer'
-  | 'reddit';
+  | 'reddit'
+  | 'docker';
 
 interface IFieldData {
   name: string;
@@ -49,7 +50,6 @@ SERVICE_ITEMS.set('google', {
   color: '#db4a39ff',
   icon: faGoogle,
   actions: [
-    {name: '', description: '', dataFields: []},
   ],
   reactions: [
     {
@@ -66,10 +66,8 @@ SERVICE_ITEMS.set('microsoft', {
   color: '#ea4300',
   icon: faMicrosoft,
   actions: [
-    {name: '', description: '', dataFields: []},
   ],
   reactions: [
-    {name: '', description: '', dataFields: []},
   ],
 } as IService);
 
@@ -78,7 +76,6 @@ SERVICE_ITEMS.set('discord', {
   color: '#7289da',
   icon: faDiscord,
   actions: [
-    {name: '', description: '', dataFields: []},
   ],
   reactions: [
     {
@@ -157,10 +154,8 @@ SERVICE_ITEMS.set('facebook', {
   color: '#1877f2',
   icon: faFacebook,
   actions: [
-    {name: '', description: '', dataFields: []},
   ],
   reactions: [
-    {name: '', description: '', dataFields: []},
   ],
 } as IService);
 
@@ -215,6 +210,23 @@ SERVICE_ITEMS.set('reddit', {
       ],
     },
   ],
+} as IService);
+
+SERVICE_ITEMS.set('docker', {
+  name: 'docker',
+  color: '#0db7ed',
+  icon: faDocker,
+  actions: [
+    {
+      name: 'watch_webhook',
+      description: 'Image Push on DockerHub',
+      dataFields: [
+        {name: 'repositoryName', hint: 'Repository Name (owner/repository)'},
+      ],
+      variables: ['DOCKER_TAG', 'DOCKER_PUSHER', 'DOCKER_DESCRIPTION', 'DOCKER_NAME', 'DOCKER_URL'],
+    },
+  ],
+  reactions: [],
 } as IService);
 
 export type {ServiceType, IServiceItem, IService, IFieldData};

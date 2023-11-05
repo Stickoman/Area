@@ -34,7 +34,7 @@ function ServiceActionsScreen(): React.JSX.Element {
                        name={element.description}
                        color={selectedService.color}
                        icon={selectedService.icon}
-                       onClick={() => navigate(`/services/${service}/reactions?actionType=${element.name}`)}/>
+                       callback={() => navigate(`/services/${service}/reactions?actionType=${element.name}`)}/>
         ))}
       </div>
     </div>

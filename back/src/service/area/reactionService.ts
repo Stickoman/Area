@@ -12,6 +12,7 @@ import {GoogleEmailReaction, IGoogleEmailData} from '../../model/reaction/google
 import sendEmailToMyself from '../google/emailService';
 import {IBranchWebhook, IIssueWebhook, IPullWebhook, IPushWebhook, IBranchWebhookHeader} from '../../routes/github';
 import {Model} from 'mongoose';
+import {IDockerData} from '../../routes/docker';
 import { IRedditPostData, RedditPostReaction } from '../../model/reaction/redditPostReaction';
 import postRedditContent from '../reddit/postMessage';
 import { IRedditSendPmData, RedditSendPmReaction } from '../../model/reaction/RedditSendPmReaction';
@@ -198,6 +199,11 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
       .replace('${GITHUB_PULL_REPOSITORY}', (data as IPullWebhook)?.repository?.name)
       .replace('${GITHUB_PULL_MESSAGE}', (data as IPullWebhook)?.pull_request?.title)
       .replace('${GITHUB_PULL_LINK}', (data as IPullWebhook)?.repository?.html_url)
+      .replace('${DOCKER_TAG}', (data as IDockerData)?.push_data?.tag)
+      .replace('${DOCKER_PUSHER}', (data as IDockerData)?.push_data?.pusher)
+      .replace('${DOCKER_DESCRIPTION}', (data as IDockerData)?.repository?.description)
+      .replace('${DOCKER_NAME}', (data as IDockerData)?.repository?.repo_name)
+      .replace('${DOCKER_URL}', (data as IDockerData)?.repository?.repo_url)
       .replace('${RSS_TITLE}', (data as { title: string })?.title)
       .replace('${RSS_CONTENT}', (data as { content: string })?.content)
       .replace('${RSS_LINK}', (data as { link: string })?.link)
