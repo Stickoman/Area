@@ -1,9 +1,13 @@
 import axios from 'axios';
 import {RedditAuthentication} from '../../model/redditAuth';
+import { reject } from '../authService';
 
 async function postRedditComment(userId: string, postId: string, text: string) {
   try {
     const redditAuth = await RedditAuthentication.findOne({id: userId}).exec();
+
+    if (!redditAuth)
+      return reject('Reddit Account not found');
     const accessToken = redditAuth.access_token;
     const redditApiUrl = `https://oauth.reddit.com/api/comment`;
     const requestBody = {
@@ -21,7 +25,7 @@ async function postRedditComment(userId: string, postId: string, text: string) {
     return Promise.resolve(response.data);
   } catch (error) {
     console.log("Error while posting a comment on Reddit: " + error);
-    return Promise.reject(new Error('Error while posting a comment on Reddit'));
+    return reject('Error while posting on reddit');
   }
 }
 
