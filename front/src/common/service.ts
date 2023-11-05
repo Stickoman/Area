@@ -50,7 +50,6 @@ SERVICE_ITEMS.set('google', {
   color: '#db4a39ff',
   icon: faGoogle,
   actions: [
-    {name: '', description: '', dataFields: []},
   ],
   reactions: [
     {
@@ -67,10 +66,8 @@ SERVICE_ITEMS.set('microsoft', {
   color: '#ea4300',
   icon: faMicrosoft,
   actions: [
-    {name: '', description: '', dataFields: []},
   ],
   reactions: [
-    {name: '', description: '', dataFields: []},
   ],
 } as IService);
 
@@ -79,7 +76,6 @@ SERVICE_ITEMS.set('discord', {
   color: '#7289da',
   icon: faDiscord,
   actions: [
-    {name: '', description: '', dataFields: []},
   ],
   reactions: [
     {
@@ -130,7 +126,6 @@ SERVICE_ITEMS.set('github', {
     },
   ],
   reactions: [
-    {name: '', description: '', dataFields: []},
   ],
 } as IService);
 
@@ -139,10 +134,8 @@ SERVICE_ITEMS.set('facebook', {
   color: '#1877f2',
   icon: faFacebook,
   actions: [
-    {name: '', description: '', dataFields: []},
   ],
   reactions: [
-    {name: '', description: '', dataFields: []},
   ],
 } as IService);
 

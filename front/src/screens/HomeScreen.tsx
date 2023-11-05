@@ -2,8 +2,10 @@ import React, {CSSProperties} from 'react';
 import NavigationBar, {checkIfUserIsLoggedIn} from '../components/common/NavigationBar';
 import {useNavigate} from 'react-router-dom';
 import '../index.css';
+import {SERVICE_ITEMS} from '../common/service';
+import {capitalize} from '../common/utils';
 
-function HomeScreen() {
+function HomeScreen(): React.JSX.Element {
   const isLoggedIn = checkIfUserIsLoggedIn();
   const navigate = useNavigate();
 
@@ -45,24 +47,37 @@ function HomeScreen() {
              src={'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtDkQxZtfjjBT1kVJlrj0_2eZGZwEMLe_g30IIgzTrZCyF73Dm'}/>
 
         <h1 style={titleStyle}>Simplify Your Digital Life with AREA</h1>
-        <p style={paragraphStyle}>Joe Solutions is a company specialized in developing automation platforms to simplify
-          the management of
+        <p style={paragraphStyle}>Our goal is to develop an automation platform to simplify the management of
           digital life. Our software suite allows users to connect and automate various online services such as social
           media, messaging platforms, file storage, and much more.</p>
         <div style={buttonContainerStyle} className={'buttonContainerStyle'}>
-          <button className={'buttonStyle'} onClick={() => {
-            navigate(!isLoggedIn ? '/authentication' : '/profile');
-          }}>Get Started
+          <button className={'buttonStyle'} onClick={() => navigate(!isLoggedIn ? '/authentication' : '/profile')}>
+            Get Started
           </button>
         </div>
       </div>
       <div>
         <h1 style={titleStyle}>Get every thing working better together</h1>
-        <p style={paragraphStyle}>Discover all of the Services that Joe Solutions supports.</p>
+        <p style={paragraphStyle}>Discover all of the Services that AREA supports.</p>
+
+        <ul>
+          {
+            Array.from(SERVICE_ITEMS.values())
+              .map(service => {
+                const name = capitalize(service.name);
+                const actions = service.actions.map(action => action.description);
+                const reactions = service.reactions.map(action => action.description);
+
+                return <p key={service.name} style={paragraphStyle}>
+                  {name} - {[...actions, ...reactions].join(', ')}
+                </p>;
+              })
+          }
+        </ul>
+
         <div style={buttonContainerStyle} className={'buttonContainerStyle'}>
-          <button className={'buttonStyle'} onClick={() => {
-            navigate('/services');
-          }}>Discover Services
+          <button className={'buttonStyle'} onClick={() => navigate('/services')}>
+            Discover Services
           </button>
         </div>
       </div>
