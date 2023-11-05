@@ -7,6 +7,7 @@ interface IMicrosoftAuthentication {
   id: string;
   grant_type: string;
   screenName: string;
+  email: string;
 }
 
 const schema = new Schema<IMicrosoftAuthentication>({
@@ -31,6 +32,10 @@ const schema = new Schema<IMicrosoftAuthentication>({
     required: true,
   },
   screenName: {
+    type: String,
+    required: true,
+  },
+  email: {
     type: String,
     required: true,
   },
