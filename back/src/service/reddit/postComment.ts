@@ -8,7 +8,7 @@ async function postRedditComment(userId: string, postId: string, text: string) {
     const redditApiUrl = `https://oauth.reddit.com/api/comment`;
     const requestBody = {
       api_type: 'json',
-      thing_id: postId,
+      thing_id: "t3_"+postId,
       text: text,
     };
     const requestHeaders = {
