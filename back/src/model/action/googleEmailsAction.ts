@@ -1,7 +1,6 @@
 import {model, Schema} from 'mongoose';
 
 interface IGoogleEmailsData {
-  email: string;
   searchCriteria?: string;
 }
 
@@ -13,10 +12,6 @@ const schema = new Schema<IGoogleEmailsAction>({
   userId: {
     type: String,
     required: false,
-  },
-  email: {
-    type: String,
-    required: true,
   },
   searchCriteria: {
     type: String,

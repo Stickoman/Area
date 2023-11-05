@@ -26,7 +26,7 @@ const SERVICE_ITEMS: Map<ServiceType, IService> = new Map<ServiceType, IService>
 SERVICE_ITEMS.set('google', {
   name: 'google',
   actions: [
-    {name: '', description: ''},
+    {name: 'google:poll_mailbox', description: 'Get last emails'},
   ],
   reactions: [
     {

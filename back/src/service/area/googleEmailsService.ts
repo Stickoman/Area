@@ -11,7 +11,7 @@ const GoogleEmailsScheduler: JobScheduler = new JobScheduler();
 function scheduleAction(actionId: string, action: IGoogleEmailsAction) {
   GoogleEmailsScheduler.schedule('0 * * * * *', async () => {
     try {
-      const emails: GoogleEmails = await retrieveEmailsUpdates(action.userId, action.email);
+      const emails: GoogleEmails = await retrieveEmailsUpdates(action.userId, action.searchCriteria);
 
       console.log(`Poll emails ${emails.items}`);
       for (const emailsItem of emails.items) {

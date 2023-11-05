@@ -10,7 +10,7 @@ import {
 } from '../../model/reaction/discordWebhookEmbedReaction';
 import {GoogleEmailReaction, IGoogleEmailData} from '../../model/reaction/googleEmailReaction';
 import sendEmail from '../google/emailService';
-import {IBranchWebhook, IIssueWebhook, IPullWebhook, IPushWebhook} from '../../routes/github';
+import {IBranchWebhook, IBranchWebhookHeader, IIssueWebhook, IPullWebhook, IPushWebhook} from '../../routes/github';
 import {Model} from 'mongoose';
 
 type ReactionFactory = (userId: string, data: object) => Promise<string>;

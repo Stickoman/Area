@@ -49,7 +49,8 @@ SERVICE_ITEMS.set('google', {
   color: '#db4a39ff',
   icon: faGoogle,
   actions: [
-    {name: '', description: '', dataFields: []},
+    {name: 'google:poll_mailbox', description: 'Get last emails', dataFields: []
+    },
   ],
   reactions: [
     {
@@ -60,7 +61,7 @@ SERVICE_ITEMS.set('google', {
       ],
     },
     {
-      name: 'send_email_to_myself', description: 'Send an email at Gmail', dataFields: [
+      name: 'send_email_to_myself', description: 'Send an email to myself at Gmail', dataFields: [
         {name: 'subject', hint: 'Google Email Subject'},
         {name: 'message', hint: 'Google Email Message'},
       ],

@@ -1,5 +1,6 @@
 import {retrieveEmailsUpdate, updateEmails} from '../repository/googleRepository';
 import checkNewEmails from '../service/google/checkNewEmails';
+import {IUser, User} from '../model/user';
 
 interface GoogleEmailsItem {
   subject: string;
@@ -14,13 +15,11 @@ interface GoogleEmails {
   lastBuildDate: string;
 }
 
-function decodeBase64ToString(base64String: string): string {
-  return Buffer.from(base64String, 'base64').toString('utf-8');
-}
 
 async function parseGoogleEmails(userId: string, searchCriteria?: string): Promise<GoogleEmails> {
   try {
-    const emails = await checkNewEmails(userId, searchCriteria);
+    const user: IUser = await User.findById(userId).exec();
+    const emails = await checkNewEmails(user.googleId, searchCriteria);
     console.warn(emails);
     return null;
   } catch (reason) {

@@ -24,7 +24,7 @@ router.get('/api/services/reddit', authenticateMiddleware, (req: AuthenticatedRe
 });
 
 router.get('/api/services/emails', authenticateMiddleware, (req: AuthenticatedRequest, res: Response) => {
-  retrieveEmailsUpdates(req.user._id, )
+  retrieveEmailsUpdates(req.user._id)
     .then(feed => {
       res.status(200)
         .json(feed);
