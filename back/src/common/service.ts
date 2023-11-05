@@ -60,7 +60,9 @@ SERVICE_ITEMS.set('github', {
     {name: 'issues', description: 'Watch Issues updates on repository '},
   ],
   reactions: [
-    {name: '', description: ''},
+    {name: 'open_issue', description: 'Open issue on a repository'},
+    {name: 'close_issue', description: 'Close issue on a repository'},
+    {name: 'post_comment', description: 'Post a comment on a repository'},
   ],
 } as IService);
 
@@ -88,7 +90,11 @@ SERVICE_ITEMS.set('reddit', {
   actions: [
     {name: 'poll_rss', description: 'Poll news from Reddit Feed'},
   ],
-  reactions: [],
+  reactions: [
+    {name: 'post_message', description: 'Post a message on a subreddit'},
+    {name: 'send_pm', description: 'Send a private message to a user'},
+    {name: 'post_comment', description: 'Post a comment on a post'}
+  ],
 } as IService);
 
 export type {ServiceType, IServiceItem, IService};

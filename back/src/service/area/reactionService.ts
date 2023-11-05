@@ -13,6 +13,18 @@ import sendEmailToMyself from '../google/emailService';
 import {IBranchWebhook, IIssueWebhook, IPullWebhook, IPushWebhook, IBranchWebhookHeader} from '../../routes/github';
 import {Model} from 'mongoose';
 import {IDockerData} from '../../routes/docker';
+import { IRedditPostData, RedditPostReaction } from '../../model/reaction/redditPostReaction';
+import postRedditContent from '../reddit/postMessage';
+import { IRedditSendPmData, RedditSendPmReaction } from '../../model/reaction/RedditSendPmReaction';
+import { sendRedditPrivateMessage } from '../reddit/sendPm';
+import { IRedditPostCommentData, RedditPostCommentReaction } from '../../model/reaction/redditPostComment';
+import { postRedditComment } from '../reddit/postComment';
+import { GithubOpenIssueReaction, IGithubOpenIssueData } from '../../model/reaction/githubOpenIssueReaction';
+import { createGitHubIssue } from '../github/openIssue';
+import { GithubCloseIssueReaction, IGithubCloseIssueData } from '../../model/reaction/githubCloseIssueReaction';
+import { closeGitHubIssue } from '../github/closeIssue';
+import { GithubPostCommentReaction, IGithubPostCommentData } from '../../model/reaction/githubPostCommentReaction';
+import { postGithubComment } from '../github/postComment';
 
 type ReactionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -21,6 +33,12 @@ const reactionAssociations = new Map<ReactionType, ReactionFactory>();
 reactionAssociations.set('discord:send_webhook', createDiscordWebhookReaction);
 reactionAssociations.set('discord:send_embedded_webhook', createDiscordWebhookEmbedReaction);
 reactionAssociations.set('google:send_email', createGoogleEmailReaction);
+reactionAssociations.set('reddit:post_message', createRedditPostReaction);
+reactionAssociations.set('reddit:send_pm', createRedditSendPmReaction);
+reactionAssociations.set('reddit:post_comment', createRedditPostCommentReaction);
+reactionAssociations.set('github:open_issue', createGithubOpenIssueReaction);
+reactionAssociations.set('github:close_issue', createGithubCloseIssueReaction);
+reactionAssociations.set('github:post_comment', createGithubPostCommentReaction);
 
 async function createDiscordWebhookReaction(userId: string, data: IDiscordWebhookData): Promise<string> {
   const webhook = await new DiscordWebhookReaction({userId, ...data}).save();
@@ -39,6 +57,43 @@ async function createGoogleEmailReaction(userId: string, data: IGoogleEmailData)
 
   return email.id;
 }
+
+async function createRedditPostReaction(userId: string, data: IRedditPostData): Promise<string> {
+  const redditPost = await new RedditPostReaction({userId, ...data}).save();
+
+  return redditPost.id;
+}
+
+async function createRedditSendPmReaction(userId: string, data: IRedditSendPmData): Promise<string> {
+  const redditPost = await new RedditSendPmReaction({userId, ...data}).save();
+
+  return redditPost.id;
+}
+
+async function createRedditPostCommentReaction(userId: string, data: IRedditPostCommentData): Promise<string> {
+  const redditPost = await new RedditPostCommentReaction({userId, ...data}).save();
+
+  return redditPost.id;
+}
+
+async function createGithubOpenIssueReaction(userId: string, data: IGithubOpenIssueData): Promise<string> {
+  const redditPost = await new GithubOpenIssueReaction({userId, ...data}).save();
+
+  return redditPost.id;
+}
+
+async function createGithubCloseIssueReaction(userId: string, data: IGithubCloseIssueData): Promise<string> {
+  const redditPost = await new GithubCloseIssueReaction({userId, ...data}).save();
+
+  return redditPost.id;
+}
+
+async function createGithubPostCommentReaction(userId: string, data: IGithubPostCommentData): Promise<string> {
+  const redditPost = await new GithubPostCommentReaction({userId, ...data}).save();
+
+  return redditPost.id;
+}
+
 
 async function createReaction(userId: string, type: ReactionType, data: object): Promise<string> {
   for (const [key, value] of reactionAssociations) {
@@ -60,6 +115,24 @@ async function retrieveReactionData(id: string, type: ReactionType): Promise<obj
     break;
   case 'google:send_email':
     data = (await GoogleEmailReaction.findById(id).exec()) as IGoogleEmailData;
+    break;
+  case 'reddit:post_message':
+    data = (await RedditPostReaction.findById(id).exec()) as IRedditPostData;
+    break;
+  case 'reddit:send_pm':
+    data = (await RedditSendPmReaction.findById(id).exec()) as IRedditSendPmData;
+    break;
+  case 'reddit:post_comment':
+    data = (await RedditPostCommentReaction.findById(id).exec()) as IRedditPostCommentData;
+    break;
+  case 'github:open_issue':
+    data = (await GithubOpenIssueReaction.findById(id).exec()) as IGithubOpenIssueData;
+    break;
+  case 'github:close_issue':
+    data = (await GithubCloseIssueReaction.findById(id).exec()) as IGithubCloseIssueData;
+    break;
+  case 'github:post_comment':
+    data = (await GithubPostCommentReaction.findById(id).exec()) as IGithubPostCommentData;
     break;
   }
 
@@ -83,6 +156,25 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
   const isValidGoogleEmailData = (data: object): data is IGoogleEmailData => {
     return !!(data as IGoogleEmailData);
   };
+  const isValidRedditPostData = (data: object): data is IRedditPostData => {
+    return !!(data as IRedditPostData);
+  };
+  const isValidRedditSendPmData = (data: object): data is IRedditSendPmData => {
+    return !!(data as IRedditSendPmData);
+  };
+  const isValidRedditPostCommentData = (data: object): data is IRedditPostCommentData => {
+    return !!(data as IRedditPostCommentData);
+  };
+  const isValidGithubOpenIssueData = (data: object): data is IGithubOpenIssueData => {
+    return !!(data as IGithubOpenIssueData);
+  };
+  const isValidGithubCloseIssueData = (data: object): data is IGithubCloseIssueData => {
+    return !!(data as IGithubCloseIssueData);
+  };
+  const isValidGithubPostCommentData = (data: object): data is IGithubPostCommentData => {
+    return !!(data as IGithubPostCommentData);
+  };
+
 
   const replaceVariables = (value: string): string => {
     return value.replace('${NAME}', fullName)
@@ -131,6 +223,29 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
     console.warn(reactionData);
     if (isValidGoogleEmailData(reactionData))
       await sendEmailToMyself(replaceVariables(reactionData.subject), replaceVariables(reactionData.message), user.googleId);
+  case 'reddit:post_message':
+    if (isValidRedditPostData(reactionData))
+      await postRedditContent(reactionData.subreddit, reactionData.title, reactionData.content, user.redditId);
+    break;
+  case 'reddit:send_pm':
+    if (isValidRedditSendPmData(reactionData))
+      await sendRedditPrivateMessage(reactionData.to, reactionData.subject, reactionData.text, user.redditId);
+    break;
+  case 'reddit:post_comment':
+    if (isValidRedditPostCommentData(reactionData))
+      await postRedditComment(user.redditId, reactionData.postId, reactionData.text);
+    break;
+  case 'github:open_issue':
+    if (isValidGithubOpenIssueData(reactionData))
+      await createGitHubIssue(user.githubId, reactionData.repository, reactionData.title, reactionData.body);
+    break;
+  case 'github:close_issue':
+    if (isValidGithubCloseIssueData(reactionData))
+      await closeGitHubIssue(user.githubId, reactionData.repository, reactionData.issueId);
+    break;
+  case 'github:post_comment':
+    if (isValidGithubPostCommentData(reactionData))
+      await postGithubComment(user.githubId, reactionData.repository, reactionData.issueId, reactionData.comment);
     break;
   }
 }

@@ -4,7 +4,7 @@ interface IRedditAuthentication {
     token_type: string;
     access_token: string;
     expires_in: string;
-    userId: string;
+    id: string;
     screenName: string;
 }
 
@@ -21,7 +21,7 @@ const schema = new Schema<IRedditAuthentication>({
         type: String,
         required: true,
       },
-      userId: {
+      id: {
         type: String,
         required: true,
       },

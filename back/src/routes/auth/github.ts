@@ -27,7 +27,7 @@ router.get('/api/auth/github', [], async (req: Request, res: Response) => {
     const API_URL = process.env.API_URL;
     const CLIENT_ID = process.env.GITHUB_CLIENT_ID;
     const REDIRECT_URI = `${API_URL}/auth/github/callback`;
-    const SCOPE = 'user';
+    const SCOPE = 'user repo';
 
     res.redirect(`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPE}`);
   } catch (error) {

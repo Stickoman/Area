@@ -3,7 +3,7 @@ import {AuthenticatedRequest, authenticateMiddleware, generateAccessToken} from 
 import {User} from '../../model/user';
 import {initOAuthFlow} from '../../service/oauthService';
 import {RedditResponse, registerRedditAccount, requestAccessToken} from '../../service/redditService';
-import {retrieveAssociatedRedditUser} from '../../service/authService';
+import {retrieveAssociatedRedditUser, isString} from '../../service/authService';
 
 const router = Router();
 
@@ -21,7 +21,7 @@ const router = Router();
  *         description: Error initiating Reddit authentication.
  */
 router.get('/api/auth/reddit', [], async (req: Request, res: Response) => {
-  const authorizationUrl = `https://www.reddit.com/api/v1/authorize?client_id=${process.env.REDDIT_CLIENT_ID}&response_type=code&state=random_state&redirect_uri=${process.env.API_URL}/auth/reddit/callback&duration=permanent&scope=identity`;
+  const authorizationUrl = `https://www.reddit.com/api/v1/authorize?client_id=${process.env.REDDIT_CLIENT_ID}&response_type=code&state=random_state&redirect_uri=${process.env.API_URL}/auth/reddit/callback&duration=permanent&scope=identity submit privatemessages`;
 
   res.redirect(authorizationUrl);
 });
@@ -50,22 +50,26 @@ router.get('/api/auth/reddit', [], async (req: Request, res: Response) => {
  */
 router.get('/api/auth/reddit/callback', [], async (req: Request, res: Response) => {
   const code = req.query.code as string;
+  if (!isString(code)) {
+    res.status(400).send('Unable to parse parameter code');
+    return;
+  }
   try {
     const FRONT_URL = process.env.FRONT_URL;
     const response: RedditResponse = await requestAccessToken(code);
     const account = await registerRedditAccount(response);
 
-    retrieveAssociatedRedditUser(account.userId)
+    retrieveAssociatedRedditUser(account.id)
       .then(async user => {
-        const document = await User.findOne({redditId: account.userId}).exec();
+        const document = await User.findOne({redditId: account.id}).exec();
 
-        document.redditId = account.userId;
+        document.redditId = account.id;
         await document.save();
 
         res.redirect(`${FRONT_URL}/login?jwt=${generateAccessToken(user)}&name=${account.screenName}`);
       })
       .catch(() => {
-        const id: string = initOAuthFlow('reddit', account.userId, account.screenName);
+        const id: string = initOAuthFlow('reddit', account.id, account.screenName);
 
         res.redirect(`${FRONT_URL}/oauth?id=${id}`);
       });

@@ -126,6 +126,26 @@ SERVICE_ITEMS.set('github', {
     },
   ],
   reactions: [
+    {
+      name: 'open_issue', description: 'Open issue on a repository', dataFields: [
+        {name: 'repository', hint: 'Repository'},
+        {name: 'title', hint: 'Title of the issue'},
+        {name: 'body', hint: 'Body of the issue'},
+      ],
+    },
+    {
+      name: 'close_issue', description: 'Close issue on a repository', dataFields: [
+        {name: 'repository', hint: 'Repository'},
+        {name: 'issueId', hint: 'Id of the issue'},
+      ],
+    },
+    {
+      name: 'post_comment', description: 'Post comment on a repository', dataFields: [
+        {name: 'repository', hint: 'Repository'},
+        {name: 'issueId', hint: 'Id of the issue'},
+        {name: 'comment', hint: 'Comment'},
+      ],
+    },
   ],
 } as IService);
 
@@ -168,7 +188,28 @@ SERVICE_ITEMS.set('reddit', {
       variables: ['RSS_TITLE', 'RSS_LINK', 'RSS_CONTENT'],
     },
   ],
-  reactions: [],
+  reactions: [
+    {
+      name: 'post_message', description: 'Post message on a subreddit', dataFields: [
+        {name: 'subreddit', hint: 'subreddit name'},
+        {name: 'title', hint: 'title of the message'},
+        {name: 'content', hint: 'content of the message'},
+      ],
+    },
+    {
+      name: 'send_pm', description: 'Send a private message', dataFields: [
+        {name: 'to', hint: 'recipient'},
+        {name: 'subject', hint: 'subject of the message'},
+        {name: 'text', hint: 'content of the message'},
+      ],
+    },
+    {
+      name: 'post_comment', description: 'Post comment on a reddit message', dataFields: [
+        {name: 'postId', hint: 'id of the post'},
+        {name: 'text', hint: 'content of the message'},
+      ],
+    },
+  ],
 } as IService);
 
 SERVICE_ITEMS.set('docker', {
