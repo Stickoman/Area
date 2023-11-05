@@ -62,6 +62,7 @@ SERVICE_ITEMS.set('github', {
   reactions: [
     {name: 'open_issue', description: 'Open issue on a repository'},
     {name: 'close_issue', description: 'Close issue on a repository'},
+    {name: 'post_comment', description: 'Post a comment on a repository'},
   ],
 } as IService);
 

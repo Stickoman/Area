@@ -142,6 +142,13 @@ SERVICE_ITEMS.set('github', {
         {name: 'issueId', hint: 'Id of the issue'},
       ],
     },
+    {
+      name: 'post_comment', description: 'Post comment on a repository', dataFields: [
+        {name: 'repository', hint: 'Repository'},
+        {name: 'issueId', hint: 'Id of the issue'},
+        {name: 'comment', hint: 'Comment'},
+      ],
+    },
   ],
 } as IService);
 
