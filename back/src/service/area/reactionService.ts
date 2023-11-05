@@ -20,6 +20,8 @@ import { IRedditPostCommentData, RedditPostCommentReaction } from '../../model/r
 import { postRedditComment } from '../reddit/postComment';
 import { GithubOpenIssueReaction, IGithubOpenIssueData } from '../../model/reaction/githubOpenIssueReaction';
 import { createGitHubIssue } from '../github/openIssue';
+import { GithubCloseIssueReaction, IGithubCloseIssueData } from '../../model/reaction/githubCloseIssueReaction';
+import { closeGitHubIssue } from '../github/closeIssue';
 
 type ReactionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -32,6 +34,7 @@ reactionAssociations.set('reddit:post_message', createRedditPostReaction);
 reactionAssociations.set('reddit:send_pm', createRedditSendPmReaction);
 reactionAssociations.set('reddit:post_comment', createRedditPostCommentReaction);
 reactionAssociations.set('github:open_issue', createGithubOpenIssueReaction);
+reactionAssociations.set('github:close_issue', createGithubOpenIssueReaction);
 
 async function createDiscordWebhookReaction(userId: string, data: IDiscordWebhookData): Promise<string> {
   const webhook = await new DiscordWebhookReaction({userId, ...data}).save();
@@ -75,6 +78,12 @@ async function createGithubOpenIssueReaction(userId: string, data: IGithubOpenIs
   return redditPost.id;
 }
 
+async function createGithubCloseIssueReaction(userId: string, data: IGithubCloseIssueData): Promise<string> {
+  const redditPost = await new GithubCloseIssueReaction({userId, ...data}).save();
+
+  return redditPost.id;
+}
+
 async function createReaction(userId: string, type: ReactionType, data: object): Promise<string> {
   for (const [key, value] of reactionAssociations) {
     if (key == type) {
@@ -107,6 +116,9 @@ async function retrieveReactionData(id: string, type: ReactionType): Promise<obj
     break;
   case 'github:open_issue':
     data = (await GithubOpenIssueReaction.findById(id).exec()) as IGithubOpenIssueData;
+    break;
+  case 'github:close_issue':
+    data = (await GithubCloseIssueReaction.findById(id).exec()) as IGithubCloseIssueData;
     break;
   }
 
@@ -141,6 +153,9 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
   };
   const isValidGithubOpenIssueData = (data: object): data is IGithubOpenIssueData => {
     return !!(data as IGithubOpenIssueData);
+  };
+  const isValidGithubCloseIssueData = (data: object): data is IGithubCloseIssueData => {
+    return !!(data as IGithubCloseIssueData);
   };
 
 
@@ -201,6 +216,10 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
   case 'github:open_issue':
     if (isValidGithubOpenIssueData(reactionData))
       await createGitHubIssue(user.githubId, reactionData.repository, reactionData.title, reactionData.body);
+    break;
+  case 'github:close_issue':
+    if (isValidGithubCloseIssueData(reactionData))
+      await closeGitHubIssue(user.githubId, reactionData.repository, reactionData.issueId);
     break;
   }
 }

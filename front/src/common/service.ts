@@ -136,6 +136,12 @@ SERVICE_ITEMS.set('github', {
         {name: 'body', hint: 'Body of the issue'},
       ],
     },
+    {
+      name: 'close_issue', description: 'Close issue on a repository', dataFields: [
+        {name: 'repository', hint: 'Repository'},
+        {name: 'issueId', hint: 'Id of the issue'},
+      ],
+    },
   ],
 } as IService);
 
