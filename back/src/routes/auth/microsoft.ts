@@ -26,7 +26,11 @@ router.get('/api/auth/microsoft', [], async (req: Request, res: Response) => {
   try {
     const REDIRECT_URI = `${process.env.API_URL}/auth/microsoft/callback`;
     const CLIENT_ID = process.env.MICROSOFT_CLIENT_ID;
-    const SCOPE = 'https://graph.microsoft.com/Mail.Send';
+    const scopes = [
+      'https://graph.microsoft.com/Mail.Send',
+      'https://graph.microsoft.com/Tasks.ReadWrite',
+    ];
+    const SCOPE = 'https://graph.microsoft.com/Mail.Send https://graph.microsoft.com/Tasks.ReadWrite https://graph.microsoft.com/Chat.ReadWrite';
 
     res.redirect(`https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${SCOPE}&response_type=code&prompt=consent`);
   } catch (error) {

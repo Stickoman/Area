@@ -8,6 +8,7 @@ import {isString} from '../service/authService';
 import {retrieveFeedUpdates} from '../adapter/redditRssAdapter';
 import sendEmailToMyself from '../service/google/emailService';
 import sendMicrosoftEmailToMyself from '../service/microsoft/microsoftEmailService';
+import teamsMessageService from '../service/microsoft/teamsMessageService';
 import {updateUserProfile} from '../service/profileService';
 
 const router = express.Router();
@@ -80,5 +81,25 @@ router.post('/api/services/emailMicrosoft', authenticateMiddleware, async (req: 
     res.sendStatus(500);
   }
 });
+
+// router.post('/api/services/messageTeams', authenticateMiddleware, async (req: AuthenticatedRequest, res: Response) => {
+//   try {
+//     const data = req.body;
+//     if (data.subject && data.message) {
+//       await teamsMessageService(data.subject, data.message, req.user.microsoftId);
+//       res.sendStatus(200);
+//     } else {
+//       const missingProperties = ['subject', 'message']
+//         .filter(prop => !data[prop])
+//         .join(', ');
+
+//       res.status(400).json({message: `Missing ${missingProperties} in body`});
+//     }
+//   } catch (error) {
+//     console.error('Error send email', error);
+//     res.sendStatus(500);
+//   }
+// });
+
 
 export {router as servicesRouter};

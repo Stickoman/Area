@@ -5,9 +5,10 @@ import {
 } from '../../model/reaction/discordWebhookEmbedReaction';
 import {DiscordWebhookReaction, IDiscordWebhookData} from '../../model/reaction/discordWebhookReaction';
 import {GoogleEmailReaction, IGoogleEmailData} from '../../model/reaction/googleEmailReaction';
-import sendEmailToMyself from '../google/emailService';
-import {IBranchWebhook, IIssueWebhook, IPullWebhook, IPushWebhook, IBranchWebhookHeader, IStarWebhook, IReleaseWebhook} from '../../routes/github';
+import {IBranchWebhook, IBranchWebhookHeader, IIssueWebhook, IPullWebhook, IPushWebhook} from '../../routes/github';
 import {IMicrosoftEmailData, MicrosoftEmailReaction} from '../../model/reaction/microsoftEmailReaction';
+import { ITaskDeletionData, ITaskDeletionReaction, TaskDeletionReaction } from '../../model/reaction/taskDeleteReaction';
+import { ITeamsMessageData, TeamsMessageReaction } from '../../model/reaction/teamsMessageReaction';
 import {IUser, User} from '../../model/user';
 import {sendEmbedWebhook, sendWebhook} from '../discord/webhookService';
 
@@ -27,6 +28,7 @@ import { GithubPostCommentReaction, IGithubPostCommentData } from '../../model/r
 import { postGithubComment } from '../github/postComment';
 
 import sendMicrosoftEmailToMyself from '../microsoft/microsoftEmailService';
+import teamsMessageService from '../microsoft/teamsMessageService';
 
 type ReactionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -42,6 +44,8 @@ reactionAssociations.set('github:open_issue', createGithubOpenIssueReaction);
 reactionAssociations.set('github:close_issue', createGithubCloseIssueReaction);
 reactionAssociations.set('github:post_comment', createGithubPostCommentReaction);
 reactionAssociations.set('microsoft:send_email_microsoft', createMicrosoftEmailReaction);
+reactionAssociations.set('microsoft:send_teams_message', createTeamsMessageReaction);
+reactionAssociations.set('microsoft:delete_all_tasks', deleteAllTasksReaction);
 
 async function createDiscordWebhookReaction(userId: string, data: IDiscordWebhookData): Promise<string> {
   const webhook = await new DiscordWebhookReaction({userId, ...data}).save();
@@ -104,6 +108,18 @@ async function createGithubPostCommentReaction(userId: string, data: IGithubPost
 }
 
 
+async function createTeamsMessageReaction(userId: string, data: IMicrosoftEmailData): Promise<string> {
+  const email = await new TeamsMessageReaction({userId, ...data}).save();
+
+  return email.id;
+}
+
+async function deleteAllTasksReaction(userId: string, data: IMicrosoftEmailData): Promise<string> {
+  const email = await new TaskDeletionReaction({userId, ...data}).save();
+
+  return email.id;
+}
+
 async function createReaction(userId: string, type: ReactionType, data: object): Promise<string> {
   for (const [key, value] of reactionAssociations) {
     if (key == type) {
@@ -145,6 +161,12 @@ async function retrieveReactionData(id: string, type: ReactionType): Promise<obj
     break;
   case 'microsoft:send_email_microsoft':
     data = (await MicrosoftEmailReaction.findById(id).exec()) as IMicrosoftEmailData;
+    break;
+  case 'microsoft:send_teams_message':
+    data = (await TeamsMessageReaction.findById(id).exec()) as ITeamsMessageData;
+    break;
+  case 'microsoft:delete_all_tasks':
+    data = (await TaskDeletionReaction.findById(id).exec()) as ITaskDeletionData;
     break;
   }
 
@@ -188,6 +210,12 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
   };
   const isValidMicrosoftEmailData = (data: object): data is IMicrosoftEmailData => {
     return !!(data as IMicrosoftEmailData);
+  };
+  const isValidTeamsMessageData = (data: object): data is ITeamsMessageData => {
+    return !!(data as ITeamsMessageData);
+  };
+  const isValidTaskDeletionData = (data: object): data is ITaskDeletionData => {
+    return !!(data as ITaskDeletionReaction);
   };
 
   const replaceVariables = (value: string): string => {
@@ -277,6 +305,14 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
     if (isValidMicrosoftEmailData(reactionData))
       await sendMicrosoftEmailToMyself(replaceVariables(reactionData.subject), replaceVariables(reactionData.message), user.microsoftId);
     break;
+  case 'microsoft:send_teams_message':
+    if (isValidTeamsMessageData(reactionData))
+      await teamsMessageService(replaceVariables(reactionData.subject), replaceVariables(reactionData.message), user.microsoftId);
+    break;
+  case 'microsoft:delete_all_tasks':
+    if (isValidTaskDeletionData(reactionData))
+      await deleteAllTasksService(replaceVariables(reactionData.subject), replaceVariables(reactionData.message), user.microsoftId);
+    break;
   }
 }
 
@@ -312,6 +348,12 @@ async function deleteReaction(id: string, type: ReactionType) {
     model = GithubPostCommentReaction;
     break;
   case 'microsoft:send_email_microsoft':
+    model = MicrosoftEmailReaction;
+    break;
+  case 'microsoft:send_teams_message':
+    model = MicrosoftT;
+    break;
+  case 'microsoft:delete_all_tasks':
     model = MicrosoftEmailReaction;
     break;
   }
