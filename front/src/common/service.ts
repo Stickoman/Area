@@ -75,7 +75,20 @@ SERVICE_ITEMS.set('microsoft', {
         {name: 'subject', hint: 'microsoft Email Subject'},
         {name: 'message', hint: 'microsoft Email Message'},
       ],
-    },  ],
+    },
+    {
+      name: 'send_teams_message', description: 'Send a at teams', dataFields: [
+        {name: 'subject', hint: 'teams message Subject'},
+        {name: 'message', hint: 'teams Message'},
+      ],
+    },
+    {
+      name: 'delete_all_tasks', description: 'Delete all tasks', dataFields: [
+        {name: 'subject', hint: 'teams message Subject'},
+        {name: 'message', hint: 'teams Message'},
+      ],
+    }
+  ],
 } as IService);
 
 SERVICE_ITEMS.set('discord', {
