@@ -8,7 +8,7 @@ async function sendRedditPrivateMessage(to: string, subject: string, text: strin
 
     if (!redditAuth)
       return reject('Reddit Account not found');
-    let accessToken = redditAuth.access_token;
+    const accessToken = redditAuth.access_token;
     const redditApiUrl = 'https://oauth.reddit.com/api/compose';
     const requestBody = {
       api_type: 'json',
@@ -25,7 +25,7 @@ async function sendRedditPrivateMessage(to: string, subject: string, text: strin
     const response = await axios.post(redditApiUrl, requestBody, {headers: requestHeaders});
     return Promise.resolve(response.data);
   } catch (error) {
-    console.log("error while send private message on reddit: " + error);
+    console.log('error while send private message on reddit: ' + error);
     return reject('Error while posting on reddit');
   }
 }

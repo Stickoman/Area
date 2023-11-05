@@ -5,30 +5,41 @@ import {
 } from '../../model/reaction/discordWebhookEmbedReaction';
 import {DiscordWebhookReaction, IDiscordWebhookData} from '../../model/reaction/discordWebhookReaction';
 import {GoogleEmailReaction, IGoogleEmailData} from '../../model/reaction/googleEmailReaction';
-import {IBranchWebhook, IBranchWebhookHeader, IIssueWebhook, IPullWebhook, IPushWebhook} from '../../routes/github';
+import {
+  IBranchWebhook,
+  IBranchWebhookHeader,
+  IIssueWebhook,
+  IPullWebhook,
+  IPushWebhook, IReleaseWebhook,
+  IStarWebhook,
+} from '../../routes/github';
 import {IMicrosoftEmailData, MicrosoftEmailReaction} from '../../model/reaction/microsoftEmailReaction';
-import { ITaskDeletionData, ITaskDeletionReaction, TaskDeletionReaction } from '../../model/reaction/taskDeleteReaction';
-import { ITeamsMessageData, TeamsMessageReaction } from '../../model/reaction/teamsMessageReaction';
+import {ITaskDeletionData, ITaskDeletionReaction, TaskDeletionReaction} from '../../model/reaction/taskDeleteReaction';
+import {ITeamsMessageData, TeamsMessageReaction} from '../../model/reaction/teamsMessageReaction';
 import {IUser, User} from '../../model/user';
 import {sendEmbedWebhook, sendWebhook} from '../discord/webhookService';
 
 import {Model} from 'mongoose';
 import {IDockerData} from '../../routes/docker';
-import { IRedditPostData, RedditPostReaction } from '../../model/reaction/redditPostReaction';
+import {IRedditPostData, RedditPostReaction} from '../../model/reaction/redditPostReaction';
 import postRedditContent from '../reddit/postMessage';
-import { IRedditSendPmData, RedditSendPmReaction } from '../../model/reaction/RedditSendPmReaction';
-import { sendRedditPrivateMessage } from '../reddit/sendPm';
-import { IRedditPostCommentData, RedditPostCommentReaction } from '../../model/reaction/redditPostComment';
-import { postRedditComment } from '../reddit/postComment';
-import { GithubOpenIssueReaction, IGithubOpenIssueData } from '../../model/reaction/githubOpenIssueReaction';
-import { createGitHubIssue } from '../github/openIssue';
-import { GithubCloseIssueReaction, IGithubCloseIssueData } from '../../model/reaction/githubCloseIssueReaction';
-import { closeGitHubIssue } from '../github/closeIssue';
-import { GithubPostCommentReaction, IGithubPostCommentData } from '../../model/reaction/githubPostCommentReaction';
-import { postGithubComment } from '../github/postComment';
+import {IRedditSendPmData, RedditSendPmReaction} from '../../model/reaction/RedditSendPmReaction';
+import {sendRedditPrivateMessage} from '../reddit/sendPm';
+import {IRedditPostCommentData, RedditPostCommentReaction} from '../../model/reaction/redditPostComment';
+import {postRedditComment} from '../reddit/postComment';
+import {GithubOpenIssueReaction, IGithubOpenIssueData} from '../../model/reaction/githubOpenIssueReaction';
+import {createGitHubIssue} from '../github/openIssue';
+import {GithubCloseIssueReaction, IGithubCloseIssueData} from '../../model/reaction/githubCloseIssueReaction';
+import {closeGitHubIssue} from '../github/closeIssue';
+import {GithubPostCommentReaction, IGithubPostCommentData} from '../../model/reaction/githubPostCommentReaction';
+import {postGithubComment} from '../github/postComment';
 
 import sendMicrosoftEmailToMyself from '../microsoft/microsoftEmailService';
 import teamsMessageService from '../microsoft/teamsMessageService';
+import {reject} from '../authService';
+import sendEmailToMyself from '../google/emailService';
+import deleteAllTasksService from '../microsoft/deleteAllTasksService';
+import {ReactionType} from '../../common/reaction.interface';
 
 type ReactionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -351,10 +362,10 @@ async function deleteReaction(id: string, type: ReactionType) {
     model = MicrosoftEmailReaction;
     break;
   case 'microsoft:send_teams_message':
-    model = MicrosoftT;
+    model = TeamsMessageReaction;
     break;
   case 'microsoft:delete_all_tasks':
-    model = MicrosoftEmailReaction;
+    model = TaskDeletionReaction;
     break;
   }
 

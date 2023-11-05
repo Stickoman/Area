@@ -1,18 +1,18 @@
 import {MicrosoftAuthentication} from '../../model/microsoftAuth';
 import axios from 'axios';
+import {reject} from '../authService';
 
 async function sendMicrosoftEmailToMyself(subject: string, message: string, userMicrosoftID: string) {
   const MicrosoftAuth = await MicrosoftAuthentication.findOne({id: userMicrosoftID}).exec();
   const microsoftEmail = MicrosoftAuth.email;
   const accessToken = MicrosoftAuth.access_token;
-  console.log('accesToken: ' + accessToken);
   const url = 'https://graph.microsoft.com/v1.0/me/sendMail';
   const email = {
     message: {
-      subject: 'Hello Juteman',
+      subject,
       body: {
         contentType: 'Text',
-        content: 'This is a test email sent from a Node.js app.',
+        content: message,
       },
       toRecipients: [
         {
@@ -32,11 +32,11 @@ async function sendMicrosoftEmailToMyself(subject: string, message: string, user
       },
     });
 
-    console.log('E-mail envoyé :', response.status);
+    console.log('E-mail send:', response.status);
     return Promise.resolve(response.data);
   } catch (error) {
-    console.error('Erreur lors de l\'envoi de l\'e-mail :', error);
-    return Promise.reject(new Error('Erreur lors de l\'envoi de l\'e-mail'));
+    console.error('Error while sending email:', error.data?.error);
+    return reject('Error while sending email');
   }
 }
 
