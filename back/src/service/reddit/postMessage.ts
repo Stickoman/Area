@@ -1,10 +1,14 @@
 import axios from 'axios';
-import { RedditAuthentication } from '../../model/redditAuth';
+import {RedditAuthentication} from '../../model/redditAuth';
+import {reject} from '../authService';
 
 async function postRedditContent(subreddit: string, title: string, content: string, userRedditID: string) {
   try {
-    const redditAuth = await RedditAuthentication.findOne({ id: userRedditID }).exec();
-    let accessToken = redditAuth.access_token;
+    const redditAuth = await RedditAuthentication.findOne({id: userRedditID}).exec();
+
+    if (!redditAuth)
+      return reject('Reddit Account not found');
+    const accessToken = redditAuth.access_token;
     const url = 'https://oauth.reddit.com/api/submit';
     const requestBody = {
       kind: 'self',
@@ -18,11 +22,11 @@ async function postRedditContent(subreddit: string, title: string, content: stri
         'Content-Type': 'application/x-www-form-urlencoded',
       },
     });
-    
+
     return Promise.resolve(response.data);
   } catch (error) {
-    console.log("error while posting on reddit: " + error);
-    return Promise.reject(new Error('Error while posting on reddit'));
+    console.error('Error while posting on reddit', error);
+    return reject('Error while posting on reddit');
   }
 }
 

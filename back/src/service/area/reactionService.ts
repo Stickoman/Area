@@ -223,6 +223,7 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
     console.warn(reactionData);
     if (isValidGoogleEmailData(reactionData))
       await sendEmailToMyself(replaceVariables(reactionData.subject), replaceVariables(reactionData.message), user.googleId);
+    break;
   case 'reddit:post_message':
     if (isValidRedditPostData(reactionData))
       await postRedditContent(reactionData.subreddit, reactionData.title, reactionData.content, user.redditId);
