@@ -14,6 +14,10 @@ import {IBranchWebhook, IIssueWebhook, IPullWebhook, IPushWebhook, IBranchWebhoo
 import {Model} from 'mongoose';
 import { IRedditPostData, RedditPostReaction } from '../../model/reaction/redditPostReaction';
 import postRedditContent from '../reddit/postMessage';
+import { IRedditSendPmData, RedditSendPmReaction } from '../../model/reaction/RedditSendPmReaction';
+import { sendRedditPrivateMessage } from '../reddit/sendPm';
+import { IRedditPostCommentData, RedditPostCommentReaction } from '../../model/reaction/redditPostComment';
+import { postRedditComment } from '../reddit/postComment';
 
 type ReactionFactory = (userId: string, data: object) => Promise<string>;
 
@@ -23,6 +27,8 @@ reactionAssociations.set('discord:send_webhook', createDiscordWebhookReaction);
 reactionAssociations.set('discord:send_embedded_webhook', createDiscordWebhookEmbedReaction);
 reactionAssociations.set('google:send_email', createGoogleEmailReaction);
 reactionAssociations.set('reddit:post_message', createRedditPostReaction);
+reactionAssociations.set('reddit:send_pm', createRedditSendPmReaction);
+reactionAssociations.set('reddit:post_comment', createRedditPostCommentReaction);
 
 async function createDiscordWebhookReaction(userId: string, data: IDiscordWebhookData): Promise<string> {
   const webhook = await new DiscordWebhookReaction({userId, ...data}).save();
@@ -44,6 +50,18 @@ async function createGoogleEmailReaction(userId: string, data: IGoogleEmailData)
 
 async function createRedditPostReaction(userId: string, data: IRedditPostData): Promise<string> {
   const redditPost = await new RedditPostReaction({userId, ...data}).save();
+
+  return redditPost.id;
+}
+
+async function createRedditSendPmReaction(userId: string, data: IRedditSendPmData): Promise<string> {
+  const redditPost = await new RedditSendPmReaction({userId, ...data}).save();
+
+  return redditPost.id;
+}
+
+async function createRedditPostCommentReaction(userId: string, data: IRedditPostCommentData): Promise<string> {
+  const redditPost = await new RedditPostCommentReaction({userId, ...data}).save();
 
   return redditPost.id;
 }
@@ -72,6 +90,12 @@ async function retrieveReactionData(id: string, type: ReactionType): Promise<obj
   case 'reddit:post_message':
     data = (await RedditPostReaction.findById(id).exec()) as IRedditPostData;
     break;
+  case 'reddit:send_pm':
+    data = (await RedditSendPmReaction.findById(id).exec()) as IRedditSendPmData;
+    break;
+  case 'reddit:post_comment':
+    data = (await RedditPostCommentReaction.findById(id).exec()) as IRedditPostCommentData;
+    break;
   }
 
   return data;
@@ -97,6 +121,13 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
   const isValidRedditPostData = (data: object): data is IRedditPostData => {
     return !!(data as IRedditPostData);
   };
+  const isValidRedditSendPmData = (data: object): data is IRedditSendPmData => {
+    return !!(data as IRedditSendPmData);
+  };
+  const isValidRedditPostCommentData = (data: object): data is IRedditPostCommentData => {
+    return !!(data as IRedditPostCommentData);
+  };
+
 
   const replaceVariables = (value: string): string => {
     return value.replace('${NAME}', fullName)
@@ -141,9 +172,16 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
     if (isValidGoogleEmailData(reactionData))
       await sendEmailToMyself(replaceVariables(reactionData.subject), replaceVariables(reactionData.message), user.googleId);
   case 'reddit:post_message':
-    console.log("Trigger reddit:post_message")
     if (isValidRedditPostData(reactionData))
       await postRedditContent(reactionData.subreddit, reactionData.title, reactionData.content, user.redditId);
+    break;
+  case 'reddit:send_pm':
+    if (isValidRedditSendPmData(reactionData))
+      await sendRedditPrivateMessage(reactionData.to, reactionData.subject, reactionData.text, user.redditId);
+    break;
+  case 'reddit:post_comment':
+    if (isValidRedditPostCommentData(reactionData))
+      await postRedditComment(user.redditId, reactionData.postId, reactionData.text);
     break;
   }
 }

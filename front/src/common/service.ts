@@ -182,6 +182,19 @@ SERVICE_ITEMS.set('reddit', {
         {name: 'content', hint: 'content of the message'},
       ],
     },
+    {
+      name: 'send_pm', description: 'Send a private message', dataFields: [
+        {name: 'to', hint: 'recipient'},
+        {name: 'subject', hint: 'subject of the message'},
+        {name: 'text', hint: 'content of the message'},
+      ],
+    },
+    {
+      name: 'post_comment', description: 'Post comment on a reddit message', dataFields: [
+        {name: 'postId', hint: 'id of the post'},
+        {name: 'text', hint: 'content of the message'},
+      ],
+    },
   ],
 } as IService);
 

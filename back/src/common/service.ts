@@ -89,7 +89,9 @@ SERVICE_ITEMS.set('reddit', {
     {name: 'poll_rss', description: 'Poll news from Reddit Feed'},
   ],
   reactions: [
-    {name: 'post_message', description: 'Post a message on a subreddit'}
+    {name: 'post_message', description: 'Post a message on a subreddit'},
+    {name: 'send_pm', description: 'Send a private message to a user'},
+    {name: 'post_comment', description: 'Post a comment on a post'}
   ],
 } as IService);
 
