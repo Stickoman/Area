@@ -114,15 +114,27 @@ SERVICE_ITEMS.set('github', {
     },
     {
       name: 'pushes',
-      description: 'Pushes alert on repository ',
+      description: 'Pushes alerts on repository ',
       dataFields: [{name: 'repositoryUrl', hint: ' '}],
       variables: ['GITHUB_COMMITS_MESSAGE', 'GITHUB_COMMITS_AUTHOR', 'GITHUB_PUSH_REPOSITORY', 'GITHUB_PUSH_USER', 'GITHUB_PUSH_LINK']
     },
     {
       name: 'pull',
-      description: 'Pull request alert on repository ',
+      description: 'Pulls request alerts on repository ',
       dataFields: [{name: 'repositoryUrl', hint: ' '}],
       variables: ['GITHUB_PULL_ACTION', 'GITHUB_PULL_MESSAGE', 'GITHUB_PULL_AUTHOR', 'GITHUB_PULL_REPOSITORY', 'GITHUB_PULL_LINK']
+    },
+    {
+      name: 'star',
+      description: 'Stars alerts on repository ',
+      dataFields: [{name: 'repositoryUrl', hint: ' '}],
+      variables: ['GITHUB_STAR_ACTION', 'GITHUB_STAR_AT', 'GITHUB_STAR_AUTHOR', 'GITHUB_STAR_REPOSITORY', 'GITHUB_STAR_LINK']
+    },
+    {
+      name: 'release',
+      description: 'Releases alerts on repository ',
+      dataFields: [{name: 'repositoryUrl', hint: ' '}],
+      variables: ['GITHUB_RELEASE_ACTION', 'GITHUB_RELEASE_AUTHOR', 'GITHUB_RELEASE_REPOSITORY', 'GITHUB_RELEASE_LINK', 'GITHUB_RELEASE_NAME', 'GITHUB_RELEASE_TAG_NAME']
     },
   ],
   reactions: [
