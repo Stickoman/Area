@@ -261,6 +261,27 @@ async function deleteReaction(id: string, type: ReactionType) {
   case 'discord:send_embedded_webhook':
     model = DiscordWebhookEmbedReaction;
     break;
+  case 'google:send_email':
+    model = GoogleEmailReaction;
+    break;
+  case 'reddit:post_message':
+    model = RedditPostReaction;
+    break;
+  case 'reddit:send_pm':
+    model = RedditSendPmReaction;
+    break;
+  case 'reddit:post_comment':
+    model = RedditPostCommentReaction;
+    break;
+  case 'github:open_issue':
+    model = GithubOpenIssueReaction;
+    break;
+  case 'github:close_issue':
+    model = GithubCloseIssueReaction;
+    break;
+  case 'github:post_comment':
+    model = GithubPostCommentReaction;
+    break;
   }
 
   if (model) {
