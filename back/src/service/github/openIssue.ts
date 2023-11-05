@@ -1,9 +1,13 @@
 import axios from 'axios';
 import { GithubAuthentication } from '../../model/githubAuth';
+import { reject } from '../authService';
 
 async function createGitHubIssue(userId: string, repository: string, title: string, body: string) {
   try {
     const githubAuth = await GithubAuthentication.findOne({id: userId}).exec();
+
+    if (!githubAuth)
+      return reject('Github Account not found');
     const accessToken = githubAuth.access_token;
     const githubApiUrl = `https://api.github.com/repos/${repository}/issues`;
     const requestBody = {
@@ -20,7 +24,7 @@ async function createGitHubIssue(userId: string, repository: string, title: stri
     return Promise.resolve(response.data);
   } catch (error) {
     console.log("Error while creating a GitHub issue: " + error);
-    return Promise.reject(new Error('Error while creating a GitHub issue'));
+    return reject('Error while opening github issue');
   }
 }
 

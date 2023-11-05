@@ -1,9 +1,13 @@
 import axios from 'axios';
 import { GithubAuthentication } from '../../model/githubAuth';
+import { reject } from '../authService';
 
 async function postGithubComment(userId: string, repository: string, issueId: string, comment: string) {
   try {
     const githubAuth = await GithubAuthentication.findOne({id: userId}).exec();
+
+    if (!githubAuth)
+      return reject('Github Account not found');
     const accessToken = githubAuth.access_token;
     const githubApiUrl = `https://api.github.com/repos/${repository}/issues/${issueId}/comments`;
     const requestBody = {
@@ -19,7 +23,7 @@ async function postGithubComment(userId: string, repository: string, issueId: st
     return Promise.resolve(response.data);
   } catch (error) {
     console.log("Error while posting a comment to a GitHub issue: " + error);
-    return Promise.reject(new Error('Error while posting a comment to a GitHub issue'));
+    return reject('Error while commenting github issue');
   }
 }
 
