@@ -27,6 +27,7 @@ SERVICE_ITEMS.set('google', {
   name: 'google',
   actions: [
     {name: 'google:poll_mailbox', description: 'Get last emails'},
+    {name: 'google:search_emails', description: 'Search in emails '},
   ],
   reactions: [
     {

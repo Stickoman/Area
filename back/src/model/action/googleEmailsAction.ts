@@ -5,13 +5,13 @@ interface IGoogleEmailsData {
 }
 
 interface IGoogleEmailsAction extends IGoogleEmailsData {
-  userId?: string;
+  userId: string;
 }
 
 const schema = new Schema<IGoogleEmailsAction>({
   userId: {
     type: String,
-    required: false,
+    required: true,
   },
   searchCriteria: {
     type: String,

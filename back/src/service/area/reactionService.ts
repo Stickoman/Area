@@ -124,6 +124,9 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
       .replace('${RSS_TITLE}', (data as { title: string })?.title)
       .replace('${RSS_CONTENT}', (data as { content: string })?.content)
       .replace('${RSS_LINK}', (data as { link: string })?.link)
+      .replace('${SUBJECT}', (data as { subject: string })?.subject)
+      .replace('${FROM}', (data as { from: string })?.from)
+      .replace('${SNIPPET}', (data as { snippet: string })?.snippet)
       .replace('\\n', '\n');
   };
 

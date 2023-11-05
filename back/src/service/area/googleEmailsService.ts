@@ -3,7 +3,8 @@ import {IUser, User} from '../../model/user';
 import {IGoogleEmailsAction, IGoogleEmailsData, GoogleEmailsAction} from '../../model/action/googleEmailsAction';
 import {isOrphanAction} from '../../common/action.interface';
 import {callReaction} from './reactionService';
-import {GoogleEmails, retrieveEmailsUpdates} from '../../adapter/googleEmailsAdapter';
+import {retrieveEmailsUpdates} from '../../adapter/googleEmailsAdapter';
+import {GoogleEmails} from '../google/checkNewEmails';
 
 
 const GoogleEmailsScheduler: JobScheduler = new JobScheduler();
@@ -13,7 +14,7 @@ function scheduleAction(actionId: string, action: IGoogleEmailsAction) {
     try {
       const emails: GoogleEmails = await retrieveEmailsUpdates(action.userId, action.searchCriteria);
 
-      console.log(`Poll emails ${emails.items}`);
+      console.log(`Poll emails ${action.userId}`);
       for (const emailsItem of emails.items) {
         await callReaction(actionId, emailsItem)
           .catch(reason => console.error(reason));
