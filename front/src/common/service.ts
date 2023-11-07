@@ -1,11 +1,13 @@
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
 import {faClock} from '@fortawesome/free-solid-svg-icons';
 import {
-  faDiscord, faDocker,
+  faDiscord,
+  faDocker,
   faFacebook,
   faGithub,
   faGoogle,
-  faMicrosoft, faReddit,
+  faMicrosoft,
+  faReddit,
 } from '@fortawesome/free-brands-svg-icons';
 
 type ServiceType =
@@ -81,10 +83,26 @@ SERVICE_ITEMS.set('microsoft', {
   color: '#ea4300',
   icon: faMicrosoft,
   actions: [
-    {name: '', description: '', dataFields: []},
   ],
   reactions: [
-    {name: '', description: '', dataFields: []},
+    {
+      name: 'send_email_microsoft', description: 'Send an email at microsoft', dataFields: [
+        {name: 'subject', hint: 'microsoft Email Subject'},
+        {name: 'message', hint: 'microsoft Email Message'},
+      ],
+    },
+    {
+      name: 'send_teams_message', description: 'Send a at teams', dataFields: [
+        {name: 'subject', hint: 'teams message Subject'},
+        {name: 'message', hint: 'teams Message'},
+      ],
+    },
+    {
+      name: 'delete_all_tasks', description: 'Delete all tasks', dataFields: [
+        {name: 'subject', hint: 'teams message Subject'},
+        {name: 'message', hint: 'teams Message'},
+      ],
+    }
   ],
 } as IService);
 
@@ -93,7 +111,6 @@ SERVICE_ITEMS.set('discord', {
   color: '#7289da',
   icon: faDiscord,
   actions: [
-    {name: '', description: '', dataFields: []},
   ],
   reactions: [
     {
@@ -132,19 +149,50 @@ SERVICE_ITEMS.set('github', {
     },
     {
       name: 'pushes',
-      description: 'Pushes alert on repository ',
+      description: 'Pushes alerts on repository ',
       dataFields: [{name: 'repositoryUrl', hint: ' '}],
       variables: ['GITHUB_COMMITS_MESSAGE', 'GITHUB_COMMITS_AUTHOR', 'GITHUB_PUSH_REPOSITORY', 'GITHUB_PUSH_USER', 'GITHUB_PUSH_LINK'],
     },
     {
-      name: 'pull',
-      description: 'Pull request alert on repository ',
+      name: 'pulls',
+      description: 'Pulls request alerts on repository ',
       dataFields: [{name: 'repositoryUrl', hint: ' '}],
-      variables: ['GITHUB_PULL_ACTION', 'GITHUB_PULL_MESSAGE', 'GITHUB_PULL_AUTHOR', 'GITHUB_PULL_REPOSITORY', 'GITHUB_PULL_LINK'],
+      variables: ['GITHUB_PULL_ACTION', 'GITHUB_PULL_MESSAGE', 'GITHUB_PULL_AUTHOR', 'GITHUB_PULL_REPOSITORY', 'GITHUB_PULL_LINK']
+    },
+    {
+      name: 'stars',
+      description: 'Stars alerts on repository ',
+      dataFields: [{name: 'repositoryUrl', hint: ' '}],
+      variables: ['GITHUB_STAR_ACTION', 'GITHUB_STAR_AT', 'GITHUB_STAR_AUTHOR', 'GITHUB_STAR_REPOSITORY', 'GITHUB_STAR_LINK']
+    },
+    {
+      name: 'releases',
+      description: 'Releases alerts on repository ',
+      dataFields: [{name: 'repositoryUrl', hint: ' '}],
+      variables: ['GITHUB_RELEASE_ACTION', 'GITHUB_RELEASE_AUTHOR', 'GITHUB_RELEASE_REPOSITORY', 'GITHUB_RELEASE_LINK', 'GITHUB_RELEASE_NAME', 'GITHUB_RELEASE_TAG_NAME']
     },
   ],
   reactions: [
-    {name: '', description: '', dataFields: []},
+    {
+      name: 'open_issue', description: 'Open issue on a repository', dataFields: [
+        {name: 'repository', hint: 'Repository'},
+        {name: 'title', hint: 'Title of the issue'},
+        {name: 'body', hint: 'Body of the issue'},
+      ],
+    },
+    {
+      name: 'close_issue', description: 'Close issue on a repository', dataFields: [
+        {name: 'repository', hint: 'Repository'},
+        {name: 'issueId', hint: 'Id of the issue'},
+      ],
+    },
+    {
+      name: 'post_comment', description: 'Post comment on a repository', dataFields: [
+        {name: 'repository', hint: 'Repository'},
+        {name: 'issueId', hint: 'Id of the issue'},
+        {name: 'comment', hint: 'Comment'},
+      ],
+    },
   ],
 } as IService);
 
@@ -153,10 +201,8 @@ SERVICE_ITEMS.set('facebook', {
   color: '#1877f2',
   icon: faFacebook,
   actions: [
-    {name: '', description: '', dataFields: []},
   ],
   reactions: [
-    {name: '', description: '', dataFields: []},
   ],
 } as IService);
 
@@ -189,7 +235,28 @@ SERVICE_ITEMS.set('reddit', {
       variables: ['RSS_TITLE', 'RSS_LINK', 'RSS_CONTENT'],
     },
   ],
-  reactions: [],
+  reactions: [
+    {
+      name: 'post_message', description: 'Post message on a subreddit', dataFields: [
+        {name: 'subreddit', hint: 'subreddit name'},
+        {name: 'title', hint: 'title of the message'},
+        {name: 'content', hint: 'content of the message'},
+      ],
+    },
+    {
+      name: 'send_pm', description: 'Send a private message', dataFields: [
+        {name: 'to', hint: 'recipient'},
+        {name: 'subject', hint: 'subject of the message'},
+        {name: 'text', hint: 'content of the message'},
+      ],
+    },
+    {
+      name: 'post_comment', description: 'Post comment on a reddit message', dataFields: [
+        {name: 'postId', hint: 'id of the post'},
+        {name: 'text', hint: 'content of the message'},
+      ],
+    },
+  ],
 } as IService);
 
 SERVICE_ITEMS.set('docker', {

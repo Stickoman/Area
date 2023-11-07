@@ -41,11 +41,6 @@ echo "=========[BUILD IMAGES]========="
 
 docker build -t baragouin/area-frontend front
 docker build -t baragouin/area-backend back
-mv ./front/Dockerfile Dockerfile_main
-mv ./front/mobile/Dockerfile ./front/Dockerfile
-docker build -t baragouin/area-mobile front
-mv ./front/Dockerfile ./front/mobile/Dockerfile
-mv Dockerfile_main ./front/Dockerfile
 
 echo "=========[PUSH IMAGES]========="
 

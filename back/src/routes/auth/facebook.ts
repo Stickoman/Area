@@ -1,5 +1,5 @@
 import {Router, Response, Request} from 'express';
-import {retrieveAssociatedFacebookUser} from '../../service/authService';
+import {retrieveAssociatedFacebookUser, isString} from '../../service/authService';
 import {AuthenticatedRequest, authenticateMiddleware, generateAccessToken} from '../../middleware/auth';
 import {User} from '../../model/user';
 import qs from 'querystring';
@@ -8,7 +8,6 @@ import {IFacebookAuthentication} from '../../model/facebookAuth';
 import {requestAccessToken, FacebookResponse, registerFacebookAccount} from '../../service/facebookService';
 
 const router = Router();
-const redirectUri = 'http://localhost:8080/api/auth/facebook/callback';
 
 /**
  * @swagger
@@ -24,6 +23,8 @@ const redirectUri = 'http://localhost:8080/api/auth/facebook/callback';
  *         description: Error initiating Facebook authentication.
  */
 router.get('/api/auth/facebook', [], async (req: Request, res: Response) => {
+  const API_URL = process.env.API_URL;
+  const redirectUri = `${API_URL}/auth/facebook/callback`;
   const params = qs.stringify({
     client_id: process.env.FACEBOOK_CLIENT_ID,
     redirect_uri: redirectUri,
@@ -57,6 +58,10 @@ router.get('/api/auth/facebook', [], async (req: Request, res: Response) => {
  */
 router.get('/api/auth/facebook/callback', [], async (req: Request, res: Response) => {
   const code = req.query.code as string;
+  if (!isString(code)) {
+    res.status(400).send('Unable to parse parameter code');
+    return;
+  }
   try {
     const FRONT_URL = process.env.FRONT_URL;
     const response: FacebookResponse = await requestAccessToken(code);

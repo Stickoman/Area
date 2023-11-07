@@ -37,18 +37,18 @@ function ServicesScreen(props: IServicesScreenProperties): React.JSX.Element {
   return (
     <div style={containerStyle}>
       <NavigationBar color={'#000'}/>
-      { service &&
+      {service &&
         <button onClick={() => navigate(`/services/${service}`)} className={'service-back buttonStyle'}>
-        <FontAwesomeIcon icon={faArrowLeft} className={'service-back-icon'}/>
-        <span>Back</span>
-      </button>
+          <FontAwesomeIcon icon={faArrowLeft} className={'service-back-icon'}/>
+          <span>Back</span>
+        </button>
       }
       <h1 style={titleStyle}>Discover Services {capitalize(props.mode)}</h1>
       <input
         type="text"
         placeholder="Search services"
         value={filter}
-        onChange={(e) => setFilter(e.target.value.toLowerCase())}
+        onChange={(e) => setFilter(e.target.value.toLowerCase().trim)}
         className={'inputStyle'}
         style={searchStyle}
       />

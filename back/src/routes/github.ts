@@ -85,6 +85,40 @@ interface IPullWebhook {
   }
 }
 
+interface IStarWebhook {
+  action: string;
+  starred_at: string;
+  repository: {
+    name: string;
+    owner: {
+      login: string;
+    },
+    html_url: string;
+  },
+  sender: {
+    login: string;
+  }
+}
+
+interface IReleaseWebhook {
+  action: string;
+  release: {
+    html_url: string;
+    author: {
+      login: string;
+    },
+    tag_name: string;
+    name: string;
+  },
+  repository: {
+    name: string;
+    owner: {
+      login: string;
+    },
+    html_url: string;
+  },
+}
+
 router.post(`/api/github/webhook/issues/`, async (req: Request, res: Response) => {
   const data: IIssueWebhook = req.body;
   const githubUser = await GithubAuthentication.findOne({ screenName: data.sender.login }).exec();
@@ -141,7 +175,7 @@ router.post(`/api/github/webhook/pushes/`, async (req: Request, res: Response) =
   }
 });
 
-router.post(`/api/github/webhook/pull/`, async (req: Request, res: Response) => {
+router.post(`/api/github/webhook/pulls/`, async (req: Request, res: Response) => {
   const data: IPullWebhook = req.body;
   const githubUser = await GithubAuthentication.findOne({ screenName: data.sender.login }).exec();
 
@@ -160,5 +194,43 @@ router.post(`/api/github/webhook/pull/`, async (req: Request, res: Response) => 
   }
 });
 
-export type {IIssueWebhook, IBranchWebhook, IPushWebhook, IPullWebhook, IBranchWebhookHeader};
+router.post(`/api/github/webhook/stars/`, async (req: Request, res: Response) => {
+  const data: IStarWebhook = req.body;
+  const githubUser = await GithubAuthentication.findOne({ screenName: data.sender.login }).exec();
+
+  console.log(`Received data for ${data.repository.owner.login}: repo "${data.repository.name}" star ${data.action} on ${data.starred_at} by ${data.sender.login}`);
+  if (!githubUser) {
+    res.sendStatus(403);
+  } else {
+    const actions = await GitHubWebHookAction.find({repositoryUrl: data.repository.html_url});
+
+    console.log(`Find ${actions.length} actions matching with this webhook`);
+    for (const action of actions) {
+
+      await callReaction(action.id, data);
+    }
+    res.sendStatus(200);
+  }
+});
+
+router.post(`/api/github/webhook/releases/`, async (req: Request, res: Response) => {
+  const data: IReleaseWebhook = req.body;
+  const githubUser = await GithubAuthentication.findOne({ screenName: data.release.author.login }).exec();
+
+  console.log(`Received data for ${data.repository.owner.login}: on repo "${data.repository.name}" the release: "${data.release.name}" tagged "${data.release.tag_name}" was ${data.action} by ${data.release.author.login}`);
+  if (!githubUser) {
+    res.sendStatus(403);
+  } else {
+    const actions = await GitHubWebHookAction.find({repositoryUrl: data.repository.html_url});
+
+    console.log(`Find ${actions.length} actions matching with this webhook`);
+    for (const action of actions) {
+
+      await callReaction(action.id, data);
+    }
+    res.sendStatus(200);
+  }
+});
+
+export type {IIssueWebhook, IBranchWebhook, IPushWebhook, IPullWebhook, IBranchWebhookHeader, IStarWebhook, IReleaseWebhook};
 export {router as githubRouter};

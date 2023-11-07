@@ -21,10 +21,12 @@ actionAssociations.set('reddit:poll_rss', createRssPoll);
 actionAssociations.set('github:issues', createGithubWebhook);
 actionAssociations.set('github:branches', createGithubWebhook);
 actionAssociations.set('github:pushes', createGithubWebhook);
-actionAssociations.set('github:pull', createGithubWebhook);
 actionAssociations.set('google:poll_mailbox', createEmailsPoll);
 actionAssociations.set('google:search_emails', createEmailsPoll);
 actionAssociations.set('docker:watch_webhook', createDockerPushAction);
+actionAssociations.set('github:pulls', createGithubWebhook);
+actionAssociations.set('github:stars', createGithubWebhook);
+actionAssociations.set('github:releases', createGithubWebhook);
 
 async function refreshActions() {
   let count: number = 0;
@@ -54,18 +56,20 @@ async function retrieveActionData(id: string, type: ActionType): Promise<object>
     case 'github:issues':
     case 'github:branches':
     case 'github:pushes':
-    case 'github:pull':
+    case 'github:pulls':
+    case 'github:stars':
+    case 'github:releases':
       data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
       break;
     case 'reddit:poll_rss':
       data = (await RedditRssAction.findById(id).exec()) as IRedditRssData;
       break;
+    case 'docker:watch_webhook':
+      data = (await DockerPushAction.findById(id).exec()) as IDockerPushData;
+      break;
     case 'google:search_emails':
     case 'google:poll_mailbox':
       data = (await GoogleEmailsAction.findById(id).exec()) as IGoogleEmailsData;
-      break;
-    case 'docker:watch_webhook':
-      data = (await DockerPushAction.findById(id).exec()) as IDockerPushData;
       break;
   }
   return data;
@@ -81,20 +85,20 @@ async function deleteAction(id: string, type: ActionType) {
     case 'github:issues':
     case 'github:branches':
     case 'github:pushes':
-    case 'github:pull':
+    case 'github:pulls':
+    case 'github:stars':
+    case 'github:releases':
       model = GitHubWebHookAction;
       break;
     case 'reddit:poll_rss':
       model = RedditRssAction;
       break;
-    case 'google:poll_mailbox':
-      model = GoogleEmailsAction;
-      break;
-    case 'google:search_emails':
-      model = GoogleEmailsAction;
-      break;
     case 'docker:watch_webhook':
       model = DockerPushAction;
+      break;
+    case 'google:search_emails':
+    case 'google:poll_mailbox':
+      model = GoogleEmailsAction;
       break;
   }
 

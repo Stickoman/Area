@@ -14,11 +14,16 @@ async function requestAccessToken(code: string): Promise<MicrosoftResponse> {
   const CLIENT_ID = process.env.MICROSOFT_CLIENT_ID;
   const CLIENT_SECRET = process.env.MICROSOFT_CLIENT_SECRET;
   const CALLBACK_URL = `${API_URL}/auth/microsoft/callback`;
-
+  
+  const scopes = [
+    'https://graph.microsoft.com/Mail.Send',
+    'https://graph.microsoft.com/Tasks.ReadWrite',
+  ];
+  
   const data = {
     client_id: CLIENT_ID,
     client_secret: CLIENT_SECRET,
-    scope: 'openid User.Read Mail.Read',
+    scope: 'https://graph.microsoft.com/Mail.Send https://graph.microsoft.com/Tasks.ReadWrite https://graph.microsoft.com/Chat.ReadWrite',
     grant_type: 'authorization_code',
     code: code,
     redirect_uri: CALLBACK_URL,
@@ -51,6 +56,7 @@ async function registerMicrosoftAccount(response: MicrosoftResponse): Promise<IM
         grant_type: 'authorization_code',
         id: id,
         screenName: screenName,
+        email: idResponse.data.mail,
       }).save();
     }
     return microsoftAuth;
