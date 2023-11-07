@@ -34,6 +34,8 @@ async function refreshGoogleEmails(): Promise<number> {
 
     if (await isOrphanAction('google:poll_mailbox', action._id, user._id)) {
       await GoogleEmailsAction.deleteOne({_id: action._id}).exec();
+    } else if (await isOrphanAction('google:search_emails', action._id, user._id)) {
+      await GoogleEmailsAction.deleteOne({_id: action._id}).exec();
     } else {
       scheduleAction(action.id, action);
       count++;

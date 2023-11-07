@@ -7,7 +7,7 @@ async function parseGoogleEmails(userId: string, searchCriteria?: string): Promi
     const user: IUser = await User.findById(userId).exec();
     return await checkNewEmails(user.googleId, searchCriteria);
   } catch (reason) {
-    return Promise.reject(new Error('Unable to reed RSS emails: ' + reason));
+    return Promise.reject(new Error('Unable to reed emails: ' + reason));
   }
 }
 
