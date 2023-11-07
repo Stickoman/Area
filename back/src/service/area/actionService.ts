@@ -7,6 +7,8 @@ import {GitHubWebHookAction, IGitHubWebhookData} from '../../model/action/gitHub
 import {createGithubWebhook} from '../github/gitHubWebHook';
 import {Model} from 'mongoose';
 import {reject} from '../authService';
+import {createEmailsPoll, refreshGoogleEmails} from './googleEmailsService';
+import {GoogleEmailsAction, IGoogleEmailsData} from '../../model/action/googleEmailsAction';
 import {DockerPushAction, IDockerPushData} from '../../model/action/dockerPushAction';
 import {createDockerPushAction} from './dockerService';
 
@@ -19,6 +21,8 @@ actionAssociations.set('reddit:poll_rss', createRssPoll);
 actionAssociations.set('github:issues', createGithubWebhook);
 actionAssociations.set('github:branches', createGithubWebhook);
 actionAssociations.set('github:pushes', createGithubWebhook);
+actionAssociations.set('google:poll_mailbox', createEmailsPoll);
+actionAssociations.set('google:search_emails', createEmailsPoll);
 actionAssociations.set('docker:watch_webhook', createDockerPushAction);
 actionAssociations.set('github:pulls', createGithubWebhook);
 actionAssociations.set('github:stars', createGithubWebhook);
@@ -29,6 +33,7 @@ async function refreshActions() {
 
   count += await refreshTimers();
   count += await refreshRedditRss();
+  count += await refreshGoogleEmails();
   console.log(`Loaded ${count} actions`);
 }
 
@@ -38,31 +43,35 @@ async function createAction(userId: string, type: ActionType, data: object): Pro
       return value(userId, data);
     }
   }
+  return reject(`Unknown action type ${type}`);
 }
 
 async function retrieveActionData(id: string, type: ActionType): Promise<object> {
   let data: object = {};
 
   switch (type) {
-  case 'timer:scheduled_task':
-    data = (await TimerAction.findById(id).exec()) as ITimerData;
-    break;
-  case 'github:issues':
-  case 'github:branches':
-  case 'github:pushes':
-  case 'github:pulls':
-  case 'github:stars':
-  case 'github:releases':
-    data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
-    break;
-  case 'reddit:poll_rss':
-    data = (await RedditRssAction.findById(id).exec()) as IRedditRssData;
-    break;
-  case 'docker:watch_webhook':
-    data = (await DockerPushAction.findById(id).exec()) as IDockerPushData;
-    break;
+    case 'timer:scheduled_task':
+      data = (await TimerAction.findById(id).exec()) as ITimerData;
+      break;
+    case 'github:issues':
+    case 'github:branches':
+    case 'github:pushes':
+    case 'github:pulls':
+    case 'github:stars':
+    case 'github:releases':
+      data = (await GitHubWebHookAction.findById(id).exec()) as IGitHubWebhookData;
+      break;
+    case 'reddit:poll_rss':
+      data = (await RedditRssAction.findById(id).exec()) as IRedditRssData;
+      break;
+    case 'docker:watch_webhook':
+      data = (await DockerPushAction.findById(id).exec()) as IDockerPushData;
+      break;
+    case 'google:search_emails':
+    case 'google:poll_mailbox':
+      data = (await GoogleEmailsAction.findById(id).exec()) as IGoogleEmailsData;
+      break;
   }
-
   return data;
 }
 
@@ -70,23 +79,27 @@ async function deleteAction(id: string, type: ActionType) {
   let model: Model<unknown> = null;
 
   switch (type) {
-  case 'timer:scheduled_task':
-    model = TimerAction;
-    break;
-  case 'github:issues':
-  case 'github:branches':
-  case 'github:pushes':
-  case 'github:pulls':
-  case 'github:stars':
-  case 'github:releases':
-    model = GitHubWebHookAction;
-    break;
-  case 'reddit:poll_rss':
-    model = RedditRssAction;
-    break;
-  case 'docker:watch_webhook':
-    model = DockerPushAction;
-    break;
+    case 'timer:scheduled_task':
+      model = TimerAction;
+      break;
+    case 'github:issues':
+    case 'github:branches':
+    case 'github:pushes':
+    case 'github:pulls':
+    case 'github:stars':
+    case 'github:releases':
+      model = GitHubWebHookAction;
+      break;
+    case 'reddit:poll_rss':
+      model = RedditRssAction;
+      break;
+    case 'docker:watch_webhook':
+      model = DockerPushAction;
+      break;
+    case 'google:search_emails':
+    case 'google:poll_mailbox':
+      model = GoogleEmailsAction;
+      break;
   }
 
   if (model) {

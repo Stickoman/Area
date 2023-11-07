@@ -52,10 +52,25 @@ SERVICE_ITEMS.set('google', {
   color: '#db4a39ff',
   icon: faGoogle,
   actions: [
+    {
+      name: 'poll_mailbox', description: 'Get last emails', dataFields: [], variables: ['SUBJECT', 'FROM', 'SNIPPET'],
+    },
+    {
+      name: 'search_emails', description: 'Search in emails ', dataFields: [
+        {name: 'searchCriteria', hint: 'Search in emails'},
+      ], variables: ['SUBJECT', 'FROM', 'SNIPPET'],
+    },
   ],
   reactions: [
     {
       name: 'send_email', description: 'Send an email at Gmail', dataFields: [
+        {name: 'subject', hint: 'Google Email Subject'},
+        {name: 'message', hint: 'Google Email Message'},
+        {name: 'email', hint: 'Send Email To'},
+      ],
+    },
+    {
+      name: 'send_email_to_myself', description: 'Send an email to myself at Gmail', dataFields: [
         {name: 'subject', hint: 'Google Email Subject'},
         {name: 'message', hint: 'Google Email Message'},
       ],
@@ -124,19 +139,19 @@ SERVICE_ITEMS.set('github', {
       name: 'issues',
       description: 'Watch Issues updates on repository ',
       dataFields: [{name: 'repositoryUrl', hint: ' '}],
-      variables: ['GITHUB_ISSUE_ACTION', 'GITHUB_ISSUE_NAME', 'GITHUB_ISSUE_LINK', 'GITHUB_ISSUE_OWNER', 'GITHUB_ISSUE_USER', 'GITHUB_ISSUE_REPOSITORY']
+      variables: ['GITHUB_ISSUE_ACTION', 'GITHUB_ISSUE_NAME', 'GITHUB_ISSUE_LINK', 'GITHUB_ISSUE_OWNER', 'GITHUB_ISSUE_USER', 'GITHUB_ISSUE_REPOSITORY'],
     },
     {
       name: 'branches',
       description: 'Watch Branches updates on repository ',
       dataFields: [{name: 'repositoryUrl', hint: ' '}],
-      variables: ['GITHUB_BRANCH_ACTION', 'GITHUB_BRANCH_NAME', 'GITHUB_BRANCH_REPOSITORY', 'GITHUB_BRANCH_USER', 'GITHUB_BRANCH_LINK']
+      variables: ['GITHUB_BRANCH_ACTION', 'GITHUB_BRANCH_NAME', 'GITHUB_BRANCH_REPOSITORY', 'GITHUB_BRANCH_USER', 'GITHUB_BRANCH_LINK'],
     },
     {
       name: 'pushes',
       description: 'Pushes alerts on repository ',
       dataFields: [{name: 'repositoryUrl', hint: ' '}],
-      variables: ['GITHUB_COMMITS_MESSAGE', 'GITHUB_COMMITS_AUTHOR', 'GITHUB_PUSH_REPOSITORY', 'GITHUB_PUSH_USER', 'GITHUB_PUSH_LINK']
+      variables: ['GITHUB_COMMITS_MESSAGE', 'GITHUB_COMMITS_AUTHOR', 'GITHUB_PUSH_REPOSITORY', 'GITHUB_PUSH_USER', 'GITHUB_PUSH_LINK'],
     },
     {
       name: 'pulls',

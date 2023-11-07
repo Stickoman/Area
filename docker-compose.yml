@@ -24,9 +24,6 @@ services:
 
   client_mobile:
     image: baragouin/area-mobile
-    build:
-      context: ./front
-      dockerfile: ./mobile/Dockerfile
     container_name: client_mobile
     volumes:
       - shared-volume:/usr/shared

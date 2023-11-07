@@ -3,12 +3,13 @@ import {GoogleAuthentication} from '../../model/googleAuth';
 import {getBearerHeader} from '../../common/bearerHelper';
 import {reject} from '../authService';
 
-async function sendEmailToMyself(subject: string, message: string, userGoogleID: string) {
-  const googleAuth = await GoogleAuthentication.findOne({id: userGoogleID}).exec();
-  const googleEmail = googleAuth.email;
-  const accessToken = googleAuth.access_token;
+async function sendEmail(subject: string, message: string, userGoogleID: string, to?: string) {
+  const GoogleAuth = await GoogleAuthentication.findOne({id: userGoogleID}).exec();
+  const googleEmail = GoogleAuth.email;
+  const accessToken = GoogleAuth.access_token;
   const url = `https://gmail.googleapis.com/gmail/v1/users/${googleEmail}/messages/send`;
-  const raw = makeBody(googleEmail, googleEmail, subject, message);
+  const toEmail = (to ? to : googleEmail);
+  const raw = makeBody(toEmail, googleEmail, subject, message);
 
   try {
     const response = await axios.post(url, {raw}, {
@@ -43,4 +44,4 @@ function makeBody(to: string, from: string, subject: string, message: string) {
     .replace(/\//g, '_');
 }
 
-export default sendEmailToMyself;
+export default sendEmail;

@@ -5,6 +5,7 @@ import {
 } from '../../model/reaction/discordWebhookEmbedReaction';
 import {DiscordWebhookReaction, IDiscordWebhookData} from '../../model/reaction/discordWebhookReaction';
 import {GoogleEmailReaction, IGoogleEmailData} from '../../model/reaction/googleEmailReaction';
+import sendEmail from '../google/emailService';
 import {
   IBranchWebhook,
   IBranchWebhookHeader,
@@ -47,6 +48,7 @@ const reactionAssociations = new Map<ReactionType, ReactionFactory>();
 
 reactionAssociations.set('discord:send_webhook', createDiscordWebhookReaction);
 reactionAssociations.set('discord:send_embedded_webhook', createDiscordWebhookEmbedReaction);
+reactionAssociations.set('google:send_email_to_myself', createGoogleEmailReaction);
 reactionAssociations.set('google:send_email', createGoogleEmailReaction);
 reactionAssociations.set('reddit:post_message', createRedditPostReaction);
 reactionAssociations.set('reddit:send_pm', createRedditSendPmReaction);
@@ -69,7 +71,6 @@ async function createDiscordWebhookEmbedReaction(userId: string, data: IDiscordW
 
   return webhook.id;
 }
-
 async function createGoogleEmailReaction(userId: string, data: IGoogleEmailData): Promise<string> {
   const email = await new GoogleEmailReaction({userId, ...data}).save();
 
@@ -143,14 +144,17 @@ async function retrieveReactionData(id: string, type: ReactionType): Promise<obj
   let data: object = {};
 
   switch (type) {
+    case 'google:send_email':
+      data = (await GoogleEmailReaction.findById(id).exec()) as IGoogleEmailData;
+      break;
+    case 'google:send_email_to_myself':
+      data = (await GoogleEmailReaction.findById(id).exec()) as IGoogleEmailData;
+      break;
   case 'discord:send_webhook':
     data = (await DiscordWebhookReaction.findById(id).exec()) as IDiscordWebhookData;
     break;
   case 'discord:send_embedded_webhook':
     data = (await DiscordWebhookEmbedReaction.findById(id).exec()) as IDiscordWebhookEmbedData;
-    break;
-  case 'google:send_email':
-    data = (await GoogleEmailReaction.findById(id).exec()) as IGoogleEmailData;
     break;
   case 'reddit:post_message':
     data = (await RedditPostReaction.findById(id).exec()) as IRedditPostData;
@@ -228,6 +232,12 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
   const isValidTaskDeletionData = (data: object): data is ITaskDeletionData => {
     return !!(data as ITaskDeletionReaction);
   };
+  const isValidEmailData = (data: object): data is IGoogleEmailData => {
+    const dataTmp = data as IGoogleEmailData;
+    if (!dataTmp.email)
+      return false;
+    return !!(data as IGoogleEmailData);
+  };
 
   const replaceVariables = (value: string): string => {
     return value.replace('${NAME}', fullName)
@@ -271,6 +281,9 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
       .replace('${RSS_TITLE}', (data as { title: string })?.title)
       .replace('${RSS_CONTENT}', (data as { content: string })?.content)
       .replace('${RSS_LINK}', (data as { link: string })?.link)
+      .replace('${SUBJECT}', (data as { subject: string })?.subject)
+      .replace('${FROM}', (data as { from: string })?.from)
+      .replace('${SNIPPET}', (data as { snippet: string })?.snippet)
       .replace('\\n', '\n');
   };
 
@@ -283,11 +296,14 @@ async function callReaction(actionId: string, data?: object, dataHeader?: object
     if (isValidDiscordWebhookEmbedData(reactionData))
       await sendEmbedWebhook(reactionData.webhookUrl, fullName, replaceVariables(reactionData.title), replaceVariables(reactionData.description), reactionData.color);
     break;
-  case 'google:send_email':
-    console.warn(reactionData);
-    if (isValidGoogleEmailData(reactionData))
-      await sendEmailToMyself(replaceVariables(reactionData.subject), replaceVariables(reactionData.message), user.googleId);
-    break;
+    case 'google:send_email_to_myself':
+      if (isValidGoogleEmailData(reactionData))
+        await sendEmail(replaceVariables(reactionData.subject), replaceVariables(reactionData.message), user.googleId);
+      break;
+    case 'google:send_email':
+      if (isValidEmailData(reactionData))
+        await sendEmail(replaceVariables(reactionData.subject), replaceVariables(reactionData.message), user.googleId, reactionData.email);
+      break;
   case 'reddit:post_message':
     if (isValidRedditPostData(reactionData))
       await postRedditContent(reactionData.subreddit, reactionData.title, reactionData.content, user.redditId);
@@ -338,6 +354,9 @@ async function deleteReaction(id: string, type: ReactionType) {
     model = DiscordWebhookEmbedReaction;
     break;
   case 'google:send_email':
+    model = GoogleEmailReaction;
+    break;
+  case 'google:send_email_to_myself':
     model = GoogleEmailReaction;
     break;
   case 'reddit:post_message':
