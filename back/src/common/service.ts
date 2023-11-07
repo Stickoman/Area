@@ -8,7 +8,8 @@ type ServiceType =
   | 'meta'
   | 'instagram'
   | 'timer'
-  | 'reddit';
+  | 'reddit'
+  | 'docker';
 
 interface IServiceItem {
   name: string;
@@ -26,62 +27,88 @@ const SERVICE_ITEMS: Map<ServiceType, IService> = new Map<ServiceType, IService>
 SERVICE_ITEMS.set('google', {
   name: 'google',
   actions: [
-    {name: 'google:poll_mailbox', description: 'Get last emails'},
-    {name: 'google:search_emails', description: 'Search in emails '},
+    {
+      name: 'poll_mailbox', description: 'Get last emails', dataFields: [], variables: ['SUBJECT', 'FROM', 'SNIPPET'],
+    },
+    {
+      name: 'search_emails', description: 'Search in emails ',
+    },
   ],
   reactions: [
     {
-      name: 'send_email_to_myself', description: 'Send an email to myself at Gmail'},
+      name: 'send_email', description: 'Send an email at Gmail',
+    },
     {
-      name: 'send_email', description: 'Send an email at Gmail'},
+      name: 'send_email_to_myself', description: 'Send an email to myself at Gmail',
+    },
   ],
 } as IService);
 
 SERVICE_ITEMS.set('microsoft', {
   name: 'microsoft',
   actions: [
-    {name: '', description: ''},
   ],
   reactions: [
-    {name: '', description: ''},
   ],
 } as IService);
 
 SERVICE_ITEMS.set('discord', {
   name: 'discord',
   actions: [
-    {name: '', description: ''},
   ],
   reactions: [
-    {name: 'send_webhook', description: 'Send a message to a Webhook'},
-    {name: 'send_embedded_webhook', description: 'Send a embedded message to a Webhook'},
+    {
+      name: 'send_webhook', description: 'Send a message to a Webhook',
+    },
+    {
+      name: 'send_embedded_webhook', description: 'Send a embedded message to a Webhook', dataFields: [
+        {name: 'webhookUrl', hint: 'Discord Webhook URL'},
+        {name: 'title', hint: 'Embed title'},
+        {name: 'description', hint: 'Embed description'},
+        {name: 'color', hint: 'Embed color (as decimal)'},
+      ],
+    },
   ],
 } as IService);
 
 SERVICE_ITEMS.set('github', {
   name: 'github',
   actions: [
-    {name: 'issues', description: 'Watch Issues updates on repository '},
+    {
+      name: 'issues',
+      description: 'Watch Issues updates on repository ',
+    },
+    {
+      name: 'branches',
+      description: 'Watch Branches updates on repository ',
+    },
+    {
+      name: 'pushes',
+      description: 'Pushes alert on repository ',
+    },
+    {
+      name: 'pull',
+      description: 'Pull request alert on repository ',
+    },
   ],
   reactions: [
-    {name: '', description: ''},
   ],
 } as IService);
 
 SERVICE_ITEMS.set('facebook', {
   name: 'facebook',
   actions: [
-    {name: '', description: ''},
   ],
   reactions: [
-    {name: '', description: ''},
   ],
 } as IService);
 
 SERVICE_ITEMS.set('timer', {
   name: 'timer',
   actions: [
-    {name: 'scheduled_task', description: 'Setup a scheduled task'},
+    {
+      name: 'scheduled_task', description: 'Setup a scheduled task',
+    },
     {name: 'reminder', description: 'Setup a reminder'},
   ],
   reactions: [],
@@ -90,7 +117,21 @@ SERVICE_ITEMS.set('timer', {
 SERVICE_ITEMS.set('reddit', {
   name: 'reddit',
   actions: [
-    {name: 'poll_rss', description: 'Poll news from Reddit Feed'},
+    {
+      name: 'poll_rss',
+      description: 'Poll news from Reddit Feed',
+    },
+  ],
+  reactions: [],
+} as IService);
+
+SERVICE_ITEMS.set('docker', {
+  name: 'docker',
+  actions: [
+    {
+      name: 'watch_webhook',
+      description: 'Image Push on DockerHub',
+    },
   ],
   reactions: [],
 } as IService);

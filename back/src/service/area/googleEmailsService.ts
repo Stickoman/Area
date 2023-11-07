@@ -6,11 +6,10 @@ import {callReaction} from './reactionService';
 import {retrieveEmailsUpdates} from '../../adapter/googleEmailsAdapter';
 import {GoogleEmails} from '../google/checkNewEmails';
 
-
-const GoogleEmailsScheduler: JobScheduler = new JobScheduler();
+const googleScheduler: JobScheduler = new JobScheduler();
 
 function scheduleAction(actionId: string, action: IGoogleEmailsAction) {
-  GoogleEmailsScheduler.schedule('0 * * * * *', async () => {
+  googleScheduler.schedule('0 * * * * *', async () => {
     try {
       const emails: GoogleEmails = await retrieveEmailsUpdates(action.userId, action.searchCriteria);
 
@@ -29,7 +28,7 @@ async function refreshGoogleEmails(): Promise<number> {
   const actions = await GoogleEmailsAction.find({}).exec();
   let count: number = 0;
 
-  GoogleEmailsScheduler.destroyJobs();
+  googleScheduler.destroyJobs();
   for (const action of actions) {
     const user: IUser = await User.findById(action.userId).exec();
 
@@ -44,10 +43,10 @@ async function refreshGoogleEmails(): Promise<number> {
 }
 
 async function createEmailsPoll(userId: string, data: IGoogleEmailsData): Promise<string> {
-  const GoogleEmails = await new GoogleEmailsAction({userId, ...data}).save();
+  const document = await new GoogleEmailsAction({userId, ...data}).save();
 
-  scheduleAction(GoogleEmails.id, GoogleEmails);
-  return GoogleEmails.id;
+  scheduleAction(document.id, document);
+  return document.id;
 }
 
 export {createEmailsPoll, refreshGoogleEmails};

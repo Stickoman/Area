@@ -51,10 +51,10 @@ SERVICE_ITEMS.set('google', {
   icon: faGoogle,
   actions: [
     {
-      name: 'google:poll_mailbox', description: 'Get last emails', dataFields: [], variables: ['SUBJECT', 'FROM', 'SNIPPET'],
+      name: 'poll_mailbox', description: 'Get last emails', dataFields: [], variables: ['SUBJECT', 'FROM', 'SNIPPET'],
     },
     {
-      name: 'google:search_emails', description: 'Search in emails ', dataFields: [
+      name: 'search_emails', description: 'Search in emails ', dataFields: [
         {name: 'searchCriteria', hint: 'Search in emails'},
       ], variables: ['SUBJECT', 'FROM', 'SNIPPET'],
     },

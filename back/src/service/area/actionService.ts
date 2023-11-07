@@ -40,6 +40,7 @@ async function createAction(userId: string, type: ActionType, data: object): Pro
       return value(userId, data);
     }
   }
+  return reject(`Unknown action type ${type}`);
 }
 
 async function retrieveActionData(id: string, type: ActionType): Promise<object> {
