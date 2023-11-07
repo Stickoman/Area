@@ -15,6 +15,7 @@ function HomeScreen(): React.JSX.Element {
 
   const containerStyle: CSSProperties = {
     textAlign: 'center',
+    overflowX: 'hidden',
   };
 
   const subContainerStyle: CSSProperties = {

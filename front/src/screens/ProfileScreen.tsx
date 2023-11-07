@@ -212,7 +212,7 @@ function ProfileScreen(): React.JSX.Element {
 
   return (
     <div>
-      <NavigationBar color={'purple'}/>
+      <NavigationBar color={'black'}/>
 
       <div>
         <h6 style={titleStyle}>My Profile</h6>
