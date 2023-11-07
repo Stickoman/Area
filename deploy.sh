@@ -41,11 +41,13 @@ echo "=========[BUILD IMAGES]========="
 
 docker build -t baragouin/area-frontend front
 docker build -t baragouin/area-backend back
+docker build -t baragouin/area-mobile front
 
 echo "=========[PUSH IMAGES]========="
 
 docker push baragouin/area-frontend:latest
 docker push baragouin/area-backend:latest
+docker push baragouin/area-mobile:latest
 
 echo "=========[SERVER UPDATE]========="
 
