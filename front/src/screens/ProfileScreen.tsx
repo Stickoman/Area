@@ -177,17 +177,6 @@ function ProfileContent(props: ProfileContentProperties): React.JSX.Element {
                   style={{...buttonStyle, backgroundColor: '#f22'}}>
             Delete account
           </button>
-          <button type={'button'}
-                  onClick={async () => {
-                    try {
-                      const response = await axios.get('/api/services/emails', {headers: getAuthorizedHeader()})
-                      console.warn(response);
-                    }catch (e) {console.warn(e);}
-                  }}
-                  className="buttonStyle"
-                  style={{...buttonStyle, backgroundColor: '#f22'}}>
-            Delete account
-          </button>
         </div>
       </div>
     );

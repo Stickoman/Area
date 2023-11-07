@@ -8,7 +8,7 @@ services:
       - "8081:8081"
     depends_on:
       - server
-#      - client_mobile
+      - client_mobile
     volumes:
       - shared-volume:/usr/src/app/src/shared
 
@@ -17,18 +17,18 @@ services:
     container_name: server
     ports:
       - "8080:8080"
-#    depends_on:
-#      - client_mobile
+    depends_on:
+      - client_mobile
     volumes:
       - shared-volume:/usr/src/app/shared
 
-#  client_mobile:
-#    build:
-#      context: ./front
-#      dockerfile: ./mobile/Dockerfile
-#    container_name: client_mobile
-#    volumes:
-#      - shared-volume:/usr/shared
+  client_mobile:
+    build:
+      context: ./front
+      dockerfile: ./mobile/Dockerfile
+    container_name: client_mobile
+    volumes:
+      - shared-volume:/usr/shared
 
 volumes:
   shared-volume:
