@@ -39,8 +39,9 @@ fi
 
 echo "=========[BUILD IMAGES]========="
 
-docker build -t baragouin/area-frontend front
+docker build -t baragouin/area-frontend front -f front/Dockerfile
 docker build -t baragouin/area-backend back
+docker build -t baragouin/area-mobile front -f front/DockerfileMobile
 
 echo "=========[PUSH IMAGES]========="
 
